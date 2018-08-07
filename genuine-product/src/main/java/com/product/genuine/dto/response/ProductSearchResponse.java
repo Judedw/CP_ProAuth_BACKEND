@@ -41,6 +41,9 @@ public class ProductSearchResponse {
 
     @Data
     public static class ClientData {
+
         private String id;
+
+        private String name;
     }
 }

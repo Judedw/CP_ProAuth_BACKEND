@@ -24,6 +24,8 @@ public class ProductUpdateRequest {
 
     private ClientData client;
 
+    private String name;
+
     @Data
     public static class ClientData {
 
