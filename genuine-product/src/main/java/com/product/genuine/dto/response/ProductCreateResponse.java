@@ -23,9 +23,9 @@ public class ProductCreateResponse {
 
     private Integer batchNumber;
 
-    private ClientData client;
-
     private String name;
+
+    private ClientData client;
 
 
     @Data

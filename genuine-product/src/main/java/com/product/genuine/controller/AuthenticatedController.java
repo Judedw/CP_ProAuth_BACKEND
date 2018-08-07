@@ -5,7 +5,6 @@ import com.product.genuine.dto.response.ProductAuthenticateResponse;
 import com.product.genuine.dto.response.wrapper.SimpleResponseWrapper;
 import com.product.genuine.service.AuthenticatedService;
 import com.product.genuine.service.ProductDetailService;
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,14 +60,18 @@ public class AuthenticatedController {
         try {
             checkAllReadyAuthenticated = authenticatedService.authenticate(new String(bytesEncryptor.decrypt(Hex.decodeHex(authCode))));
 
-            result = productDetailService.authenticate(new String(bytesEncryptor.decrypt(Hex.decodeHex(authCode))));
-        } catch (DecoderException e) {
+            //result = productDetailService.authenticate(new String(bytesEncryptor.decrypt(Hex.decodeHex(authCode))));
+        } catch (Exception e) {
+            e.printStackTrace();
+            productAuthenticateResponse.setTitle(configs.getAuthenticate().getTitleReject());
             productAuthenticateResponse.setMessage(configs.getAuthenticate().getRejectMessage());
         }
 
-        if(result) {
+        if(checkAllReadyAuthenticated) {
+            productAuthenticateResponse.setTitle(configs.getAuthenticate().getTitleSuccess());
             productAuthenticateResponse.setMessage(configs.getAuthenticate().getSuccessMessage());
         } else {
+            productAuthenticateResponse.setTitle(configs.getAuthenticate().getTitleReject());
             productAuthenticateResponse.setMessage(configs.getAuthenticate().getRejectMessage());
         }
 

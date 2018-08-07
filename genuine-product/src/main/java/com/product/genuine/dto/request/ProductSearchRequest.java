@@ -16,7 +16,7 @@ public class ProductSearchRequest extends BaseSearchRequest {
     //@NotBlank(message = "ClientSearchRequest.search.name.empty")
     private String code;
 
-    @Pattern(regexp = "lastModifiedDate|name", flags = Pattern.Flag.CASE_INSENSITIVE, message = "{answerTemplateSearchRequest.sortProperty.invalid}")
+    @Pattern(regexp = "lastModifiedDate|name", flags = Pattern.Flag.CASE_INSENSITIVE, message = "{productSearchRequest.sortProperty.invalid}")
     @Override
     public String getSortProperty() {
         return sortProperty;

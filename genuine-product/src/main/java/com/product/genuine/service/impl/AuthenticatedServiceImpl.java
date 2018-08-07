@@ -8,17 +8,18 @@ import com.product.genuine.repository.AuthenticatedRepository;
 import com.product.genuine.repository.ProductDetailRepository;
 import com.product.genuine.service.AuthenticatedService;
 import com.querydsl.core.BooleanBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
  * AuthenticatedServiceImpl
  * Created by nuwan on 8/7/18.
  */
+@Slf4j
 @Transactional
 @Service
 public class AuthenticatedServiceImpl implements AuthenticatedService {
@@ -32,11 +33,21 @@ public class AuthenticatedServiceImpl implements AuthenticatedService {
     @Override
     public Boolean authenticate(String authenticateCode) {
 
+        log.info("authenticateCode : {}",authenticateCode);
+
         BooleanBuilder booleanBuilder = new BooleanBuilder(QAuthenticated.authenticated.authenticationCode.eq(authenticateCode));
 
-        List<Authenticated> authenticates = (List<Authenticated>) authenticatedRepository.findAll(booleanBuilder);
+        Optional<Authenticated> authenticate =authenticatedRepository.findOne(booleanBuilder);
 
-        if(authenticates != null && authenticates.size() != 0) {
+
+        log.info("authenticates : {}",authenticate);
+
+
+        if(authenticate != null && authenticate.isPresent()) {
+            log.info("authenticates get: {}",authenticate.get());
+            Authenticated authenticated = authenticate.get();
+            authenticated.setNumberOfAuthentication(authenticated.getNumberOfAuthentication()+1);
+            authenticatedRepository.save(authenticated);
             return true;
         } else {
 

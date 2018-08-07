@@ -1,7 +1,5 @@
 package com.product.genuine.dto.response;
 
-import com.product.genuine.entity.Client;
-import com.product.genuine.modelmapper.ModelMappingAware;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -25,17 +23,15 @@ public class ProductUpdateResponse {
 
     private Integer batchNumber;
 
+    private String name;
+
     private ClientData client;
 
-    @Data
-    public static class ClientData implements ModelMappingAware {
 
+    @Data
+    public static class ClientData  {
 
         private String id;
 
-        @Override
-        public Class<?> getDestinationType() {
-            return Client.class;
-        }
     }
 }

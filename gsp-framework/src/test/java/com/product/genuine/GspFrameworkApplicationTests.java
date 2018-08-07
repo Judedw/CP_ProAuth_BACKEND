@@ -1,4 +1,4 @@
-package com.common.feature;
+package com.product.genuine;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

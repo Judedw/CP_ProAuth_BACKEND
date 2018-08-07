@@ -9,5 +9,7 @@ import lombok.Data;
 @Data
 public class ProductAuthenticateResponse {
 
+    private String title;
+
     private String message;
 }

@@ -39,6 +39,10 @@ public class PlatformConfigProperties {
     @Data
     public static class Authenticate {
 
+        private String titleSuccess;
+
+        private String titleReject;
+
         private String successMessage;
 
         private String rejectMessage;

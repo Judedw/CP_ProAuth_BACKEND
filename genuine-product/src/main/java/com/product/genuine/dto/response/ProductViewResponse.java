@@ -14,6 +14,8 @@ public class ProductViewResponse {
 
     private String id;
 
+    private String name;
+
     private String code;
 
     private String description;
@@ -31,7 +33,7 @@ public class ProductViewResponse {
     @Data
     public static class ProductDetailData {
 
-        //private String uniqueProductCode;
+        private String uniqueProductCode;
 
         private String authenticationCode;
 
@@ -39,6 +41,9 @@ public class ProductViewResponse {
 
     @Data
     public static class ClientData {
+
         private String id;
+
+        private String name;
     }
 }

@@ -5,6 +5,7 @@ import com.product.genuine.dto.response.ProductDetailResponse;
 import com.product.genuine.dto.response.wrapper.ListResponseWrapper;
 import com.product.genuine.entity.ProductDetail;
 import com.product.genuine.modelmapper.ModelMapper;
+import com.product.genuine.service.CryptoService;
 import com.product.genuine.service.ProductDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Hex;
@@ -41,6 +42,9 @@ public class ProductDetailController {
     private PlatformConfigProperties configs;
 
     @Autowired
+    private CryptoService cryptoService;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     private TextEncryptor textEncryptor;
@@ -67,8 +71,9 @@ public class ProductDetailController {
     public ResponseEntity<ListResponseWrapper<ProductDetailResponse>> retrieveList(@PathVariable String productId) throws GeneralSecurityException, IOException {
 
         //ProductDetailSearchCriteria criteria = modelMapper.map(request,ProductDetailSearchCriteria.class);
+        Long id = cryptoService.decryptEntityId(productId);
 
-        List<ProductDetail> results = productDetailService.retrieveList(Long.parseLong(productId));
+        List<ProductDetail> results = productDetailService.retrieveList(id);
 
         List<ProductDetailResponse> productDetails =  modelMapper.map(results,ProductDetailResponse.class);
 
