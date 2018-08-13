@@ -26,6 +26,8 @@ public class ProductViewResponse {
 
     private Integer batchNumber;
 
+    private String imageName;
+
     private List<ProductDetailData> productDetails;
 
     private ClientData client;

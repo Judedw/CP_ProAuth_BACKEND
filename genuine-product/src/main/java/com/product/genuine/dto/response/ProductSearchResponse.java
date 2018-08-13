@@ -26,9 +26,12 @@ public class ProductSearchResponse {
 
     private Integer batchNumber;
 
+    private String imageName;
+
     private List<ProductDetailData> productDetails;
 
     private ClientData client;
+
 
     @Data
     public static class ProductDetailData {

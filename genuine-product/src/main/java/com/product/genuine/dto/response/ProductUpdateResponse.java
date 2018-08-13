@@ -25,6 +25,8 @@ public class ProductUpdateResponse {
 
     private String name;
 
+    private String imageName;
+
     private ClientData client;
 
 

@@ -4,6 +4,7 @@ import com.product.genuine.entity.Client;
 import com.product.genuine.modelmapper.ModelMappingAware;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
@@ -15,19 +16,25 @@ import java.time.LocalDate;
 @Data
 public class ProductCreateRequest {
 
+    @NotBlank(message = "platformProductCreateRequest.product.code.empty")
     private String code;
 
     private String description;
 
-    private Integer quantity;
+    @NotBlank(message = "platformProductCreateRequest.product.quantity.empty")
+    private String quantity;
 
     private LocalDate expireDate;
 
-    private Integer batchNumber;
+    private String batchNumber;
 
+    @Valid
     private ClientData client;
 
+    @NotBlank(message = "platformProductCreateRequest.product.name.empty")
     private String name;
+
+    private String imageName;
 
 
     @Data

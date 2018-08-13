@@ -99,6 +99,43 @@
             <version>1.16.22</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.chemistry.opencmis/chemistry-opencmis-client-api -->
+        <dependency>
+            <groupId>org.apache.chemistry.opencmis</groupId>
+            <artifactId>chemistry-opencmis-client-api</artifactId>
+            <version>0.4.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.sap.hana.cloud/spring-cloud-sap-core -->
+        <dependency>
+            <groupId>com.sap.hana.cloud</groupId>
+            <artifactId>spring-cloud-sap-core</artifactId>
+            <version>1.0.4.RELEASE</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.sap.hana.cloud/spring-cloud-sap-parent -->
+        <dependency>
+            <groupId>com.sap.hana.cloud</groupId>
+            <artifactId>spring-cloud-sap-parent</artifactId>
+            <version>1.0.4.RELEASE</version>
+            <type>pom</type>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.sap.hana.cloud/spring-cloud-sap-connector -->
+        <dependency>
+            <groupId>com.sap.hana.cloud</groupId>
+            <artifactId>spring-cloud-sap-connector</artifactId>
+            <version>1.0.4.RELEASE</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.sap.hana.cloud/spring-cloud-cloudfoundry-hana-service-connector -->
+        <dependency>
+            <groupId>com.sap.hana.cloud</groupId>
+            <artifactId>spring-cloud-cloudfoundry-hana-service-connector</artifactId>
+            <version>1.0.4.RELEASE</version>
+        </dependency>
+
+
 
     </dependencies>
 

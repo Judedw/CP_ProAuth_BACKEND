@@ -16,6 +16,7 @@ import com.product.genuine.entity.Product;
 import com.product.genuine.entity.criteria.ProductSearchCriteria;
 import com.product.genuine.modelmapper.ModelMapper;
 import com.product.genuine.service.CryptoService;
+import com.product.genuine.service.FileStorageService;
 import com.product.genuine.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,8 +29,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -49,8 +53,29 @@ public class ProductController {
     @Autowired
     private CryptoService cryptoService;
 
-    @PostMapping("${app.endpoint.productsCreate}")
-    public ResponseEntity<SimpleResponseWrapper<ProductCreateResponse>> create(@Validated @RequestBody ProductCreateRequest request) {
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    @PostMapping(value = "${app.endpoint.productsCreate}")
+    public ResponseEntity<SimpleResponseWrapper<ProductCreateResponse>> create(
+            @RequestParam("file")MultipartFile file ,@RequestParam("code") String code,
+            @RequestParam(value = "quantity")String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
+            @RequestParam(value = "name",required = false)String name ,@RequestParam(value = "description",required = false) String description,
+            @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client") String client) {
+
+        String fileName = fileStorageService.storeFile(file);
+        ProductCreateRequest request = new ProductCreateRequest();
+        request.setCode(code);
+        request.setName(name);
+        request.setDescription(description);
+        request.setQuantity(quantity);
+        request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
+        request.setBatchNumber(batchNumber);
+        request.setImageName(fileName);
+
+        ProductCreateRequest.ClientData clientData = new ProductCreateRequest.ClientData();
+        clientData.setId(client);
+        request.setClient(clientData);
 
         Product product = modelMapper.map(request,Product.class);
         Product saveProduct = productService.save(product);

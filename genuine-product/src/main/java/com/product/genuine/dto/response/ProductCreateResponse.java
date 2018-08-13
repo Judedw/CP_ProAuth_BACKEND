@@ -27,6 +27,8 @@ public class ProductCreateResponse {
 
     private ClientData client;
 
+    private String imageName;
+
 
     @Data
     public static class ClientData  {

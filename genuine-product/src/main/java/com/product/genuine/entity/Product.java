@@ -41,6 +41,8 @@ public class Product extends  CreateModifyAwareBaseEntity {
 
     private Integer batchNumber;
 
+    private String imageName;
+
     @ManyToOne
     @JoinColumn(name="client_id")
     private Client client;

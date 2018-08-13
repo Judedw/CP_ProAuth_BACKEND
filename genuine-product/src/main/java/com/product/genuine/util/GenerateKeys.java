@@ -1,28 +1,12 @@
 package com.product.genuine.util;
 
 
-import com.product.genuine.configuration.PlatformConfigProperties;
-import com.product.genuine.entity.UserKey;
-import com.product.genuine.service.UserKeyService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
 
 @Component
 public class GenerateKeys {
 
-    @Autowired
+    /*@Autowired
     private UserKeyService userKeyService;
 
     @Autowired
@@ -85,6 +69,6 @@ public class GenerateKeys {
         KeyFactory kf = KeyFactory.getInstance("RSA");
         key = kf.generatePrivate(spec);
 		return key;
-	}
+	}*/
 
 }
