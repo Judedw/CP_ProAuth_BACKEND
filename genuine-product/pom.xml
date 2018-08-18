@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.product.genuine</groupId>
+	<groupId>com.clearpicture.platform.product</groupId>
 	<artifactId>genuine-product</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -26,12 +26,12 @@
         <querydsl.version>4.1.4</querydsl.version>
         <gsp-framework-version>1.0.1</gsp-framework-version>
         <querydsl.apt.plugin.version>1.1.3</querydsl.apt.plugin.version>
-        <war.file.name>ROOT</war.file.name>
+        <war.file.name>product-service</war.file.name>
 	</properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.product.genuine</groupId>
+            <groupId>com.clearpicture.platform</groupId>
             <artifactId>gsp-framework</artifactId>
             <version>${gsp-framework-version}</version>
         </dependency>
@@ -246,7 +246,7 @@
             </activation>
             <properties>
                 <packaging.type>war</packaging.type>
-                <start-class> com.product.genuine.GenuineProductApplication</start-class>
+                <start-class>com.clearpicture.platform.product.GenuineProductApplication</start-class>
             </properties>
 
             <dependencies>

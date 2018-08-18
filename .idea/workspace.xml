@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f3770575-cd99-4d1d-a91f-e89ace4650e4" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/local-repo/com/clearpicture/platform/gsp-framework/gsp-framework-1.0.1.jar" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/configuration/ConfigProperties.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/entity/Question.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/controller/QuestionController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/dto/request/QuestionCreateRequest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/dto/response/QuestionCreateResponse.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/repository/QuestionRepository.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/service/QuestionService.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/service/impl/QuestionServiceImpl.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/configuration/ResourceServerConfig.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/entity/Survey.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/controller/SurveyController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/dto/request/SurveyCreateRequest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/dto/response/SurveyCreateResponse.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/repository/SurveyRepository.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/service/SurveyService.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/SurveyServiceApplication.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/test/java/com/clearpicture/platform/survey/SurveyServiceApplicationTests.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/service/impl/SurveyServiceImpl.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/src/main/resources/application.properties" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/survey-service/pom.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/genuine-product/local-repo/com/product/genuine/gsp-framework/gsp-framework-1.0.1.jar" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/controller/WelcomeController.java" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/GenuineProductApplication.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/GenuineProductApplication.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/configuration/ConfigProperties.java" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/configuration/ConfigProperties.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/configuration/FileStorageProperties.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/configuration/FileStorageProperties.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/configuration/NeoConfig.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/configuration/NeoConfig.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/configuration/ResourceServerConfig.java" afterPath="$PROJECT_DIR$/survey-service/src/main/java/com/clearpicture/platform/survey/configuration/ResourceServerConfig.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/configuration/SimpleCORSFilter.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/configuration/SimpleCORSFilter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/controller/AuthenticatedController.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/controller/AuthenticatedController.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/controller/ClientController.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/controller/ClientController.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/controller/FileUploadController.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/controller/FileUploadController.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/controller/ImageEncodeController.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/controller/ImageEncodeController.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/controller/ProductController.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/controller/ProductController.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/controller/ProductDetailController.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/controller/ProductDetailController.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/controller/WelcomeController.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/controller/WelcomeController.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/request/BaseSearchRequest.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/request/BaseSearchRequest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/request/ClientCreateRequest.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/request/ClientCreateRequest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/request/ClientSearchRequest.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/request/ClientSearchRequest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/request/ClientUpdateRequest.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/request/ClientUpdateRequest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/request/ProductCreateRequest.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/request/ProductCreateRequest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/request/ProductDetailSearchRequest.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/request/ProductDetailSearchRequest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/request/ProductSearchRequest.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/request/ProductSearchRequest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/request/ProductUpdateRequest.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/request/ProductUpdateRequest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ClientCreateResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ClientCreateResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ClientDeleteResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ClientDeleteResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ClientSearchResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ClientSearchResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ClientSuggestionResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ClientSuggestionResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ClientUpdateResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ClientUpdateResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ClientViewResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ClientViewResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ProductAuthenticateResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ProductAuthenticateResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ProductCreateResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ProductCreateResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ProductDeleteResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ProductDeleteResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ProductDetailEncryptedResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ProductDetailEncryptedResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ProductDetailResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ProductDetailResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ProductSearchResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ProductSearchResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ProductSuggestionResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ProductSuggestionResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ProductUpdateResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ProductUpdateResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/ProductViewResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/ProductViewResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/dto/response/SuccessResponse.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/response/SuccessResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/Authenticated.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/Authenticated.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/Client.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/Client.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/EvoteQuestion.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/EvoteQuestion.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/OptionChoice.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/OptionChoice.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/OptionGroup.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/OptionGroup.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/Product.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/Product.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/ProductComment.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/ProductComment.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/ProductDetail.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/ProductDetail.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/ProductIdentity.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/ProductIdentity.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/QuestionOption.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/QuestionOption.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/Sequence.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/Sequence.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/UnitOfMeasure.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/UnitOfMeasure.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/UserKey.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/UserKey.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/Voter.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/Voter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/authenticatedCustomer.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/authenticatedCustomer.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/criteria/ClientSearchCriteria.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/criteria/ClientSearchCriteria.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/criteria/ProductDetailSearchCriteria.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/criteria/ProductDetailSearchCriteria.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/criteria/ProductSearchCriteria.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/criteria/ProductSearchCriteria.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/entity/model/Image.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/entity/model/Image.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/exception/FileStorageException.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/exception/FileStorageException.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/exception/MyFileNotFoundException.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/exception/MyFileNotFoundException.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/repository/AuthenticatedRepository.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/repository/AuthenticatedRepository.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/repository/ClientRepository.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/repository/ClientRepository.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/repository/ProductDetailRepository.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/repository/ProductDetailRepository.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/repository/ProductRepository.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/repository/ProductRepository.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/repository/UserKeyRepository.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/repository/UserKeyRepository.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/AuthenticatedService.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/AuthenticatedService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/ClientService.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/ClientService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/FileStorageService.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/FileStorageService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/ProductDetailService.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/ProductDetailService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/ProductService.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/ProductService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/UserKeyService.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/UserKeyService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/impl/AuthenticatedServiceImpl.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/impl/AuthenticatedServiceImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/impl/ClientServiceImpl.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/impl/ClientServiceImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/impl/FileStorageServiceImpl.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/impl/FileStorageServiceImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/impl/ProductDetailServiceImpl.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/impl/ProductDetailServiceImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/impl/ProductServiceImpl.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/impl/ProductServiceImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/service/impl/UserKeyServiceImpl.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/service/impl/UserKeyServiceImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/util/AsymmetricCryptography.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/util/AsymmetricCryptography.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/util/DBInformation.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/util/DBInformation.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/util/DocumentAdapter.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/util/DocumentAdapter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/util/GenerateKeys.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/util/GenerateKeys.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/util/IOUtils.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/util/IOUtils.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/main/java/com/product/genuine/util/UtilBase64Image.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/util/UtilBase64Image.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/genuine-product/src/test/java/com/product/genuine/genuineproduct/GenuineProductApplicationTests.java" afterPath="$PROJECT_DIR$/genuine-product/src/test/java/com/clearpicture/platform/product/genuineproduct/GenuineProductApplicationTests.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/GspFrameworkApplication.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/configuration/GspFrameworkApplication.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/configuration/PlatformConfigProperties.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/configuration/PlatformConfigProperties.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/dto/response/SuccessResponse.java" afterPath="$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/dto/response/SuccessResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/dto/response/wrapper/BaseResponseWrapper.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/response/wrapper/BaseResponseWrapper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/dto/response/wrapper/ListResponseWrapper.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/response/wrapper/ListResponseWrapper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/dto/response/wrapper/MapResponseWrapper.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/response/wrapper/MapResponseWrapper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/dto/response/wrapper/PagingListResponseWrapper.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/response/wrapper/PagingListResponseWrapper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/dto/response/wrapper/SimpleResponseWrapper.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/response/wrapper/SimpleResponseWrapper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/entity/CreateModifyAwareBaseEntity.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/entity/CreateModifyAwareBaseEntity.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/enums/RestApiResponseStatus.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/enums/RestApiResponseStatus.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/exception/BaseException.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/exception/BaseException.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/exception/EntityIdCryptoException.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/exception/EntityIdCryptoException.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/modelmapper/ModelMapper.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/modelmapper/ModelMapper.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/modelmapper/ModelMappingAware.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/modelmapper/ModelMappingAware.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/modelmapper/converter/LongToStringConverter.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/modelmapper/converter/LongToStringConverter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/modelmapper/converter/StringToLongConverter.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/modelmapper/converter/StringToLongConverter.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/service/CryptoService.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/service/CryptoService.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/main/java/com/product/genuine/service/impl/CryptoServiceImpl.java" afterPath="$PROJECT_DIR$/gsp-framework/src/main/java/com/clearpicture/platform/service/impl/CryptoServiceImpl.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/gsp-framework/src/test/java/com/product/genuine/GspFrameworkApplicationTests.java" afterPath="$PROJECT_DIR$/gsp-framework/src/test/java/com/clearpicture/GspFrameworkApplicationTests.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/genuine-product/src/main/resources/application.properties" afterPath="$PROJECT_DIR$/genuine-product/src/main/resources/application.properties" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/genuine-product/pom.xml" afterPath="$PROJECT_DIR$/genuine-product/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gsp-framework/pom.xml" afterPath="$PROJECT_DIR$/gsp-framework/pom.xml" />
+    </list>
+    <ignored path="Clear-Picture.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="Clear-Picture" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/genuine-product/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5010">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GenuineProductApplication.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/GenuineProductApplication.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="315">
+              <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="47" />
+    <option name="y" value="24" />
+    <option name="width" value="1553" />
+    <option name="height" value="876" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <OptionsSetting value="true" id="Undo Check Out" />
+    <OptionsSetting value="true" id="Get Latest Version" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="genuine-product" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="genuine-product" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="genuine-product" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Clear-Picture" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="genuine-product" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="product" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="GoToClass.includeLibraries" value="false" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="GoToFile.includeJavaFiles" value="false" />
+    <property name="MemberChooser.sorted" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.36091954" />
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+      <method />
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f3770575-cd99-4d1d-a91f-e89ace4650e4" name="Default" comment="" />
+      <created>1534581773228</created>
+      <option name="number" value="Default" />
+      <updated>1534581773228</updated>
+      <workItem from="1534581773941" duration="147000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="147000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="47" y="24" width="1553" height="876" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294979" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.09572742" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30543932" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26009265" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="CodotaView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.17154811" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.36087865" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/genuine-product/src/main/java/com/clearpicture/platform/product/GenuineProductApplication.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="315">
+          <caret line="7" column="15" selection-start-line="7" selection-start-column="15" selection-end-line="7" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genuine-product/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5010">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.36091954" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.36091954" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>commons-codec-1.7</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.36091954" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8 (1)</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.36091954" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>Clear-Picture</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.36091954" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.36091954" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
