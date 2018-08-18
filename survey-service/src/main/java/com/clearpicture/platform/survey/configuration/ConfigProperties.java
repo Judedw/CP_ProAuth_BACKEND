@@ -1,4 +1,4 @@
-package com.product.genuine.configuration;
+package com.clearpicture.platform.survey.configuration;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

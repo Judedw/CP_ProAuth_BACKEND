@@ -1,4 +1,4 @@
-package com.product.genuine.configuration;
+package com.clearpicture.platform.survey.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
