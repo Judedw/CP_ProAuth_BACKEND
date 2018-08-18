@@ -3,11 +3,11 @@ package com.clearpicture.platform.survey.dto.response;
 import lombok.Data;
 
 /**
- * QuestionCreateResponse
- * Created by nuwan on 8/17/18.
+ * AnswerTemplateCreateResponse
+ * Created by nuwan on 8/18/18.
  */
 @Data
-public class QuestionCreateResponse {
+public class AnswerTemplateCreateResponse {
 
     private String id;
 }

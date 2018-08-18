@@ -29,8 +29,6 @@ public class SurveyController {
     @Qualifier("modelMapper")
     private ModelMapper modelMapper;
 
-
-
     @PostMapping("${app.endpoint.surveysCreate}")
     public ResponseEntity<SimpleResponseWrapper<SurveyCreateResponse>> create(@Validated @RequestBody SurveyCreateRequest request) {
 
