@@ -1,7 +1,9 @@
 package com.clearpicture.platform.product.controller;
 
 import com.clearpicture.platform.product.service.FileStorageService;
+import com.sap.ecm.api.EcmService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.naming.InitialContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -30,11 +33,52 @@ public class FileUploadController {
     private FileStorageService fileStorageService;
 
     @PostMapping(value = "/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void uploadFile(@RequestParam("file")MultipartFile file) {
+    public String uploadFile(@RequestParam("file")MultipartFile file) {
 
         System.out.println("original file name :"+file.getOriginalFilename());
 
-        File convertFile = new File(file.getOriginalFilename());
+        StringBuilder response = new StringBuilder();
+
+                File convertFile = new File(file.getOriginalFilename());
+
+        try
+        {
+            String uniqueName = "clearpicture-documents";
+            String secretKey = "nuw1nSAPH@n@";
+
+            com.sap.ecm.api.EcmService ecmSvc = null;
+
+            InitialContext ctx = new InitialContext();
+            String lookupName = "java:comp/env/" + "EcmService";
+            try
+            {
+                ecmSvc = (EcmService) ctx.lookup(lookupName);
+                Session openCmisSession = null;
+
+                //connect to my repository
+                openCmisSession = ecmSvc.connect(uniqueName,secretKey);
+
+                if(openCmisSession != null) {
+                    response.append("You have now connected to CMS :"+openCmisSession.getRepositoryInfo().getId());
+                    System.out.println("You have now connected to CMS :"+openCmisSession.getRepositoryInfo().getId());
+                } else {
+                    response.append("You can not connected to CMS :"+openCmisSession);
+                }
+
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        response.append("original file name :"+file.getOriginalFilename());
+
+        return response.toString();
     }
 
 

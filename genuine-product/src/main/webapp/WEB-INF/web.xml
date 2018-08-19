@@ -12,4 +12,10 @@
     <!--
         -Dspring.profiles.active=prod
     -->
+
+    <resource-ref>
+        <res-ref-name>EcmService</res-ref-name>
+        <res-type>com.sap.ecm.api.EcmService</res-type>
+    </resource-ref>
+
 </web-app>
