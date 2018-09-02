@@ -5,7 +5,7 @@
 
 	<groupId>com.clearpicture.platform</groupId>
 	<artifactId>gsp-framework</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>gsp-framework</name>
@@ -23,6 +23,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <apache-common-lang.version>3.7</apache-common-lang.version>
+        <model-mapper.version>1.1.0</model-mapper.version>
         <querydsl.version>4.1.4</querydsl.version>
 
     </properties>
@@ -52,10 +53,15 @@
 
         <!--21072018-->
         <!-- https://mvnrepository.com/artifact/com.github.jmnarloch/modelmapper-spring-boot-starter -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.jmnarloch</groupId>
             <artifactId>modelmapper-spring-boot-starter</artifactId>
             <version>1.0.1</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${model-mapper.version}</version>
         </dependency>
 
         <dependency>

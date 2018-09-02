@@ -3,15 +3,17 @@ package com.clearpicture.platform.survey.dto.response;
 import lombok.Data;
 
 /**
- * SurveyCreateResponse
- * Created by nuwan on 8/17/18.
+ * SurveyViewResponse
+ * Created by nuwan on 9/2/18.
  */
 @Data
-public class SurveyCreateResponse {
+public class SurveyViewResponse {
 
     private String id;
 
     private String topic;
+
+    private String type;
 
     private String startDate;
 

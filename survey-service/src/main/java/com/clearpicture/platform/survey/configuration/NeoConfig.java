@@ -1,7 +1,6 @@
-package com.clearpicture.platform.product.configuration;
+package com.clearpicture.platform.survey.configuration;
 
-
-import com.clearpicture.platform.product.util.DBInformation;
+import com.clearpicture.platform.survey.util.DBInformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +24,7 @@ public class NeoConfig
 		JndiDataSourceLookup dataSourceLookup = new JndiDataSourceLookup();
 		
 		//DataSource ds = dataSourceLookup.getDataSource("java:comp/env/jdbc/DefaultDB");
-		DataSource ds = dataSourceLookup.getDataSource("java:comp/env/jdbc/ProductDB");
+		DataSource ds = dataSourceLookup.getDataSource("java:comp/env/jdbc/SurveyDB");
 
 		DBInformation dbInfo = new DBInformation(ds.getConnection().getMetaData());
 		log.info(dbInfo.toString());

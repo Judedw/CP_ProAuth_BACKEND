@@ -1,7 +1,6 @@
 package com.clearpicture.platform.survey.entity;
 
 import com.clearpicture.platform.entity.CreateModifyAwareBaseEntity;
-import com.clearpicture.platform.survey.enums.SurveyType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,39 +8,36 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
-import java.util.Set;
 
 /**
- * Survey
- * Created by nuwan on 8/17/18.
+ * EVote
+ * Created by nuwan on 8/23/18.
  */
 @Getter
 @Setter
 @Entity
-@Table(catalog = "survey_db", name = "survey")
-public class Survey extends CreateModifyAwareBaseEntity {
+@Table(catalog = "survey_db", name = "e_vote")
+public class EVote extends CreateModifyAwareBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@Column(unique = true)
     private String topic;
 
-    private SurveyType type;
+    private String code;
 
-    private LocalDate startDate;
+    private String description;
 
-    private LocalDate endDate;
+    private Integer quantity;
 
-    private String productId;
+    private LocalDate expireDate;
 
-    private String eVoteId;
+    private Integer batchNumber;
 
-    @OneToMany(mappedBy = "survey")
-    private Set<Question> questions;
+    private String imageName;
 
+    private Long clientId;
 }

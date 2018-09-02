@@ -16,6 +16,8 @@ public class AnswerTeamplateTypeConverter implements AttributeConverter<AnswerTe
 
 	@Override
 	public String convertToDatabaseColumn(AnswerTemplateType attribute) {
+        if(attribute == null)
+            return null;
 		return attribute.getValue();
 	}
 

@@ -13,8 +13,8 @@ public enum QuestionStatus {
 	private String label;
 	private String value;
 	
-	private QuestionStatus(String lable,String value) {
-		this.label = lable;
+	private QuestionStatus(String label,String value) {
+		this.label = label;
 		this.value = value;
 	}
 	

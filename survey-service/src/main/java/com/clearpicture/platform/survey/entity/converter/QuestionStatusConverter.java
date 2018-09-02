@@ -18,6 +18,8 @@ public class QuestionStatusConverter implements AttributeConverter<QuestionStatu
 	 */
 	@Override
 	public String convertToDatabaseColumn(QuestionStatus attribute) {
+        if(attribute == null)
+            return null;
 		return attribute.getValue();
 	}
 

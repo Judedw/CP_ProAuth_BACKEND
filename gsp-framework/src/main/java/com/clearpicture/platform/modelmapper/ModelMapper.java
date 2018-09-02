@@ -19,10 +19,10 @@ public class ModelMapper {
     @Autowired
     private List<Converter> converters;
 
-    public <T>  T map(Object source,Class<T> targetType) {
+    public <T> T map(Object source, Class<T> targetType) {
         org.modelmapper.ModelMapper mapper = createModelMapperInstance();
         mapper.getConfiguration().setAmbiguityIgnored(true);
-        return mapper.map(source,targetType);
+        return mapper.map(source, targetType);
     }
 
     public <T, S> List<T> map(List<S> sourceList, Class<T> targetType) {
@@ -36,6 +36,12 @@ public class ModelMapper {
             }
         }
         return result;
+    }
+
+    public void map(Object source, Object target) {
+        org.modelmapper.ModelMapper mapper = createModelMapperInstance();
+        mapper.getConfiguration().setAmbiguityIgnored(true);
+        mapper.map(source, target);
     }
 
     @SuppressWarnings("unchecked")

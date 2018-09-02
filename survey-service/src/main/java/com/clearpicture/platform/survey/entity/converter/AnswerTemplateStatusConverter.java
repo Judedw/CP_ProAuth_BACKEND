@@ -16,6 +16,8 @@ public class AnswerTemplateStatusConverter implements AttributeConverter<AnswerT
 
 	@Override
 	public String convertToDatabaseColumn(AnswerTemplateStatus attribute) {
+        if(attribute == null)
+            return null;
 		return attribute.getValue();
 	}
 

@@ -1,6 +1,5 @@
 package com.clearpicture.platform.survey.dto.request;
 
-
 import com.clearpicture.platform.enums.DateTimePattern;
 import com.clearpicture.platform.survey.enums.SurveyType;
 import com.clearpicture.platform.survey.validation.annotation.DateFormat;
@@ -11,11 +10,11 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 
 /**
- * SurveyCreateRequest
- * Created by nuwan on 8/17/18.
+ * SurveyUpdateRequest
+ * Created by nuwan on 9/2/18.
  */
 @Data
-public class SurveyCreateRequest {
+public class SurveyUpdateRequest {
 
     @NotBlank(message = "surveyCreateRequest.topic.empty")
     @Length(max = 100, message = "surveyCreateRequest.topic.lengthExceeds")
