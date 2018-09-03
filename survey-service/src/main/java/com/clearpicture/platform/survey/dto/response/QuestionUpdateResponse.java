@@ -10,5 +10,7 @@ import lombok.Data;
 public class QuestionUpdateResponse {
 
 	private String id;
+
+    private String name;
 	
 }

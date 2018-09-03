@@ -1,8 +1,10 @@
 package com.clearpicture.platform.survey.service.impl;
 
 import com.clearpicture.platform.survey.entity.QSurvey;
+import com.clearpicture.platform.survey.entity.Question;
 import com.clearpicture.platform.survey.entity.Survey;
 import com.clearpicture.platform.survey.entity.criteria.SurveySearchCriteria;
+import com.clearpicture.platform.survey.repository.QuestionRepository;
 import com.clearpicture.platform.survey.repository.SurveyRepository;
 import com.clearpicture.platform.survey.service.SurveyService;
 import com.querydsl.core.BooleanBuilder;
@@ -13,6 +15,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * SurveyServiceImpl
@@ -25,9 +30,18 @@ public class SurveyServiceImpl implements SurveyService {
     @Autowired
     private SurveyRepository surveyRepository;
 
+    @Autowired
+    private QuestionRepository questionRepository;
+
     @Override
     public Survey save(Survey survey) {
+        Set<Question> questions = new HashSet<>();
+        for (Question question:survey.getQuestions()) {
+            Question dbQuestion = questionRepository.getOne(question.getId());
+            questions.add(dbQuestion);
 
+        }
+        survey.setQuestions(questions);
         return surveyRepository.save(survey);
 
     }
@@ -53,6 +67,12 @@ public class SurveyServiceImpl implements SurveyService {
             surveys = surveyRepository.findAll(page);
         }
 
+        if(surveys != null) {
+            surveys.forEach(survey -> {
+                survey.getQuestions().size();
+            });
+        }
+
         return surveys;
 
     }
@@ -75,6 +95,9 @@ public class SurveyServiceImpl implements SurveyService {
         currentSurvey.setType(survey.getType());
         currentSurvey.setStartDate(survey.getStartDate());
         currentSurvey.setEndDate(survey.getEndDate());
+
+        if(currentSurvey.getQuestions() != null)
+            currentSurvey.getQuestions().size();
 
         return surveyRepository.save(currentSurvey);
 

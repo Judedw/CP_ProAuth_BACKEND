@@ -10,4 +10,6 @@ import lombok.Data;
 public class QuestionCreateResponse {
 
     private String id;
+
+    private String name;
 }

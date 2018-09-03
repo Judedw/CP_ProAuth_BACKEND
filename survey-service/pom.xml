@@ -27,7 +27,7 @@
         <gsp-framework-version>1.0.2</gsp-framework-version>
         <querydsl.apt.plugin.version>1.1.3</querydsl.apt.plugin.version>
         <model-mapper.version>1.1.0</model-mapper.version>
-        <war.file.name>survey-service</war.file.name>
+        <war.file.name>survey</war.file.name>
     </properties>
 
     <dependencies>

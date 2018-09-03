@@ -54,8 +54,6 @@ public class SurveyController {
     public ResponseEntity<SimpleResponseWrapper<SurveyCreateResponse>> create
             (@Validated @RequestBody SurveyCreateRequest request) {
 
-        log.info("converter ->"+modelMapper.toString());
-
         Survey survey = modelMapper.map(request,Survey.class);
 
         Survey savedSurvey = surveyService.save(survey);

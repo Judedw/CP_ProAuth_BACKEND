@@ -11,8 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Question
@@ -33,9 +36,12 @@ public class Question  extends CreateModifyAwareBaseEntity {
 
     private QuestionStatus status;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "survey_id")
-    private Survey survey;
+    private Survey survey;*/
+
+    @ManyToMany(mappedBy = "questions")
+    private Set<Survey> surveys = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name="answer_template_id")

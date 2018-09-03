@@ -4,6 +4,7 @@ import com.clearpicture.platform.survey.enums.SurveyType;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * SurveySearchResponse
@@ -25,5 +26,14 @@ public class SurveySearchResponse {
     private String productId;
 
     private String eVoteId;
+
+    private List<QuestionData> questions;
+
+    @Data
+    public static class QuestionData {
+
+        private String id;
+
+    }
 
 }

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * EVoteServiceImpl
  * Created by nuwan on 8/23/18.
@@ -62,5 +64,20 @@ public class EVoteServiceImpl implements EVoteService {
             product.getProductDetails().size();
         }*/
         return eVote;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<EVote> retrieveForSuggestions(String keyword) {
+
+        if (StringUtils.isNotBlank(keyword)) {
+            BooleanBuilder booleanBuilder = new BooleanBuilder(
+                    QEVote.eVote.topic.containsIgnoreCase(keyword));
+            return (List<EVote>) eVoteRepository.findAll(booleanBuilder);
+        } else {
+            BooleanBuilder booleanBuilder = new BooleanBuilder();
+            return (List<EVote>) eVoteRepository.findAll(booleanBuilder);
+        }
+
     }
 }

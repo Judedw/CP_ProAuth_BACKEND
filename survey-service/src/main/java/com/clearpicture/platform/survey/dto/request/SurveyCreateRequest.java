@@ -9,6 +9,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * SurveyCreateRequest
@@ -32,14 +33,29 @@ public class SurveyCreateRequest {
     @NotBlank(message = "surveyCreateRequest.endDate.empty")
     private String endDate;
 
-    private String productId;
 
     private String eVoteId;
 
-    private QuestionData questionsData;
+    private ProductData product;
+
+    private List<QuestionData> questions;
 
     @Data
     public static class QuestionData {
+
+        private String id;
+
+    }
+
+    @Data
+    public static class EVoteData {
+
+        private String id;
+
+    }
+
+    @Data
+    public static class ProductData {
 
         private String id;
 

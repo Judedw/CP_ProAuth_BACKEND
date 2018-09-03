@@ -5,10 +5,6 @@ import com.clearpicture.platform.survey.entity.AnswerTemplate;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 
 /**
  * @author nuwan
@@ -17,18 +13,18 @@ import javax.validation.constraints.NotNull;
 @Data
 public class QuestionUpdateRequest {
 
-	@NotBlank(message = "questionnaireUpdateRequest.name.empty")
+	//@NotBlank(message = "questionnaireUpdateRequest.name.empty")
 	@Length(max = 1000, message = "questionnaireUpdateRequest.name.lengthExceeds")
 	private String name;
 
-	@Valid
-	@NotNull(message = "questionCreateRequest.answerTemplate.empty")
+	//@Valid
+	//@NotNull(message = "questionCreateRequest.answerTemplate.empty")
 	private AnswerTemplateData answerTemplate;
 	
 	@Data
 	public static class AnswerTemplateData implements ModelMappingAware {
 		
-		@NotBlank(message = "questionCreateRequest.answerTemplate.id.empty")
+		//@NotBlank(message = "questionCreateRequest.answerTemplate.id.empty")
 		private String id;
 		
 		private String name;

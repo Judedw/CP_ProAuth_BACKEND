@@ -26,10 +26,7 @@ public class QuestionSearchRequest extends BaseSearchRequest {
 			message = "{questionnaireSearchRequest.sortProperty.invalid}")
 	@Override
 	public String getSortProperty() {
-		
-		if(sortProperty.equals("scale") ) {
-			sortProperty = "scale.name";
-		}
+
 		if(sortProperty.equals("answerTemplate") ) {
 			sortProperty = "answerTemplate.name";
 		}

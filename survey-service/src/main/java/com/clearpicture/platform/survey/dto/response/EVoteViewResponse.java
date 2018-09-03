@@ -13,7 +13,7 @@ public class EVoteViewResponse {
 
     private String id;
 
-    private String name;
+    private String topic;
 
     private String code;
 

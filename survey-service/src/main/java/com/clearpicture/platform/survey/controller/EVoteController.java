@@ -1,6 +1,8 @@
 package com.clearpicture.platform.survey.controller;
 
+import com.clearpicture.platform.dto.request.GeneralSuggestionRequest;
 import com.clearpicture.platform.modelmapper.ModelMapper;
+import com.clearpicture.platform.response.wrapper.ListResponseWrapper;
 import com.clearpicture.platform.response.wrapper.PagingListResponseWrapper;
 import com.clearpicture.platform.response.wrapper.SimpleResponseWrapper;
 import com.clearpicture.platform.service.CryptoService;
@@ -8,10 +10,12 @@ import com.clearpicture.platform.survey.dto.request.EVoteCreateRequest;
 import com.clearpicture.platform.survey.dto.request.EVoteSearchRequest;
 import com.clearpicture.platform.survey.dto.response.EVoteCreateResponse;
 import com.clearpicture.platform.survey.dto.response.EVoteSearchResponse;
+import com.clearpicture.platform.survey.dto.response.EVoteSuggestionResponse;
 import com.clearpicture.platform.survey.dto.response.EVoteViewResponse;
 import com.clearpicture.platform.survey.entity.EVote;
 import com.clearpicture.platform.survey.entity.criteria.EVoteSearchCriteria;
 import com.clearpicture.platform.survey.service.EVoteService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -31,6 +35,7 @@ import java.util.List;
  * EVoteController
  * Created by nuwan on 8/23/18.
  */
+@Slf4j
 @RestController
 public class EVoteController {
 
@@ -45,10 +50,12 @@ public class EVoteController {
 
     @PostMapping(value = "${app.endpoint.evotesCreate}")
     public ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>> create(
-            @RequestParam("file")MultipartFile file ,@RequestParam("code") String code,
+            @RequestParam(value = "file",required = false)MultipartFile file,@RequestParam("code") String code,
             @RequestParam(value = "quantity")String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
             @RequestParam(value = "topic",required = false)String topic ,@RequestParam(value = "description",required = false) String description,
             @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client") String client) {
+
+        log.info("file ->"+file);
 
         //String fileName = fileStorageService.storeFile(file);
         EVoteCreateRequest request = new EVoteCreateRequest();
@@ -59,9 +66,10 @@ public class EVoteController {
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
         //request.setImageName(fileName);
-        request.setClientId(client);
+        //request.setClientId(cryptoService.decryptEntityId(client));
 
-        EVote eVote = modelMapper.map(request,EVote.class);
+        EVote eVote = modelMapper.map(request, EVote.class);
+        eVote.setClientId(cryptoService.decryptEntityId(client));
         EVote saveEVote = eVoteService.save(eVote);
         EVoteCreateResponse response = modelMapper.map(saveEVote,EVoteCreateResponse.class);
 
@@ -95,6 +103,16 @@ public class EVoteController {
         return new ResponseEntity<SimpleResponseWrapper<EVoteViewResponse>>(new SimpleResponseWrapper<EVoteViewResponse>(response),HttpStatus.OK);
 
 
+    }
+
+    @GetMapping("${app.endpoint.evotesSuggestion}")
+    public ResponseEntity<ListResponseWrapper<EVoteSuggestionResponse>> retrieve(GeneralSuggestionRequest request) {
+        List<EVote> eVotes = eVoteService.retrieveForSuggestions(request.getKeyword());
+
+        List<EVoteSuggestionResponse> answerTemplatesSuggestions = modelMapper.map(eVotes, EVoteSuggestionResponse.class);
+
+        return new ResponseEntity<ListResponseWrapper<EVoteSuggestionResponse>>(
+                new ListResponseWrapper<EVoteSuggestionResponse>(answerTemplatesSuggestions), HttpStatus.OK);
     }
 
 }
