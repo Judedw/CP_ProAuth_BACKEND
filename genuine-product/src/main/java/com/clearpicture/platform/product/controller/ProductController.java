@@ -58,12 +58,12 @@ public class ProductController {
 
     @PostMapping(value = "${app.endpoint.productsCreate}")
     public ResponseEntity<SimpleResponseWrapper<ProductCreateResponse>> create(
-            @RequestParam("file")MultipartFile file ,@RequestParam("code") String code,
+            @RequestParam(value = "file",required = false)MultipartFile file ,@RequestParam("code") String code,
             @RequestParam(value = "quantity")String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
             @RequestParam(value = "name",required = false)String name ,@RequestParam(value = "description",required = false) String description,
             @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client") String client) {
 
-        String fileName = fileStorageService.storeFile(file);
+        //String fileName = fileStorageService.storeFile(file);
         ProductCreateRequest request = new ProductCreateRequest();
         request.setCode(code);
         request.setName(name);
@@ -71,7 +71,7 @@ public class ProductController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
-        request.setImageName(fileName);
+        //request.setImageName(fileName);
 
         ProductCreateRequest.ClientData clientData = new ProductCreateRequest.ClientData();
         clientData.setId(client);
