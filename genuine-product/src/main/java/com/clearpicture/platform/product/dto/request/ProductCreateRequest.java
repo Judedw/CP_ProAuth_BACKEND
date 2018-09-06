@@ -36,6 +36,9 @@ public class ProductCreateRequest {
 
     private String imageName;
 
+    private String imageObject;
+
+
 
     @Data
     public static class ClientData implements ModelMappingAware {

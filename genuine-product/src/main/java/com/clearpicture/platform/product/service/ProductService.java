@@ -22,5 +22,5 @@ public interface ProductService {
 
     Product delete(Long aLong);
 
-    List<Product> retrieveForSuggestions(Long id);
+    List<Product> retrieveForSuggestions();
 }

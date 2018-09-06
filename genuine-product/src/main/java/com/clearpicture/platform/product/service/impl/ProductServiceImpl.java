@@ -124,10 +124,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> retrieveForSuggestions(Long id) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder(QProduct.product.client.id.eq(id));
+    public List<Product> retrieveForSuggestions() {
+        //BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        return (List<Product>) productRepository.findAll(booleanBuilder);
+        List<Product> products = productRepository.findAll();
+
+        return products;
 
 
 

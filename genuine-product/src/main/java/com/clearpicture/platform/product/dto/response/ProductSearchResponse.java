@@ -1,5 +1,6 @@
 package com.clearpicture.platform.product.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -22,11 +23,14 @@ public class ProductSearchResponse {
 
     private Integer quantity;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate expireDate;
 
     private Integer batchNumber;
 
     private String imageName;
+
+    private String imageObject;
 
     private List<ProductDetailData> productDetails;
 

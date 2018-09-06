@@ -28,6 +28,8 @@ public class ProductViewResponse {
 
     private String imageName;
 
+    private String imageObject;
+
     private List<ProductDetailData> productDetails;
 
     private ClientData client;

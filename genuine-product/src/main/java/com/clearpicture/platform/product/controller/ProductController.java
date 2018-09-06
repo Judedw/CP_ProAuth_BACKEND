@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -61,9 +63,8 @@ public class ProductController {
             @RequestParam(value = "file",required = false)MultipartFile file ,@RequestParam("code") String code,
             @RequestParam(value = "quantity")String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
             @RequestParam(value = "name",required = false)String name ,@RequestParam(value = "description",required = false) String description,
-            @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client") String client) {
+            @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client") String client) throws IOException, ServletException {
 
-        //String fileName = fileStorageService.storeFile(file);
         ProductCreateRequest request = new ProductCreateRequest();
         request.setCode(code);
         request.setName(name);
@@ -71,7 +72,11 @@ public class ProductController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
-        //request.setImageName(fileName);
+        if(file != null) {
+            request.setImageName(file.getOriginalFilename());
+            request.setImageObject(fileStorageService.storeFile(file));
+        }
+
 
         ProductCreateRequest.ClientData clientData = new ProductCreateRequest.ClientData();
         clientData.setId(client);
@@ -144,11 +149,12 @@ public class ProductController {
     }
 
     @GetMapping("${app.endpoint.productsSuggestion}")
-    public ResponseEntity<ListResponseWrapper<ProductSuggestionResponse>> retrieve(@PathVariable String id) {
+    public ResponseEntity<ListResponseWrapper<ProductSuggestionResponse>> retrieveSuggestion() {
 
-        Long productId = cryptoService.decryptEntityId(id);
+        //Long productId = cryptoService.decryptEntityId(id);
 
-        List<Product> products = productService.retrieveForSuggestions(productId);
+        //After aouth implementation we can use retrieve logged use as client
+        List<Product> products = productService.retrieveForSuggestions();
 
         List<ProductSuggestionResponse> productSuggestions = modelMapper.map(products, ProductSuggestionResponse.class);
 
