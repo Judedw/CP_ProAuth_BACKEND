@@ -13,7 +13,13 @@ public class SurveyCreateResponse {
 
     private String topic;
 
+    private String type;
+
     private String startDate;
 
     private String endDate;
+
+    private String voteId;
+
+    private String productId;
 }

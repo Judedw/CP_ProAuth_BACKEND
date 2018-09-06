@@ -8,7 +8,9 @@ import com.clearpicture.platform.survey.validation.annotation.ValidSurveyType;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -34,18 +36,37 @@ public class SurveyCreateRequest {
     private String endDate;
 
 
-    private String eVoteId;
+    private String voteId;
 
-    private ProductData product;
+    private String productId;
 
+    @Valid
     private List<QuestionData> questions;
 
     @Data
     public static class QuestionData {
 
-        private String id;
+        @NotBlank(message = "questionCreateRequest.question.empty")
+        @Length(max = 1000, message = "questionCreateRequest.question.lengthExceeds")
+        private String name;
+
+        @Valid
+        @NotNull(message = "questionCreateRequest.answerTemplate.empty")
+        private AnswerTemplateData answerTemplate;
+
+        @Data
+        public static class AnswerTemplateData  {
+
+            @NotBlank(message = "questionCreateRequest.answerTemplate.id.empty")
+            private String id;
+
+        }
 
     }
+
+    /*private ProductData product;
+
+
 
     @Data
     public static class EVoteData {
@@ -59,5 +80,5 @@ public class SurveyCreateRequest {
 
         private String id;
 
-    }
+    }*/
 }

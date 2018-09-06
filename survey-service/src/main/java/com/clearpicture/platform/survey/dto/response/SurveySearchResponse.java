@@ -1,6 +1,5 @@
 package com.clearpicture.platform.survey.dto.response;
 
-import com.clearpicture.platform.survey.enums.SurveyType;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -17,7 +16,7 @@ public class SurveySearchResponse {
 
     private String topic;
 
-    private SurveyType type;
+    private String type;
 
     private LocalDate startDate;
 
@@ -25,7 +24,7 @@ public class SurveySearchResponse {
 
     private String productId;
 
-    private String eVoteId;
+    private String voteId;
 
     private List<QuestionData> questions;
 

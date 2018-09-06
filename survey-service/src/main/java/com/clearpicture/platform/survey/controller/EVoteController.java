@@ -15,6 +15,8 @@ import com.clearpicture.platform.survey.dto.response.EVoteViewResponse;
 import com.clearpicture.platform.survey.entity.EVote;
 import com.clearpicture.platform.survey.entity.criteria.EVoteSearchCriteria;
 import com.clearpicture.platform.survey.service.EVoteService;
+import com.clearpicture.platform.survey.service.FileStorageService;
+import com.clearpicture.platform.survey.validation.validator.EVoteCreateRequestValidation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletException;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -48,16 +52,16 @@ public class EVoteController {
     @Autowired
     private CryptoService cryptoService;
 
+    @Autowired
+    private FileStorageService fileStorageService;
+
     @PostMapping(value = "${app.endpoint.evotesCreate}")
     public ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>> create(
-            @RequestParam(value = "file",required = false)MultipartFile file,@RequestParam("code") String code,
-            @RequestParam(value = "quantity")String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
+            @RequestParam(value = "file",required = false)MultipartFile file,@RequestParam(value = "code",required = false) String code,
+            @RequestParam(value = "quantity",required = false)String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
             @RequestParam(value = "topic",required = false)String topic ,@RequestParam(value = "description",required = false) String description,
-            @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client") String client) {
+            @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client",required = false) String client) throws IOException, ServletException {
 
-        log.info("file ->"+file);
-
-        //String fileName = fileStorageService.storeFile(file);
         EVoteCreateRequest request = new EVoteCreateRequest();
         request.setCode(code);
         request.setTopic(topic);
@@ -65,13 +69,23 @@ public class EVoteController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
-        //request.setImageName(fileName);
-        //request.setClientId(cryptoService.decryptEntityId(client));
+        request.setClient(client);
+        if(file != null) {
+            request.setImageName(file.getOriginalFilename());
+            request.setImageObject(fileStorageService.storeFile(file));
+        }
+
+        EVoteCreateRequestValidation validation = new EVoteCreateRequestValidation();
+        validation.validate(request);
+        /*EVoteCreateRequest.ClientData clientData = new EVoteCreateRequest.ClientData();
+        clientData.setId(client);
+        request.setClient(clientData);*/
 
         EVote eVote = modelMapper.map(request, EVote.class);
         eVote.setClientId(cryptoService.decryptEntityId(client));
         EVote saveEVote = eVoteService.save(eVote);
         EVoteCreateResponse response = modelMapper.map(saveEVote,EVoteCreateResponse.class);
+        response.setClientId(cryptoService.encryptEntityId(saveEVote.getClientId()));
 
         return new ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>>(new SimpleResponseWrapper<>(response), HttpStatus.CREATED);
     }

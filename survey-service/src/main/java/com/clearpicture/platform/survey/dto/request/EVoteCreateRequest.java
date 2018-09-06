@@ -25,11 +25,14 @@ public class EVoteCreateRequest {
     private String batchNumber;
 
     @NotBlank(message = "EVoteCreateRequest.clientId.empty")
-    private String clientId;
+    private String client;
 
     @NotBlank(message = "EVoteCreateRequest.topic.empty")
     private String topic;
 
     private String imageName;
+
+    private String imageObject;
+
 
 }

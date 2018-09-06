@@ -28,6 +28,16 @@ public class SurveyViewResponse {
 
         private String id;
 
+        private AnswerTemplateData answerTemplate;
+
+        @Data
+        public static class AnswerTemplateData  {
+
+
+            private String id;
+
+        }
+
     }
 
 }

@@ -1,10 +1,11 @@
 package com.clearpicture.platform.survey.service.impl;
 
+import com.clearpicture.platform.survey.entity.AnswerTemplate;
 import com.clearpicture.platform.survey.entity.QSurvey;
 import com.clearpicture.platform.survey.entity.Question;
 import com.clearpicture.platform.survey.entity.Survey;
 import com.clearpicture.platform.survey.entity.criteria.SurveySearchCriteria;
-import com.clearpicture.platform.survey.repository.QuestionRepository;
+import com.clearpicture.platform.survey.repository.AnswerTemplateRepository;
 import com.clearpicture.platform.survey.repository.SurveyRepository;
 import com.clearpicture.platform.survey.service.SurveyService;
 import com.querydsl.core.BooleanBuilder;
@@ -31,18 +32,17 @@ public class SurveyServiceImpl implements SurveyService {
     private SurveyRepository surveyRepository;
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private AnswerTemplateRepository answerTemplateRepository;
 
     @Override
-    public Survey save(Survey survey) {
-        Set<Question> questions = new HashSet<>();
-        for (Question question:survey.getQuestions()) {
-            Question dbQuestion = questionRepository.getOne(question.getId());
-            questions.add(dbQuestion);
-
+    public Survey save(Survey newSurvey) {
+        if(newSurvey.getQuestions() != null && newSurvey.getQuestions().size() != 0) {
+            for(Question question:newSurvey.getQuestions()) {
+                question.setSurvey(newSurvey);
+            }
         }
-        survey.setQuestions(questions);
-        return surveyRepository.save(survey);
+
+        return surveyRepository.save(newSurvey);
 
     }
 
@@ -86,20 +86,71 @@ public class SurveyServiceImpl implements SurveyService {
     @Override
     public Survey update(Survey survey) {
 
-        Survey currentSurvey = surveyRepository.getOne(survey.getId());
+        Set<Question> newQuestions = new HashSet<>();
+        Set<Question> deletedQuestions = new HashSet<>();
 
-        if(currentSurvey == null) {
+        Survey persistedSurvey = surveyRepository.getOne(survey.getId());
+
+        if(persistedSurvey == null) {
 
         }
-        currentSurvey.setTopic(survey.getTopic());
-        currentSurvey.setType(survey.getType());
-        currentSurvey.setStartDate(survey.getStartDate());
-        currentSurvey.setEndDate(survey.getEndDate());
+        persistedSurvey.setTopic(survey.getTopic());
+        persistedSurvey.setType(survey.getType());
+        persistedSurvey.setStartDate(survey.getStartDate());
+        persistedSurvey.setEndDate(survey.getEndDate());
 
-        if(currentSurvey.getQuestions() != null)
-            currentSurvey.getQuestions().size();
+        if(persistedSurvey.getQuestions() != null)
+            persistedSurvey.getQuestions().size();
 
-        return surveyRepository.save(currentSurvey);
+        if(persistedSurvey.getQuestions() != null && persistedSurvey.getQuestions().size() !=0) {
+
+            if(survey.getQuestions() != null && survey.getQuestions().size() != 0) {
+
+                for(Question persistedQuestion:persistedSurvey.getQuestions()) {
+                    boolean matchedQuestion = false;
+
+                    for(Question updatedQuestion:survey.getQuestions()) {
+
+                        if(updatedQuestion.getId() != null) {
+
+                            if(persistedQuestion.getId().equals(updatedQuestion.getId())) {
+
+                                persistedQuestion.setName(updatedQuestion.getName());
+
+                                if(updatedQuestion.getAnswerTemplate() != null ) {
+                                    AnswerTemplate answerTemplate = answerTemplateRepository.getOne(updatedQuestion.getAnswerTemplate().getId());
+                                    persistedQuestion.setAnswerTemplate(answerTemplate);
+                                }
+                                matchedQuestion=true;
+                            }
+
+                        } else {
+                            updatedQuestion.setSurvey(persistedSurvey);
+                            newQuestions.add(updatedQuestion);
+                        }
+                    }
+
+                    if(!matchedQuestion) {
+                        deletedQuestions.add(persistedQuestion);
+                    }
+
+                }
+            } else {
+                deletedQuestions.addAll(persistedSurvey.getQuestions());
+            }
+
+        } else {
+            if(survey.getQuestions() != null && survey.getQuestions().size() != 0) {
+                for(Question question:survey.getQuestions()) {
+                    question.setSurvey(survey);
+                }
+                newQuestions.addAll(survey.getQuestions());
+            }
+        }
+
+
+
+        return surveyRepository.save(persistedSurvey);
 
     }
 
@@ -107,7 +158,6 @@ public class SurveyServiceImpl implements SurveyService {
     public Survey delete(Long surveyId) {
         Survey currentSurvey = surveyRepository.getOne(surveyId);
         surveyRepository.delete(currentSurvey);
-
         return currentSurvey;
     }
 }
