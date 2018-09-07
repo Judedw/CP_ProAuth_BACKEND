@@ -15,7 +15,9 @@ public interface EVoteService {
 
     Page<EVote> search(EVoteSearchCriteria criteria);
 
-    EVote retrieve(Long productId);
+    EVote retrieve(Long eVoteId);
 
     List<EVote> retrieveForSuggestions(String keyword);
+
+    EVote update(EVote eVote);
 }

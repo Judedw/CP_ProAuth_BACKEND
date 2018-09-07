@@ -6,11 +6,11 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 /**
- * EVoteCreateRequest
- * Created by nuwan on 8/23/18.
+ * EVoteUpdateRequest
+ * Created by nuwan on 9/7/18.
  */
 @Data
-public class EVoteCreateRequest {
+public class EVoteUpdateRequest {
 
     @NotBlank(message = "EVoteCreateRequest.code.empty")
     private String code;
@@ -35,6 +35,4 @@ public class EVoteCreateRequest {
     private String imageObject;
 
     private String surveyId;
-
-
 }

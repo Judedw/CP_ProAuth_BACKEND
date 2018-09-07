@@ -22,14 +22,14 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(catalog = "survey_db", name = "e_vote_detail")
-public class EVoteDetails {
+public class EVoteDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    private String uniqueProductCode;
+    private String uniqueVoteCode;
 
     @Column(unique = true)
     private String authenticationCode;

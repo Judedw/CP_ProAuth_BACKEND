@@ -30,4 +30,6 @@ public class EVoteCreateResponse {
     private String imageObject;
 
     private String clientId;
+
+    private String surveyId;
 }

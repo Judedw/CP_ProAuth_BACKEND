@@ -1,6 +1,7 @@
 package com.clearpicture.platform.survey.controller;
 
 import com.clearpicture.platform.dto.request.GeneralSuggestionRequest;
+import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.modelmapper.ModelMapper;
 import com.clearpicture.platform.response.wrapper.ListResponseWrapper;
 import com.clearpicture.platform.response.wrapper.PagingListResponseWrapper;
@@ -8,15 +9,18 @@ import com.clearpicture.platform.response.wrapper.SimpleResponseWrapper;
 import com.clearpicture.platform.service.CryptoService;
 import com.clearpicture.platform.survey.dto.request.EVoteCreateRequest;
 import com.clearpicture.platform.survey.dto.request.EVoteSearchRequest;
+import com.clearpicture.platform.survey.dto.request.EVoteUpdateRequest;
 import com.clearpicture.platform.survey.dto.response.EVoteCreateResponse;
 import com.clearpicture.platform.survey.dto.response.EVoteSearchResponse;
 import com.clearpicture.platform.survey.dto.response.EVoteSuggestionResponse;
+import com.clearpicture.platform.survey.dto.response.EVoteUpdateResponse;
 import com.clearpicture.platform.survey.dto.response.EVoteViewResponse;
 import com.clearpicture.platform.survey.entity.EVote;
 import com.clearpicture.platform.survey.entity.criteria.EVoteSearchCriteria;
 import com.clearpicture.platform.survey.service.EVoteService;
 import com.clearpicture.platform.survey.service.FileStorageService;
 import com.clearpicture.platform.survey.validation.validator.EVoteCreateRequestValidation;
+import com.clearpicture.platform.survey.validation.validator.EVoteUpdateRequestValidation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +30,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,7 +65,8 @@ public class EVoteController {
             @RequestParam(value = "file",required = false)MultipartFile file,@RequestParam(value = "code",required = false) String code,
             @RequestParam(value = "quantity",required = false)String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
             @RequestParam(value = "topic",required = false)String topic ,@RequestParam(value = "description",required = false) String description,
-            @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client",required = false) String client) throws IOException, ServletException {
+            @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "clientId",required = false) String clientId,
+            @RequestParam(value = "surveyId",required = false) String surveyId) {
 
         EVoteCreateRequest request = new EVoteCreateRequest();
         request.setCode(code);
@@ -69,23 +75,33 @@ public class EVoteController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
-        request.setClient(client);
+        request.setClientId(clientId);
+        request.setSurveyId(surveyId);
         if(file != null) {
             request.setImageName(file.getOriginalFilename());
-            request.setImageObject(fileStorageService.storeFile(file));
+            try {
+                request.setImageObject(fileStorageService.storeFile(file));
+            } catch (IOException e) {
+
+                throw  new ComplexValidationException("eVote","eVoteCreateRequest.canNotStoreFile");
+
+            } catch (ServletException e) {
+                throw  new ComplexValidationException("eVote","eVoteCreateRequest.canNotStoreFile");
+            }
         }
 
         EVoteCreateRequestValidation validation = new EVoteCreateRequestValidation();
         validation.validate(request);
-        /*EVoteCreateRequest.ClientData clientData = new EVoteCreateRequest.ClientData();
-        clientData.setId(client);
-        request.setClient(clientData);*/
 
         EVote eVote = modelMapper.map(request, EVote.class);
-        eVote.setClientId(cryptoService.decryptEntityId(client));
+        /*eVote.setClientId(cryptoService.decryptEntityId(client));
+        if(survey != null)
+            eVote.setSurveyId(cryptoService.decryptEntityId(survey));*/
         EVote saveEVote = eVoteService.save(eVote);
         EVoteCreateResponse response = modelMapper.map(saveEVote,EVoteCreateResponse.class);
-        response.setClientId(cryptoService.encryptEntityId(saveEVote.getClientId()));
+        /*response.setClientId(cryptoService.encryptEntityId(saveEVote.getClientId()));
+        if(saveEVote.getSurveyId()!= null)
+            response.setSurveyId(cryptoService.encryptEntityId(saveEVote.getSurveyId()));*/
 
         return new ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>>(new SimpleResponseWrapper<>(response), HttpStatus.CREATED);
     }
@@ -115,6 +131,52 @@ public class EVoteController {
         EVoteViewResponse response = modelMapper.map(retrievedProduct,EVoteViewResponse.class);
 
         return new ResponseEntity<SimpleResponseWrapper<EVoteViewResponse>>(new SimpleResponseWrapper<EVoteViewResponse>(response),HttpStatus.OK);
+
+
+    }
+
+    @PutMapping("${app.endpoint.evotesUpdate}")
+    public ResponseEntity<SimpleResponseWrapper<EVoteUpdateResponse>> update(@PathVariable String id,@RequestParam(value = "file",required = false)MultipartFile file,@RequestParam(value = "code",required = false) String code,
+                                                                             @RequestParam(value = "quantity",required = false)String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
+                                                                             @RequestParam(value = "topic",required = false)String topic ,@RequestParam(value = "description",required = false) String description,
+                                                                             @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "clientId",required = false) String clientId,
+                                                                             @RequestParam(value = "surveyId",required = false) String surveyId) {
+        Long eVoteId = cryptoService.decryptEntityId(id);
+
+        EVoteUpdateRequest request = new EVoteUpdateRequest();
+        request.setCode(code);
+        request.setTopic(topic);
+        request.setDescription(description);
+        request.setQuantity(quantity);
+        request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
+        request.setBatchNumber(batchNumber);
+        request.setClientId(clientId);
+        request.setSurveyId(surveyId);
+        if(file != null) {
+            request.setImageName(file.getOriginalFilename());
+            try {
+                request.setImageObject(fileStorageService.storeFile(file));
+            } catch (IOException e) {
+
+                throw  new ComplexValidationException("eVote","eVoteUpdateRequest.canNotStoreFile");
+
+            } catch (ServletException e) {
+                throw  new ComplexValidationException("eVote","eVoteUpdateRequest.canNotStoreFile");
+            }
+        }
+
+        EVoteUpdateRequestValidation validation = new EVoteUpdateRequestValidation();
+        validation.validate(request);
+
+        EVote eVote = modelMapper.map(request, EVote.class);
+
+        eVote.setId(eVoteId);
+
+        EVote updatedEVote = eVoteService.update(eVote);
+
+        EVoteUpdateResponse response = modelMapper.map(updatedEVote,EVoteUpdateResponse.class);
+
+        return new ResponseEntity<SimpleResponseWrapper<EVoteUpdateResponse>>(new SimpleResponseWrapper<EVoteUpdateResponse>(response),HttpStatus.OK);
 
 
     }

@@ -5,11 +5,11 @@ import lombok.Data;
 import java.time.LocalDate;
 
 /**
- * EVoteViewResponse
- * Created by nuwan on 8/23/18.
+ * EVoteUpdateResponse
+ * Created by nuwan on 9/7/18.
  */
 @Data
-public class EVoteViewResponse {
+public class EVoteUpdateResponse {
 
     private String id;
 
@@ -26,6 +26,8 @@ public class EVoteViewResponse {
     private Integer batchNumber;
 
     private String imageName;
+
+    private String imageObject;
 
     private String clientId;
 

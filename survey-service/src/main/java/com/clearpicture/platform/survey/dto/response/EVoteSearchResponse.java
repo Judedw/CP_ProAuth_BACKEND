@@ -26,4 +26,8 @@ public class EVoteSearchResponse {
     private Integer batchNumber;
 
     private String imageName;
+
+    private String clientId;
+
+    private String surveyId;
 }
