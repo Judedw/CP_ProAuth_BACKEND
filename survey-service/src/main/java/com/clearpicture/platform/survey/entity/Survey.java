@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,7 +43,7 @@ public class Survey extends CreateModifyAwareBaseEntity {
 
     private Long voteId;
 
-    @OneToMany(mappedBy = "survey",cascade = {CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval = true)
+    @OneToMany(mappedBy = "survey",cascade = {CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<Question> questions;
 
     /*@ManyToMany(cascade = { CascadeType.ALL })

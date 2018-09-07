@@ -1,5 +1,6 @@
 package com.clearpicture.platform.survey.service.impl;
 
+import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.survey.entity.AnswerTemplate;
 import com.clearpicture.platform.survey.entity.QSurvey;
 import com.clearpicture.platform.survey.entity.Question;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -80,7 +82,12 @@ public class SurveyServiceImpl implements SurveyService {
     @Transactional(readOnly = true)
     @Override
     public Survey retrieve(Long surveyId) {
-        return surveyRepository.getOne(surveyId);
+        try {
+            return surveyRepository.getOne(surveyId);
+    } catch (EntityNotFoundException e) {
+        throw new ComplexValidationException("product", "productUpdateRequest.productNotExist");
+    }
+
     }
 
     @Override

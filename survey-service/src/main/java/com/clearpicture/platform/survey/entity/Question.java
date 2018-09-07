@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.ZonedDateTime;
 
 /**
  * Question
@@ -30,6 +31,10 @@ public class Question  extends CreateModifyAwareBaseEntity {
     //@Column(unique = true)
     private String name;
 
+    private ZonedDateTime expirationDate;
+
+    private ZonedDateTime startDate;
+
     private QuestionStatus status;
 
     @ManyToOne
@@ -42,6 +47,8 @@ public class Question  extends CreateModifyAwareBaseEntity {
     @ManyToOne
     @JoinColumn(name="answer_template_id")
     private AnswerTemplate answerTemplate;
+
+
 
 
 }

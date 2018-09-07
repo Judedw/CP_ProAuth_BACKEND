@@ -1,5 +1,6 @@
 package com.clearpicture.platform.survey.service.impl;
 
+import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.survey.entity.AnswerTemplate;
 import com.clearpicture.platform.survey.entity.QQuestion;
 import com.clearpicture.platform.survey.entity.Question;
@@ -39,7 +40,7 @@ public class QuestionServiceImpl implements QuestionService {
             newQuestion.setAnswerTemplate(answerTemplate);
         }
 
-        newQuestion.setStatus(QuestionStatus.ACTIVE);
+        newQuestion.setStatus(QuestionStatus.NEW);
         Question persistedQuestion = questionRepository.save(newQuestion);
 
         return persistedQuestion;
@@ -53,7 +54,7 @@ public class QuestionServiceImpl implements QuestionService {
         PageRequest page = PageRequest.of(criteria.getPageNumber() - 1, criteria.getPageSize(),
                 Sort.Direction.fromString(criteria.getSortDirection() == null ? null : criteria.getSortDirection()), criteria.getSortProperty());
         Page<Question> questions = null;
-        BooleanBuilder booleanBuilder = new BooleanBuilder(QQuestion.question.status.ne(QuestionStatus.DELETED));
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
 
 		if(StringUtils.isNotBlank(criteria.getKeyword())) {
 			booleanBuilder.and(QQuestion.question.name.containsIgnoreCase(criteria.getKeyword()));
@@ -80,21 +81,21 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question update(Question question) {
-        Question currentQestion =questionRepository.getOne(question.getId());
+        Question currentQuestion =questionRepository.getOne(question.getId());
 
-        /*if(currentQestion == null) {
+        if(currentQuestion == null) {
             throw new ComplexValidationException("question", "questionUpdateRequest.questionNotExist");
-        }*/
+        }
 
-        currentQestion.setName(question.getName());
+        currentQuestion.setName(question.getName());
 
         if(question.getAnswerTemplate() != null ) {
             AnswerTemplate answerTemplate = answerTemplateService.retrieve(question.getAnswerTemplate().getId());
-            currentQestion.setAnswerTemplate(answerTemplate);
+            currentQuestion.setAnswerTemplate(answerTemplate);
         }
 
 
-        Question persistedQuestion = questionRepository.save(currentQestion);
+        Question persistedQuestion = questionRepository.save(currentQuestion);
 
         return persistedQuestion;
     }
@@ -102,10 +103,8 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Question delete(Long questionId) {
         Question question = questionRepository.getOne(questionId);
-        question.setStatus(QuestionStatus.DELETED);
-        Question persistedQuestion = questionRepository.save(question);
-
-        return persistedQuestion;
+        questionRepository.delete(question);
+        return question;
 
         /*if (question == null) {
             //throw new ComplexValidationException("question", "questionDeleteRequest.questionNotExist");

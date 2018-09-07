@@ -6,32 +6,32 @@ package com.clearpicture.platform.survey.enums;
  */
 public enum QuestionStatus {
 
-	ACTIVE("Active", "A"),
-	INACTIVE("Inactive", "I"),
-	DELETED("Deleted", "D");
+    NEW("New", "N"),
+    FETCHED("Fetched", "F"),
+    ANSWERED("Answerd", "A");
 
-	private String label;
-	private String value;
-	
-	private QuestionStatus(String label,String value) {
-		this.label = label;
-		this.value = value;
-	}
-	
-	public String getValue() {
-		return value;
-	}
+    private String label;
+    private String value;
 
-	public String getLabel() {
-		return label;
-	}
-	
-	public static QuestionStatus getEnum(String value) {
-		for(QuestionStatus item:QuestionStatus.values()) {
-			if(item.getValue().equalsIgnoreCase(value)) {
-				return item;
-			}
-		}
-		return null;
-	}
+    private QuestionStatus(String lable,String value) {
+        this.label = lable;
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public static QuestionStatus getEnum(String value) {
+        for(QuestionStatus item:QuestionStatus.values()) {
+            if(item.getValue().equalsIgnoreCase(value)) {
+                return item;
+            }
+        }
+        return null;
+    }
 }

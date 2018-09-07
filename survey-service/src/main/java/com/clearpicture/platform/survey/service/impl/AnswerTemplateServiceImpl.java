@@ -6,7 +6,6 @@ import com.clearpicture.platform.survey.entity.QAnswerTemplate;
 import com.clearpicture.platform.survey.entity.QQuestion;
 import com.clearpicture.platform.survey.entity.criteria.AnswerTemplateCriteria;
 import com.clearpicture.platform.survey.enums.AnswerTemplateStatus;
-import com.clearpicture.platform.survey.enums.QuestionStatus;
 import com.clearpicture.platform.survey.repository.AnswerRepository;
 import com.clearpicture.platform.survey.repository.AnswerTemplateRepository;
 import com.clearpicture.platform.survey.service.AnswerTemplateService;
@@ -149,7 +148,7 @@ public class AnswerTemplateServiceImpl implements AnswerTemplateService {
         BooleanBuilder builder = new BooleanBuilder(QAnswerTemplate.answerTemplate.id.eq(id))
                 .and(QAnswerTemplate.answerTemplate.answers.isNotEmpty());
 
-        BooleanBuilder booleanBuilderQuestion = new BooleanBuilder(QQuestion.question.status.ne(QuestionStatus.DELETED))
+        BooleanBuilder booleanBuilderQuestion = new BooleanBuilder()
                 .and(QQuestion.question.answerTemplate.id.eq(id));
 
         /*if (questionRepository.exists(booleanBuilderQuestion)) {
