@@ -31,6 +31,8 @@ public class ProductCreateResponse {
 
     private String imageObject;
 
+    private String surveyId;
+
 
     @Data
     public static class ClientData  {

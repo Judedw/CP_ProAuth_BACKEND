@@ -38,6 +38,8 @@ public class ProductCreateRequest {
 
     private String imageObject;
 
+    private String surveyId;
+
 
 
     @Data

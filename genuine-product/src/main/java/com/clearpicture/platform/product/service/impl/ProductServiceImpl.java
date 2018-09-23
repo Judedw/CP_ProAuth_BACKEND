@@ -1,13 +1,18 @@
 package com.clearpicture.platform.product.service.impl;
 
-import com.clearpicture.platform.product.entity.ProductDetail;
+import com.clearpicture.platform.exception.ComplexValidationException;
+import com.clearpicture.platform.product.entity.Client;
 import com.clearpicture.platform.product.entity.Product;
+import com.clearpicture.platform.product.entity.ProductDetail;
 import com.clearpicture.platform.product.entity.QProduct;
 import com.clearpicture.platform.product.entity.criteria.ProductSearchCriteria;
+import com.clearpicture.platform.product.repository.ClientRepository;
 import com.clearpicture.platform.product.repository.ProductDetailRepository;
 import com.clearpicture.platform.product.repository.ProductRepository;
+import com.clearpicture.platform.product.service.ClientService;
 import com.clearpicture.platform.product.service.ProductService;
 import com.querydsl.core.BooleanBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,6 +30,7 @@ import java.util.Set;
  * ProductServiceImpl
  * Created by nuwan on 7/12/18.
  */
+@Slf4j
 @Transactional
 @Service("productService")
 public class ProductServiceImpl implements ProductService {
@@ -34,8 +41,26 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductDetailRepository productDetailRepository;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private ClientService clientService;
+
     @Override
     public Product save(Product product) {
+
+        try {
+            //Client client = clientRepository.getOne(product.getClient().getId());
+            Client client = clientService.retrieve(product.getClient().getId());
+            log.debug("{}",client);
+            System.out.println(client);//do not removed this
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("client", "productCreateRequest.clientNotExist");
+        } catch (Exception e) {
+            throw new ComplexValidationException("client", "productCreateRequest.clientNotExist");
+        }
+
 
         Set<ProductDetail> productDetails = new HashSet<>();
         Long lastId = productDetailRepository.getMaxId();
@@ -83,44 +108,48 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product retrieve(Long id) {
-        Product product = productRepository.getOne(id);
-        if(product != null) {
+        try {
+            Product product = productRepository.getOne(id);
             product.getProductDetails().size();
+            return product;
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("product", "productCreateRequest.productNotExist");
         }
-        return product;
+
     }
 
     @Override
     public Product update(Product product) {
-        Product currentProduct = productRepository.getOne(product.getId());
 
-        if(currentProduct == null) {
+        try {
+            Product currentProduct = productRepository.getOne(product.getId());
+            currentProduct.setCode(product.getCode());
+            currentProduct.setDescription(product.getDescription());
+            currentProduct.setQuantity(product.getQuantity());
+            currentProduct.setExpireDate(product.getExpireDate());
+            currentProduct.setBatchNumber(product.getBatchNumber());
+            currentProduct.setClient(product.getClient());
+            currentProduct.setSurveyId(product.getSurveyId());
 
+            return productRepository.save(currentProduct);
+
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("product", "productUpdateRequest.productNotExist");
         }
 
-        currentProduct.setCode(product.getCode());
-        currentProduct.setDescription(product.getDescription());
-        currentProduct.setQuantity(product.getQuantity());
-        currentProduct.setExpireDate(product.getExpireDate());
-        currentProduct.setBatchNumber(product.getBatchNumber());
-
-        return productRepository.save(product);
     }
 
     @Override
     public Product delete(Long id) {
 
-        Product currentProduct = productRepository.getOne(id);
-
-        if(currentProduct == null) {
-
+        try {
+            Product currentProduct = productRepository.getOne(id);
+            productRepository.delete(currentProduct);
+            return currentProduct;
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("product", "productDeleteRequest.productNotExist");
         }
 
-        //if product attached to product details to will not permit to delete client
-
-        productRepository.delete(currentProduct);
-
-        return currentProduct;
     }
 
     @Override

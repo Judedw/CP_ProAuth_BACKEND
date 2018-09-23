@@ -51,6 +51,8 @@ public class Product extends CreateModifyAwareBaseEntity {
     @JoinColumn(name="client_id")
     private Client client;
 
+    private Long surveyId;
+
     @OneToMany(mappedBy = "product",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private Set<ProductDetail> productDetails;
 

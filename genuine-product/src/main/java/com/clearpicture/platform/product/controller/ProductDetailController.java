@@ -2,6 +2,7 @@ package com.clearpicture.platform.product.controller;
 
 
 import com.clearpicture.platform.configuration.PlatformConfigProperties;
+import com.clearpicture.platform.enums.SurveyType;
 import com.clearpicture.platform.modelmapper.ModelMapper;
 import com.clearpicture.platform.product.entity.ProductDetail;
 import com.clearpicture.platform.product.service.ProductDetailService;
@@ -83,7 +84,8 @@ public class ProductDetailController {
         productDetails.forEach(productDetail -> {
             ProductDetailResponse response = new ProductDetailResponse();
             try {
-                byte[] encVal = bytesEncryptor.encrypt(productDetail.getAuthenticationCode().getBytes(UNICODE_FORMAT));
+                String uniqueAuthCode = productDetail.getAuthenticationCode()+"/"+SurveyType.PRODUCT.getValue();
+                byte[] encVal = bytesEncryptor.encrypt(uniqueAuthCode.getBytes(UNICODE_FORMAT));
                 response.setAuthenticationCode(Hex.encodeHexString(encVal));
                 //response.setAuthCode(encrypt(productDetail.getAuthenticationCode()));
             } catch (UnsupportedEncodingException e) {

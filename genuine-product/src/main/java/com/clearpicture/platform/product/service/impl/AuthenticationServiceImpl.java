@@ -2,6 +2,7 @@ package com.clearpicture.platform.product.service.impl;
 
 import com.clearpicture.platform.configuration.PlatformConfigProperties;
 import com.clearpicture.platform.enums.SurveyType;
+import com.clearpicture.platform.product.dto.response.ProductAuthenticateResponse;
 import com.clearpicture.platform.product.entity.Authenticated;
 import com.clearpicture.platform.product.entity.Product;
 import com.clearpicture.platform.product.entity.ProductDetail;
@@ -9,11 +10,12 @@ import com.clearpicture.platform.product.entity.QAuthenticated;
 import com.clearpicture.platform.product.entity.QProductDetail;
 import com.clearpicture.platform.product.repository.AuthenticatedRepository;
 import com.clearpicture.platform.product.repository.ProductDetailRepository;
-import com.clearpicture.platform.product.service.AuthenticatedService;
+import com.clearpicture.platform.product.service.AuthenticationService;
+import com.clearpicture.platform.product.service.Ms2msCommunicationService;
+import com.clearpicture.platform.service.CryptoService;
 import com.clearpicture.platform.util.AuthenticatedConstant;
 import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.encrypt.BytesEncryptor;
@@ -28,24 +30,31 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * AuthenticatedServiceImpl
- * Created by nuwan on 8/7/18.
+ * AuthenticationServiceImpl
+ * Created by nuwan on 9/23/18.
  */
 @Slf4j
 @Transactional
 @Service
-public class AuthenticatedServiceImpl implements AuthenticatedService {
-
-    @Autowired
-    private AuthenticatedRepository authenticatedRepository;
-
-    @Autowired
-    private ProductDetailRepository productDetailRepository;
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private BytesEncryptor bytesEncryptor;
 
     @Autowired
     private PlatformConfigProperties configs;
+
+    @Autowired
+    private Ms2msCommunicationService ms2msCommunicationService;
+
+    @Autowired
+    private ProductDetailRepository productDetailRepository;
+
+    @Autowired
+    private AuthenticatedRepository authenticatedRepository;
+
+    @Autowired
+    private CryptoService cryptoService;
+
 
     @PostConstruct
     public void init() {
@@ -54,15 +63,53 @@ public class AuthenticatedServiceImpl implements AuthenticatedService {
     }
 
     @Override
-    public Map<String,Object>  authenticate(String authenticateCode) throws Exception {
+    public ProductAuthenticateResponse authenticate(String authenticateCode) throws Exception {
+        Long surveyId =0L;
+        Boolean checkAllReadyAuthenticated = Boolean.FALSE;
+        ProductAuthenticateResponse productAuthenticateResponse = new ProductAuthenticateResponse();
+        ProductAuthenticateResponse.ProductAuthData authData = new ProductAuthenticateResponse.ProductAuthData();
+        String authenticationCode = new String(bytesEncryptor.decrypt(Hex.decodeHex(authenticateCode)));
+        String[] authCodeType = authenticationCode.split("/");
+        if(authCodeType[1].equals(SurveyType.PRODUCT.getValue())) {
+            log.info("authenticationCode type -->"+authCodeType[1]);
+
+            Map<String,Object> authenticatedMap = new HashMap<>();
+
+            try {
+                authenticatedMap = productAuthenticate(authCodeType[0]);
+                checkAllReadyAuthenticated = (Boolean) authenticatedMap.get(AuthenticatedConstant.AUTH_STATUS);
+
+                if((Boolean) authenticatedMap.get(AuthenticatedConstant.AUTH_STATUS)) {
+                    surveyId = (Long) authenticatedMap.get(AuthenticatedConstant.SURVEY_ID);
+                    authData.setTitle(configs.getAuthenticate().getTitleSuccess());
+                    authData.setMessage(configs.getAuthenticate().getSuccessMessage());
+                    authData.setSurveyId(cryptoService.encryptEntityId(surveyId));
+                } else {
+                    authData.setTitle(configs.getAuthenticate().getTitleReject());
+                    authData.setMessage(configs.getAuthenticate().getRejectMessage());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                authData.setTitle(configs.getAuthenticate().getTitleReject());
+                authData.setMessage(configs.getAuthenticate().getRejectMessage());
+            }
+        } else if(authCodeType[1].equals(SurveyType.EVOTE.getValue())) {
+            log.info("authenticationCode type -->"+authCodeType[1]);
+            productAuthenticateResponse = ms2msCommunicationService.authenticateEVote(authCodeType[0]);
+
+        }
+
+        productAuthenticateResponse.setContent(authData);
+        return productAuthenticateResponse;
+    }
+
+    public Map<String,Object> productAuthenticate(String authenticateCode) throws Exception {
 
         log.info("authenticateCode : {}",authenticateCode);
 
-        String authCode = getAuthenticateCode(authenticateCode);
-
         Map<String,Object> authenticatedMap = new HashMap<>();
 
-        Optional<ProductDetail> productDetail = authenticateProductDetail(authCode);
+        Optional<ProductDetail> productDetail = authenticateProductDetail(authenticateCode);
 
         if(productDetail != null) {
             authenticatedMap.put(AuthenticatedConstant.AUTH_STATUS,Boolean.TRUE);
@@ -122,16 +169,5 @@ public class AuthenticatedServiceImpl implements AuthenticatedService {
 
     }
 
-    /*Divided into product and evote*/
-    public String getAuthenticateCode(String authenticateCode) throws DecoderException {
-        String authenticationCode = new String(bytesEncryptor.decrypt(Hex.decodeHex(authenticateCode)));
-        String[] authCodeType = authenticationCode.split("/");
-        if(authCodeType[1].equals(SurveyType.PRODUCT.getValue())) {
-            log.info("authenticationCode type -->"+authCodeType[1]);
-            return authCodeType[0];
-        } else if(authCodeType[1].equals(SurveyType.EVOTE.getValue())) {
-            log.info("authenticationCode type -->"+authCodeType[1]);
-        }
-        return null;
-    }
+
 }

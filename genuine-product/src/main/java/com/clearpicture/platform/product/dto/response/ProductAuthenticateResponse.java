@@ -9,7 +9,16 @@ import lombok.Data;
 @Data
 public class ProductAuthenticateResponse {
 
-    private String title;
+    private ProductAuthData content;
 
-    private String message;
+    @Data
+    public static  class ProductAuthData {
+
+        private String surveyId;
+
+        private String title;
+
+        private String message;
+
+    }
 }

@@ -34,6 +34,8 @@ public class ProductViewResponse {
 
     private ClientData client;
 
+    private String surveyId;
+
     @Data
     public static class ProductDetailData {
 
