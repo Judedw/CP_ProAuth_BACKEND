@@ -1,7 +1,8 @@
 package com.clearpicture.platform.survey.service;
 
-import com.clearpicture.platform.survey.entity.Authenticated;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /**
  * AuthenticatedService
@@ -9,5 +10,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface AuthenticatedService {
-    Authenticated authenticate(String code);
+    Map<String,Object> authenticate(String code) throws Exception;
 }

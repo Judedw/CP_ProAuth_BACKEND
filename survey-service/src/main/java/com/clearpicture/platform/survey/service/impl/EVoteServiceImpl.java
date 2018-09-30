@@ -42,7 +42,7 @@ public class EVoteServiceImpl implements EVoteService {
     private EVoteDetailsRepository eVoteDetailsRepository;
 
     @Override
-    public EVote save(EVote eVote) {
+    public EVote save(EVote eVote) throws Exception {
 
         Set<EVoteDetail> eVoteDetails = new HashSet<>();
         Long lastId = eVoteDetailsRepository.getMaxId();

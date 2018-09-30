@@ -1,10 +1,10 @@
-package com.clearpicture.platform.survey.enums;
+package com.clearpicture.platform.enums;
 
 /**
  * SurveyType
  * Created by nuwan on 8/22/18.
  */
-public enum  SurveyType {
+public enum SurveyType {
 
     PRODUCT("Product", "P"),
     EVOTE("Evote", "V");
@@ -12,7 +12,7 @@ public enum  SurveyType {
     private String label;
     private String value;
 
-    private SurveyType(String label,String value) {
+    private SurveyType(String label, String value) {
         this.label = label;
         this.value = value;
     }

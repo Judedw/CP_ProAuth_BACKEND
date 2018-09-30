@@ -15,7 +15,7 @@ public class ConfigProperties {
 
     private Crypto crypto;
 
-    //private Auth auth;
+    private ExternalEndpointProduct externalEndpointProduct;
 
     @Data
     public static class Crypto {
@@ -25,13 +25,10 @@ public class ConfigProperties {
         private String salt;
     }
 
-    /*@Data
-    public static class Auth {
+    @Data
+    public static class ExternalEndpointProduct {
 
-        private String resourceId;
+        private String validateClient;
 
-        private String ksPass;
-
-        private String kfName;
-    }*/
+    }
 }

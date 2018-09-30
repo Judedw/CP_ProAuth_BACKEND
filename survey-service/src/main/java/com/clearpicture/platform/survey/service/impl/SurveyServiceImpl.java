@@ -6,6 +6,7 @@ import com.clearpicture.platform.survey.entity.QSurvey;
 import com.clearpicture.platform.survey.entity.Question;
 import com.clearpicture.platform.survey.entity.Survey;
 import com.clearpicture.platform.survey.entity.criteria.SurveySearchCriteria;
+import com.clearpicture.platform.survey.enums.QuestionStatus;
 import com.clearpicture.platform.survey.repository.AnswerTemplateRepository;
 import com.clearpicture.platform.survey.repository.SurveyRepository;
 import com.clearpicture.platform.survey.service.SurveyService;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -41,6 +43,8 @@ public class SurveyServiceImpl implements SurveyService {
         if(newSurvey.getQuestions() != null && newSurvey.getQuestions().size() != 0) {
             for(Question question:newSurvey.getQuestions()) {
                 question.setSurvey(newSurvey);
+                question.setStatus(QuestionStatus.NEW);
+                question.setExpirationDate(newSurvey.getEndDate());
             }
         }
 
@@ -82,11 +86,17 @@ public class SurveyServiceImpl implements SurveyService {
     @Transactional(readOnly = true)
     @Override
     public Survey retrieve(Long surveyId) {
+
         try {
-            return surveyRepository.getOne(surveyId);
-    } catch (EntityNotFoundException e) {
-        throw new ComplexValidationException("product", "productUpdateRequest.productNotExist");
-    }
+            Optional<Survey> survey = surveyRepository.findById(surveyId);
+            if(survey != null) {
+                return survey.get();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
 
     }
 
@@ -96,69 +106,70 @@ public class SurveyServiceImpl implements SurveyService {
         Set<Question> newQuestions = new HashSet<>();
         Set<Question> deletedQuestions = new HashSet<>();
 
-        Survey persistedSurvey = surveyRepository.getOne(survey.getId());
+        try {
+            Survey persistedSurvey = surveyRepository.getOne(survey.getId());
+            persistedSurvey.setTopic(survey.getTopic());
+            persistedSurvey.setType(survey.getType());
+            persistedSurvey.setStartDate(survey.getStartDate());
+            persistedSurvey.setEndDate(survey.getEndDate());
 
-        if(persistedSurvey == null) {
+            if(persistedSurvey.getQuestions() != null)
+                persistedSurvey.getQuestions().size();
 
-        }
-        persistedSurvey.setTopic(survey.getTopic());
-        persistedSurvey.setType(survey.getType());
-        persistedSurvey.setStartDate(survey.getStartDate());
-        persistedSurvey.setEndDate(survey.getEndDate());
+            if(persistedSurvey.getQuestions() != null && persistedSurvey.getQuestions().size() !=0) {
 
-        if(persistedSurvey.getQuestions() != null)
-            persistedSurvey.getQuestions().size();
+                if(survey.getQuestions() != null && survey.getQuestions().size() != 0) {
 
-        if(persistedSurvey.getQuestions() != null && persistedSurvey.getQuestions().size() !=0) {
+                    for(Question persistedQuestion:persistedSurvey.getQuestions()) {
 
-            if(survey.getQuestions() != null && survey.getQuestions().size() != 0) {
+                        boolean matchedQuestion = false;
 
-                for(Question persistedQuestion:persistedSurvey.getQuestions()) {
-                    boolean matchedQuestion = false;
+                        for(Question updatedQuestion:survey.getQuestions()) {
 
-                    for(Question updatedQuestion:survey.getQuestions()) {
+                            if(updatedQuestion.getId() != null) {
 
-                        if(updatedQuestion.getId() != null) {
+                                if(persistedQuestion.getId().equals(updatedQuestion.getId())) {
 
-                            if(persistedQuestion.getId().equals(updatedQuestion.getId())) {
+                                    persistedQuestion.setName(updatedQuestion.getName());
 
-                                persistedQuestion.setName(updatedQuestion.getName());
-
-                                if(updatedQuestion.getAnswerTemplate() != null ) {
-                                    AnswerTemplate answerTemplate = answerTemplateRepository.getOne(updatedQuestion.getAnswerTemplate().getId());
-                                    persistedQuestion.setAnswerTemplate(answerTemplate);
+                                    if(updatedQuestion.getAnswerTemplate() != null ) {
+                                        AnswerTemplate answerTemplate = answerTemplateRepository.getOne(updatedQuestion.getAnswerTemplate().getId());
+                                        persistedQuestion.setAnswerTemplate(answerTemplate);
+                                    }
+                                    matchedQuestion=true;
                                 }
-                                matchedQuestion=true;
+
+                            } else {
+                                updatedQuestion.setSurvey(persistedSurvey);
+                                newQuestions.add(updatedQuestion);
                             }
-
-                        } else {
-                            updatedQuestion.setSurvey(persistedSurvey);
-                            newQuestions.add(updatedQuestion);
                         }
-                    }
 
-                    if(!matchedQuestion) {
-                        deletedQuestions.add(persistedQuestion);
-                    }
+                        if(!matchedQuestion) {
+                            deletedQuestions.add(persistedQuestion);
+                        }
 
+                    }
+                } else {
+                    deletedQuestions.addAll(persistedSurvey.getQuestions());
                 }
+
             } else {
-                deletedQuestions.addAll(persistedSurvey.getQuestions());
-            }
-
-        } else {
-            if(survey.getQuestions() != null && survey.getQuestions().size() != 0) {
-                for(Question question:survey.getQuestions()) {
-                    question.setSurvey(survey);
+                if(survey.getQuestions() != null && survey.getQuestions().size() != 0) {
+                    for(Question question:survey.getQuestions()) {
+                        question.setSurvey(survey);
+                    }
+                    newQuestions.addAll(survey.getQuestions());
                 }
-                newQuestions.addAll(survey.getQuestions());
             }
+            persistedSurvey.getQuestions().removeAll(deletedQuestions);
+            persistedSurvey.getQuestions().addAll(newQuestions);
+
+            return surveyRepository.save(persistedSurvey);
+
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("product", "productUpdateRequest.productNotExist");
         }
-
-
-
-        return surveyRepository.save(persistedSurvey);
-
     }
 
     @Override

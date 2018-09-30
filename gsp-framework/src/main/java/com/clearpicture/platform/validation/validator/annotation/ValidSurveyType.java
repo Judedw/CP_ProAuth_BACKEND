@@ -1,7 +1,8 @@
-package com.clearpicture.platform.survey.validation.annotation;
+package com.clearpicture.platform.validation.validator.annotation;
 
-import com.clearpicture.platform.survey.enums.SurveyType;
-import com.clearpicture.platform.survey.validation.validator.SurveyTypeValidator;
+
+import com.clearpicture.platform.enums.SurveyType;
+import com.clearpicture.platform.validation.validator.SurveyTypeValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -11,7 +11,7 @@ import java.util.List;
  * Created by nuwan on 8/23/18.
  */
 public interface EVoteService {
-    EVote save(EVote eVote);
+    EVote save(EVote eVote) throws Exception;
 
     Page<EVote> search(EVoteSearchCriteria criteria);
 

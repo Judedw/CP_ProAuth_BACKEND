@@ -147,12 +147,12 @@
             <version>1.0.4.RELEASE</version>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>com.sap.cloud</groupId>
             <artifactId>neo-java-web-api</artifactId>
             <version>3.58.10.1</version>
             <scope>provided</scope>
-        </dependency>-->
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.opencsv/opencsv -->
         <dependency>
@@ -231,7 +231,7 @@
                     <groupId>com.sap.cloud</groupId>
                     <artifactId>neo-java-web-api</artifactId>
                     <version>3.58.10.1</version>
-                    <!--<scope>provided</scope>-->
+                    <scope>provided</scope>
                 </dependency>
             </dependencies>
         </profile>

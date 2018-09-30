@@ -1,5 +1,6 @@
 package com.clearpicture.platform.survey.controller;
 
+import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.modelmapper.ModelMapper;
 import com.clearpicture.platform.response.wrapper.PagingListResponseWrapper;
 import com.clearpicture.platform.response.wrapper.SimpleResponseWrapper;
@@ -12,6 +13,7 @@ import com.clearpicture.platform.survey.dto.response.SurveyDeleteResponse;
 import com.clearpicture.platform.survey.dto.response.SurveySearchResponse;
 import com.clearpicture.platform.survey.dto.response.SurveyUpdateResponse;
 import com.clearpicture.platform.survey.dto.response.SurveyViewResponse;
+import com.clearpicture.platform.survey.dto.response.external.SurveyValidateResponse;
 import com.clearpicture.platform.survey.entity.Survey;
 import com.clearpicture.platform.survey.entity.criteria.SurveySearchCriteria;
 import com.clearpicture.platform.survey.service.SurveyService;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -85,9 +88,19 @@ public class SurveyController {
 
         Long surveyId = cryptoService.decryptEntityId(id);
 
+        log.info("surveyId {}",surveyId);
+
         Survey retrievedSurvey = surveyService.retrieve(surveyId);
 
-        SurveyViewResponse response = modelMapper.map(retrievedSurvey,SurveyViewResponse.class);
+        log.info("retrievedSurvey {}",retrievedSurvey);
+
+        SurveyViewResponse response = null;
+
+        if(retrievedSurvey != null) {
+            response = modelMapper.map(retrievedSurvey,SurveyViewResponse.class);
+        } else {
+            throw new ComplexValidationException("survey", "surveyViewRequest.surveyNotExist");
+        }
 
         return new ResponseEntity<SimpleResponseWrapper<SurveyViewResponse>>(new SimpleResponseWrapper<SurveyViewResponse>(response),HttpStatus.OK);
 
@@ -122,5 +135,26 @@ public class SurveyController {
         SurveyDeleteResponse response = modelMapper.map(survey.getId(),SurveyDeleteResponse.class);
 
         return new ResponseEntity<SimpleResponseWrapper<SurveyDeleteResponse>>(new SimpleResponseWrapper<SurveyDeleteResponse>(response),HttpStatus.OK);
+    }
+
+    @GetMapping("${app.endpoint.surveysValidate}")
+    public ResponseEntity<SimpleResponseWrapper<SurveyValidateResponse>> validateSurvey(@RequestParam String surveyId) {
+
+        Long survey = cryptoService.decryptEntityId(surveyId);
+
+        Survey retrievedSurvey = surveyService.retrieve(survey);
+
+        log.info("retrievedSurvey {}",retrievedSurvey);
+
+        SurveyValidateResponse response = new SurveyValidateResponse();
+
+        if(retrievedSurvey != null) {
+            log.info("retrievedSurvey id {}",retrievedSurvey.getId());
+            response.setIsValid(Boolean.TRUE);
+        } else {
+            response.setIsValid(Boolean.FALSE);
+        }
+        return new ResponseEntity<SimpleResponseWrapper<SurveyValidateResponse>>(new SimpleResponseWrapper<SurveyValidateResponse>(response),HttpStatus.OK);
+
     }
 }

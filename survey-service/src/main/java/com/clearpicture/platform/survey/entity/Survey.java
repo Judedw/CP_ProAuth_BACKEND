@@ -1,7 +1,7 @@
 package com.clearpicture.platform.survey.entity;
 
 import com.clearpicture.platform.entity.CreateModifyAwareBaseEntity;
-import com.clearpicture.platform.survey.enums.SurveyType;
+import com.clearpicture.platform.enums.SurveyType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Set;
 
 /**
@@ -30,14 +31,13 @@ public class Survey extends CreateModifyAwareBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@Column(unique = true)
     private String topic;
 
     private SurveyType type;
 
     private LocalDate startDate;
 
-    private LocalDate endDate;
+    private ZonedDateTime endDate;
 
     private Long productId;
 
@@ -45,13 +45,5 @@ public class Survey extends CreateModifyAwareBaseEntity {
 
     @OneToMany(mappedBy = "survey",cascade = {CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<Question> questions;
-
-    /*@ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(
-            name = "survey_question",
-            joinColumns = { @JoinColumn(name = "survey_id") },
-            inverseJoinColumns = { @JoinColumn(name = "question_id") }
-    )
-    Set<Question> questions = new HashSet<>();*/
 
 }

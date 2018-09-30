@@ -1,6 +1,7 @@
 package com.clearpicture.platform.survey.controller;
 
 import com.clearpicture.platform.configuration.PlatformConfigProperties;
+import com.clearpicture.platform.enums.SurveyType;
 import com.clearpicture.platform.modelmapper.ModelMapper;
 import com.clearpicture.platform.response.wrapper.ListResponseWrapper;
 import com.clearpicture.platform.service.CryptoService;
@@ -52,9 +53,6 @@ public class EVoteDetailController {
     @PostConstruct
     public void init() {
         bytesEncryptor = Encryptors.stronger(configs.getCrypto().getPassword(), configs.getCrypto().getSalt());
-
-
-
     }
     @GetMapping("${app.endpoint.eVoteDetails}")
     public ResponseEntity<ListResponseWrapper<EVoteDetailResponse>> retrieveList(@PathVariable String eVoteId) throws GeneralSecurityException, IOException {
@@ -71,8 +69,11 @@ public class EVoteDetailController {
         eVoteDetails.forEach(productDetail -> {
             EVoteDetailResponse response = new EVoteDetailResponse();
             try {
-                byte[] encVal = bytesEncryptor.encrypt(productDetail.getAuthenticationCode().getBytes(UNICODE_FORMAT));
+                String uniqueAuthCode = productDetail.getAuthenticationCode()+"/"+ SurveyType.EVOTE.getValue();
+                byte[] encVal = bytesEncryptor.encrypt(uniqueAuthCode.getBytes(UNICODE_FORMAT));
                 response.setAuthenticationCode(Hex.encodeHexString(encVal));
+                /*byte[] encVal = bytesEncryptor.encrypt(productDetail.getAuthenticationCode().getBytes(UNICODE_FORMAT));
+                response.setAuthenticationCode(Hex.encodeHexString(encVal));*/
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

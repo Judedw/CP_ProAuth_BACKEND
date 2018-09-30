@@ -1,6 +1,6 @@
 package com.clearpicture.platform.survey.entity.converter;
 
-import com.clearpicture.platform.survey.enums.SurveyType;
+import com.clearpicture.platform.enums.SurveyType;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

@@ -5,12 +5,11 @@ import com.clearpicture.platform.configuration.PlatformConfigProperties;
 import com.clearpicture.platform.response.wrapper.SimpleResponseWrapper;
 import com.clearpicture.platform.service.CryptoService;
 import com.clearpicture.platform.survey.dto.response.EVoteAuthenticateResponse;
-import com.clearpicture.platform.survey.entity.Authenticated;
-import com.clearpicture.platform.survey.entity.EVote;
 import com.clearpicture.platform.survey.service.AuthenticatedService;
 import com.clearpicture.platform.survey.service.EVoteDetailService;
 import com.clearpicture.platform.survey.service.EVoteService;
-import org.apache.commons.codec.binary.Hex;
+import com.clearpicture.platform.util.AuthenticatedConstant;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.security.Security;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * AutheniticatedController
  * Created by nuwan on 8/7/18.
  */
+@Slf4j
 @RestController
 public class AuthenticatedController {
 
@@ -56,28 +58,31 @@ public class AuthenticatedController {
     @GetMapping("${app.endpoint.eVoteAuthenticate}")
     public ResponseEntity<SimpleResponseWrapper<EVoteAuthenticateResponse>> authenticate(@RequestParam String authCode) {
 
+        log.info("authCode-->"+authCode);
+
         EVoteAuthenticateResponse evoteAuthenticateResponse = new EVoteAuthenticateResponse();
-        Boolean result = Boolean.FALSE;
+        Long surveyId =0L;
         Boolean checkAllReadyAuthenticated = Boolean.FALSE;
-
+        Map<String,Object> authenticatedMap = new HashMap<>();
         try {
-            Authenticated authenticated = authenticatedService.authenticate(new String(bytesEncryptor.decrypt(Hex.decodeHex(authCode))));
-
-            if(authenticated != null) {
-                EVote eVote = authenticated.getEVoteDetail().getEVote();
-                if(eVote !=null)
-                    evoteAuthenticateResponse.setSurveyId(cryptoService.encryptEntityId(eVote.getSurveyId()));
-                evoteAuthenticateResponse.setTitle(configs.getAuthenticate().getTitleSuccess());
-                evoteAuthenticateResponse.setMessage(configs.getAuthenticate().getSuccessMessage());
-            } else {
-                evoteAuthenticateResponse.setTitle(configs.getAuthenticate().getTitleReject());
-                evoteAuthenticateResponse.setMessage(configs.getAuthenticate().getRejectMessage());
-            }
+            authenticatedMap = authenticatedService.authenticate((authCode));
+            checkAllReadyAuthenticated = (Boolean) authenticatedMap.get(AuthenticatedConstant.AUTH_STATUS);
+            surveyId = (Long) authenticatedMap.get(AuthenticatedConstant.SURVEY_ID);
+            log.info("surveyId {}",surveyId);
         } catch (Exception e) {
             e.printStackTrace();
             evoteAuthenticateResponse.setTitle(configs.getAuthenticate().getTitleReject());
             evoteAuthenticateResponse.setMessage(configs.getAuthenticate().getRejectMessage());
-
+        }
+        log.info("checkAllReadyAuthenticated {}",checkAllReadyAuthenticated);
+        if(checkAllReadyAuthenticated) {
+            evoteAuthenticateResponse.setTitle(configs.getAuthenticate().getTitleSuccess());
+            evoteAuthenticateResponse.setMessage(configs.getAuthenticate().getSuccessMessage());
+            if(surveyId != null)
+                evoteAuthenticateResponse.setSurveyId(cryptoService.encryptEntityId(surveyId));
+        } else {
+            evoteAuthenticateResponse.setTitle(configs.getAuthenticate().getTitleReject());
+            evoteAuthenticateResponse.setMessage(configs.getAuthenticate().getRejectMessage());
         }
 
 

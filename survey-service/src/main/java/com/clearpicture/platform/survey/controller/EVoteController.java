@@ -16,10 +16,12 @@ import com.clearpicture.platform.survey.dto.response.EVoteSuggestionResponse;
 import com.clearpicture.platform.survey.dto.response.EVoteUpdateResponse;
 import com.clearpicture.platform.survey.dto.response.EVoteViewResponse;
 import com.clearpicture.platform.survey.entity.EVote;
+import com.clearpicture.platform.survey.entity.Survey;
 import com.clearpicture.platform.survey.entity.criteria.EVoteSearchCriteria;
 import com.clearpicture.platform.survey.service.EVoteService;
 import com.clearpicture.platform.survey.service.FileStorageService;
-import com.clearpicture.platform.survey.validation.validator.EVoteCreateRequestValidation;
+import com.clearpicture.platform.survey.service.Ms2msCommunicationService;
+import com.clearpicture.platform.survey.service.SurveyService;
 import com.clearpicture.platform.survey.validation.validator.EVoteUpdateRequestValidation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +62,12 @@ public class EVoteController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private SurveyService surveyService;
+
+    @Autowired
+    private Ms2msCommunicationService ms2msCommunicationService;
+
     @PostMapping(value = "${app.endpoint.evotesCreate}")
     public ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>> create(
             @RequestParam(value = "file",required = false)MultipartFile file,@RequestParam(value = "code",required = false) String code,
@@ -76,34 +84,40 @@ public class EVoteController {
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
         request.setClientId(clientId);
-        request.setSurveyId(surveyId);
+        if(surveyId!=null && !surveyId.isEmpty())
+            request.setSurveyId(surveyId);
         if(file != null) {
             request.setImageName(file.getOriginalFilename());
             try {
                 request.setImageObject(fileStorageService.storeFile(file));
             } catch (IOException e) {
-
                 throw  new ComplexValidationException("eVote","eVoteCreateRequest.canNotStoreFile");
-
             } catch (ServletException e) {
                 throw  new ComplexValidationException("eVote","eVoteCreateRequest.canNotStoreFile");
             }
         }
 
-        EVoteCreateRequestValidation validation = new EVoteCreateRequestValidation();
-        validation.validate(request);
+        validate(request);
+
 
         EVote eVote = modelMapper.map(request, EVote.class);
         /*eVote.setClientId(cryptoService.decryptEntityId(client));
         if(survey != null)
             eVote.setSurveyId(cryptoService.decryptEntityId(survey));*/
-        EVote saveEVote = eVoteService.save(eVote);
-        EVoteCreateResponse response = modelMapper.map(saveEVote,EVoteCreateResponse.class);
+        try {
+            EVote saveEVote = eVoteService.save(eVote);
+            EVoteCreateResponse response = modelMapper.map(saveEVote,EVoteCreateResponse.class);
+            return new ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>>(new SimpleResponseWrapper<>(response), HttpStatus.CREATED);
+        } catch (Exception e) {
+            throw  new ComplexValidationException("eVote",e.toString());
+        }
+
+
         /*response.setClientId(cryptoService.encryptEntityId(saveEVote.getClientId()));
         if(saveEVote.getSurveyId()!= null)
             response.setSurveyId(cryptoService.encryptEntityId(saveEVote.getSurveyId()));*/
 
-        return new ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>>(new SimpleResponseWrapper<>(response), HttpStatus.CREATED);
+
     }
 
     @GetMapping("${app.endpoint.evotesSearch}")
@@ -189,6 +203,29 @@ public class EVoteController {
 
         return new ResponseEntity<ListResponseWrapper<EVoteSuggestionResponse>>(
                 new ListResponseWrapper<EVoteSuggestionResponse>(answerTemplatesSuggestions), HttpStatus.OK);
+    }
+
+    public void validate(EVoteCreateRequest request) {
+
+        if(request.getSurveyId() != null) {
+            Survey survey = surveyService.retrieve(cryptoService.decryptEntityId(request.getSurveyId()));
+            if(survey == null) {
+                throw new ComplexValidationException("survey","EVoteCreateRequest.survey.invalid");
+            }
+        }
+
+        if(request.getClientId() == null) {
+            throw new ComplexValidationException("client","EVoteCreateRequest.client.empty");
+        } else {
+            if(!ms2msCommunicationService.validateClient(request.getClientId())) {
+                throw new ComplexValidationException("client","EVoteCreateRequest.client.invalid");
+            }
+        }
+
+        if(request.getTopic() == null) {
+            throw new ComplexValidationException("client","EVoteCreateRequest.client.empty");
+        }
+
     }
 
 }

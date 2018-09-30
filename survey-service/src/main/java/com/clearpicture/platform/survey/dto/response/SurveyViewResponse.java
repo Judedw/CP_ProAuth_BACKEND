@@ -26,6 +26,8 @@ public class SurveyViewResponse {
     @Data
     public static class QuestionData {
 
+        private String name;
+
         private String id;
 
         private AnswerTemplateData answerTemplate;
@@ -33,6 +35,7 @@ public class SurveyViewResponse {
         @Data
         public static class AnswerTemplateData  {
 
+            private String name;
 
             private String id;
 

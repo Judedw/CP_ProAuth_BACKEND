@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SurveyRepository extends JpaRepository<Survey,Long>,QuerydslPredicateExecutor<Survey> {
+    Survey findByVoteId(Long id);
 }

@@ -31,6 +31,8 @@ public class SurveySearchResponse {
     @Data
     public static class QuestionData {
 
+        private String name;
+
         private String id;
 
     }

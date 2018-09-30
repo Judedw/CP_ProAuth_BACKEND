@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AnswerTemplateRepository extends JpaRepository<AnswerTemplate,Long>,QuerydslPredicateExecutor<AnswerTemplate> {
+    AnswerTemplate findByName(String name);
 }

@@ -1,6 +1,6 @@
-package com.clearpicture.platform.survey.modelmapper.converter;
+package com.clearpicture.platform.modelmapper.converter;
 
-import com.clearpicture.platform.survey.enums.SurveyType;
+import com.clearpicture.platform.enums.SurveyType;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;

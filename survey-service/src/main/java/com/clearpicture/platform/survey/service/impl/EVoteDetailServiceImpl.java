@@ -1,6 +1,7 @@
 package com.clearpicture.platform.survey.service.impl;
 
 import com.clearpicture.platform.survey.entity.EVoteDetail;
+import com.clearpicture.platform.survey.entity.QEVoteDetail;
 import com.clearpicture.platform.survey.repository.EVoteDetailsRepository;
 import com.clearpicture.platform.survey.service.EVoteDetailService;
 import com.querydsl.core.BooleanBuilder;
@@ -22,7 +23,7 @@ public class EVoteDetailServiceImpl implements EVoteDetailService {
 
     @Override
     public List<EVoteDetail> retrieveList(Long id) {
-        BooleanBuilder builder = new BooleanBuilder();
+        BooleanBuilder builder = new BooleanBuilder(QEVoteDetail.eVoteDetail.eVote.id.eq(id));
         return (List<EVoteDetail>) eVoteDetailsRepository.findAll(builder);
     }
 }

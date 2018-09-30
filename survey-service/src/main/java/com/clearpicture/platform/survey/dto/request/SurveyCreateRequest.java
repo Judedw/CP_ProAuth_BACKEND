@@ -2,9 +2,9 @@ package com.clearpicture.platform.survey.dto.request;
 
 
 import com.clearpicture.platform.enums.DateTimePattern;
-import com.clearpicture.platform.survey.enums.SurveyType;
+import com.clearpicture.platform.enums.SurveyType;
 import com.clearpicture.platform.survey.validation.annotation.DateFormat;
-import com.clearpicture.platform.survey.validation.annotation.ValidSurveyType;
+import com.clearpicture.platform.validation.validator.annotation.ValidSurveyType;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -64,21 +64,4 @@ public class SurveyCreateRequest {
 
     }
 
-    /*private ProductData product;
-
-
-
-    @Data
-    public static class EVoteData {
-
-        private String id;
-
-    }
-
-    @Data
-    public static class ProductData {
-
-        private String id;
-
-    }*/
 }

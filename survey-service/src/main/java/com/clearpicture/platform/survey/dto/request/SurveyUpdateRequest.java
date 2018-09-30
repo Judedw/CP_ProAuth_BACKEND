@@ -1,13 +1,15 @@
 package com.clearpicture.platform.survey.dto.request;
 
 import com.clearpicture.platform.enums.DateTimePattern;
-import com.clearpicture.platform.survey.enums.SurveyType;
+import com.clearpicture.platform.enums.SurveyType;
 import com.clearpicture.platform.survey.validation.annotation.DateFormat;
-import com.clearpicture.platform.survey.validation.annotation.ValidSurveyType;
+import com.clearpicture.platform.validation.validator.annotation.ValidSurveyType;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -36,12 +38,27 @@ public class SurveyUpdateRequest {
 
     private String productId;
 
-    private List<QuestionData> questionsData;
+    @Valid
+    private List<QuestionData> questions;
 
     @Data
     public static class QuestionData {
 
+        private String name;
+
         private String id;
+
+        @Valid
+        @NotNull(message = "surveyUpdateRequest.answerTemplate.empty")
+        private AnswerTemplateData answerTemplate;
+
+        @Data
+        public static class AnswerTemplateData  {
+
+            @NotBlank(message = "surveyUpdateRequest.answerTemplate.id.empty")
+            private String id;
+
+        }
 
     }
 }

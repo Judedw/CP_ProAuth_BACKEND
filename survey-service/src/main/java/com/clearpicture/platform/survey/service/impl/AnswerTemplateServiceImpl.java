@@ -1,5 +1,6 @@
 package com.clearpicture.platform.survey.service.impl;
 
+import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.survey.entity.Answer;
 import com.clearpicture.platform.survey.entity.AnswerTemplate;
 import com.clearpicture.platform.survey.entity.QAnswerTemplate;
@@ -41,15 +42,24 @@ public class AnswerTemplateServiceImpl implements AnswerTemplateService {
 
         newAnswerTemplate.setStatus(AnswerTemplateStatus.ACTIVE);
 
-        for (Answer answer : newAnswerTemplate.getAnswers()) {
-            if (!(answer.getLable() == "")) {
-                answer.setAnswerTemplate(newAnswerTemplate);
-            } else {
-                newAnswerTemplate.getAnswers().remove(answer);
+        AnswerTemplate answerTemplate = answerTemplateRepository.findByName(newAnswerTemplate.getName());
+
+        if(answerTemplate == null) {
+
+            for (Answer answer : newAnswerTemplate.getAnswers()) {
+                if (!(answer.getLable() == "")) {
+                    answer.setAnswerTemplate(newAnswerTemplate);
+                } else {
+                    newAnswerTemplate.getAnswers().remove(answer);
+                }
             }
+            return answerTemplateRepository.save(newAnswerTemplate);
+
+        } else {
+            throw new ComplexValidationException("name","answerTemplateCreateRequest.name.duplicate");
         }
 
-        return answerTemplateRepository.save(newAnswerTemplate);
+
 
     }
 
