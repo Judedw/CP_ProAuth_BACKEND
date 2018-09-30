@@ -39,5 +39,7 @@ public class ConfigProperties {
 
         private String authEVoteDetail;
 
+        private String validateSurvey;
+
     }
 }

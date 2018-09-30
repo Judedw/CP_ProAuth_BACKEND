@@ -11,4 +11,6 @@ public interface Ms2msCommunicationService {
     ProductAuthenticateResponse authenticateProduct(String s);
 
     ProductAuthenticateResponse authenticateEVote(String s);
+
+    Boolean validateSurvey(String surveyId);
 }

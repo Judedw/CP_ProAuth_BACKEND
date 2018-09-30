@@ -10,6 +10,7 @@ import com.clearpicture.platform.product.repository.ClientRepository;
 import com.clearpicture.platform.product.repository.ProductDetailRepository;
 import com.clearpicture.platform.product.repository.ProductRepository;
 import com.clearpicture.platform.product.service.ClientService;
+import com.clearpicture.platform.product.service.Ms2msCommunicationService;
 import com.clearpicture.platform.product.service.ProductService;
 import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private Ms2msCommunicationService ms2msCommunicationService;
 
     @Override
     public Product save(Product product) {
@@ -162,5 +166,10 @@ public class ProductServiceImpl implements ProductService {
 
 
 
+    }
+
+    @Override
+    public Boolean validateSurvey(String surveyId) {
+        return ms2msCommunicationService.validateSurvey(surveyId);
     }
 }

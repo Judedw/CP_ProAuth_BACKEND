@@ -23,4 +23,6 @@ public interface ProductService {
     Product delete(Long aLong);
 
     List<Product> retrieveForSuggestions();
+
+    Boolean validateSurvey(String surveyId);
 }

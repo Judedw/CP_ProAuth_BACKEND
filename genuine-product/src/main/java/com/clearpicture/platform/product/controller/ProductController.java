@@ -1,12 +1,15 @@
 package com.clearpicture.platform.product.controller;
 
+import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.modelmapper.ModelMapper;
 import com.clearpicture.platform.product.dto.response.ProductCreateResponse;
 import com.clearpicture.platform.product.dto.response.ProductSearchResponse;
 import com.clearpicture.platform.product.dto.response.ProductSuggestionResponse;
 import com.clearpicture.platform.product.dto.response.ProductUpdateResponse;
+import com.clearpicture.platform.product.entity.Client;
 import com.clearpicture.platform.product.entity.Product;
 import com.clearpicture.platform.product.entity.criteria.ProductSearchCriteria;
+import com.clearpicture.platform.product.service.ClientService;
 import com.clearpicture.platform.product.service.FileStorageService;
 import com.clearpicture.platform.product.service.ProductService;
 import com.clearpicture.platform.response.wrapper.ListResponseWrapper;
@@ -58,6 +61,9 @@ public class ProductController {
     @Autowired
     private FileStorageService fileStorageService;
 
+    @Autowired
+    private ClientService clientService;
+
     @PostMapping(value = "${app.endpoint.productsCreate}")
     public ResponseEntity<SimpleResponseWrapper<ProductCreateResponse>> create(
             @RequestParam(value = "file",required = false)MultipartFile file ,@RequestParam("code") String code,
@@ -72,6 +78,10 @@ public class ProductController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
+        Boolean isValidSurvey = productService.validateSurvey(surveyId);
+        if(!isValidSurvey) {
+            throw  new ComplexValidationException("surveyId","productsCreateRequest.surveyId.invalid");
+        }
         request.setSurveyId(surveyId);
         if(file != null) {
             request.setImageName(file.getOriginalFilename());
@@ -80,6 +90,10 @@ public class ProductController {
 
 
         ProductCreateRequest.ClientData clientData = new ProductCreateRequest.ClientData();
+        Client dbClient = clientService.retrieve(cryptoService.decryptEntityId(client));
+        if(dbClient == null) {
+            throw  new ComplexValidationException("client","productsCreateRequest.client.invalid");
+        }
         clientData.setId(client);
         request.setClient(clientData);
 

@@ -6,8 +6,11 @@ import com.clearpicture.platform.product.dto.request.ClientSearchRequest;
 import com.clearpicture.platform.product.dto.request.ClientUpdateRequest;
 import com.clearpicture.platform.product.dto.response.ClientCreateResponse;
 import com.clearpicture.platform.product.dto.response.ClientDeleteResponse;
+import com.clearpicture.platform.product.dto.response.ClientSearchResponse;
 import com.clearpicture.platform.product.dto.response.ClientSuggestionResponse;
 import com.clearpicture.platform.product.dto.response.ClientUpdateResponse;
+import com.clearpicture.platform.product.dto.response.ClientViewResponse;
+import com.clearpicture.platform.product.dto.response.external.ClientValidateResponse;
 import com.clearpicture.platform.product.entity.Client;
 import com.clearpicture.platform.product.entity.criteria.ClientSearchCriteria;
 import com.clearpicture.platform.product.service.ClientService;
@@ -15,8 +18,6 @@ import com.clearpicture.platform.response.wrapper.ListResponseWrapper;
 import com.clearpicture.platform.response.wrapper.PagingListResponseWrapper;
 import com.clearpicture.platform.response.wrapper.SimpleResponseWrapper;
 import com.clearpicture.platform.service.CryptoService;
-import com.clearpicture.platform.product.dto.response.ClientSearchResponse;
-import com.clearpicture.platform.product.dto.response.ClientViewResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -129,5 +131,26 @@ public class ClientController {
 
         return new ResponseEntity<ListResponseWrapper<ClientSuggestionResponse>>(
                 new ListResponseWrapper<ClientSuggestionResponse>(clientSuggestions), HttpStatus.OK);
+    }
+
+    @GetMapping("${app.endpoint.clientsValidate}")
+    public ResponseEntity<SimpleResponseWrapper<ClientValidateResponse>> validateClient(@RequestParam String clientId) {
+
+        Long client = cryptoService.decryptEntityId(clientId);
+
+        Client retrievedClient = clientService.retrieve(client);
+
+        log.info("retrievedSurvey {}",retrievedClient);
+
+        ClientValidateResponse response = new ClientValidateResponse();
+
+        if(retrievedClient != null) {
+            log.info("retrievedSurvey id {}",retrievedClient.getId());
+            response.setIsValid(Boolean.TRUE);
+        } else {
+            response.setIsValid(Boolean.FALSE);
+        }
+        return new ResponseEntity<SimpleResponseWrapper<ClientValidateResponse>>(new SimpleResponseWrapper<ClientValidateResponse>(response),HttpStatus.OK);
+
     }
 }

@@ -6,7 +6,6 @@ import com.clearpicture.platform.product.dto.response.ProductAuthenticateRespons
 import com.clearpicture.platform.product.service.AuthenticationService;
 import com.clearpicture.platform.response.wrapper.SimpleResponseWrapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,33 +29,14 @@ public class AuthenticationController {
 
     @GetMapping("${app.endpoint.authenticate}")
     public ResponseEntity<SimpleResponseWrapper<AuthenticateResponse>> authenticate(@RequestParam String authCode) {
-        log.debug("Authentication Start {}",authCode);
+        log.info("Authentication Start {}",authCode);
         AuthenticateResponse authenticateResponse = new AuthenticateResponse();
         ProductAuthenticateResponse productAuthenticateResponse=null;
-        try {
-            productAuthenticateResponse = authenticatedService.authenticate((authCode));
-        }  catch (DecoderException de) {
-            de.printStackTrace();
-            authenticateResponse.setTitle(configs.getAuthenticate().getTitleReject());
-            authenticateResponse.setMessage(configs.getAuthenticate().getRejectMessage());
-            return new ResponseEntity<SimpleResponseWrapper<AuthenticateResponse>>(new SimpleResponseWrapper<AuthenticateResponse>(authenticateResponse), HttpStatus.OK);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            authenticateResponse.setTitle(configs.getAuthenticate().getTitleReject());
-            authenticateResponse.setMessage(configs.getAuthenticate().getRejectMessage());
-            return new ResponseEntity<SimpleResponseWrapper<AuthenticateResponse>>(new SimpleResponseWrapper<AuthenticateResponse>(authenticateResponse), HttpStatus.OK);
-        }
-
-        if(productAuthenticateResponse != null) {
-            authenticateResponse.setTitle(configs.getAuthenticate().getTitleSuccess());
-            authenticateResponse.setMessage(configs.getAuthenticate().getSuccessMessage());
-            authenticateResponse.setServerId(productAuthenticateResponse.getContent().getSurveyId());
-        } else {
-            authenticateResponse.setTitle(configs.getAuthenticate().getTitleReject());
-            authenticateResponse.setMessage(configs.getAuthenticate().getRejectMessage());
-        }
-        log.debug("Authentication End {}",authCode);
+        productAuthenticateResponse = authenticatedService.authenticate((authCode));
+        authenticateResponse.setTitle(productAuthenticateResponse.getContent().getTitle());
+        authenticateResponse.setMessage(productAuthenticateResponse.getContent().getMessage());
+        authenticateResponse.setServerId(productAuthenticateResponse.getContent().getSurveyId());
+        log.info("Authentication End {}",authCode);
         return new ResponseEntity<SimpleResponseWrapper<AuthenticateResponse>>(new SimpleResponseWrapper<AuthenticateResponse>(authenticateResponse), HttpStatus.OK);
     }
 }

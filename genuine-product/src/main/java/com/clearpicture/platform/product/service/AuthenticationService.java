@@ -7,5 +7,5 @@ import com.clearpicture.platform.product.dto.response.ProductAuthenticateRespons
  * Created by nuwan on 9/23/18.
  */
 public interface AuthenticationService {
-    ProductAuthenticateResponse authenticate(String code) throws Exception;
+    ProductAuthenticateResponse authenticate(String code) ;
 }

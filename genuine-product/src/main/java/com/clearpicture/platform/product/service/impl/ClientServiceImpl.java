@@ -1,10 +1,11 @@
 package com.clearpicture.platform.product.service.impl;
 
+import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.product.entity.Client;
-import com.clearpicture.platform.product.repository.ClientRepository;
-import com.clearpicture.platform.product.service.ClientService;
 import com.clearpicture.platform.product.entity.QClient;
 import com.clearpicture.platform.product.entity.criteria.ClientSearchCriteria;
+import com.clearpicture.platform.product.repository.ClientRepository;
+import com.clearpicture.platform.product.service.ClientService;
 import com.querydsl.core.BooleanBuilder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * ClientServiceImpl
@@ -29,7 +31,13 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client save(Client client) {
-        return clientRepository.save(client);
+        Client dbClient = clientRepository.findByCode(client.getCode());
+        if(dbClient == null) {
+            return clientRepository.save(client);
+        } else {
+            throw new ComplexValidationException("code","clientCreateRequest.duplicate.code");
+        }
+
     }
 
     @Override
@@ -57,8 +65,17 @@ public class ClientServiceImpl implements ClientService {
     @Transactional(readOnly = true)
     @Override
     public Client retrieve(Long id) {
-        Client client = clientRepository.getOne(id);
-        return client;
+        try {
+            Optional<Client> client = clientRepository.findById(id);
+
+            if(client != null) {
+                return client.get();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override

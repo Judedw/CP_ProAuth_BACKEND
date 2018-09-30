@@ -2,6 +2,7 @@ package com.clearpicture.platform.product.service.impl;
 
 import com.clearpicture.platform.configuration.PlatformConfigProperties;
 import com.clearpicture.platform.enums.SurveyType;
+import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.product.dto.response.ProductAuthenticateResponse;
 import com.clearpicture.platform.product.entity.Authenticated;
 import com.clearpicture.platform.product.entity.Product;
@@ -16,6 +17,7 @@ import com.clearpicture.platform.service.CryptoService;
 import com.clearpicture.platform.util.AuthenticatedConstant;
 import com.querydsl.core.BooleanBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.encrypt.BytesEncryptor;
@@ -63,40 +65,48 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ProductAuthenticateResponse authenticate(String authenticateCode) throws Exception {
+    public ProductAuthenticateResponse authenticate(String authenticateCode) {
         Long surveyId =0L;
         Boolean checkAllReadyAuthenticated = Boolean.FALSE;
         ProductAuthenticateResponse productAuthenticateResponse = new ProductAuthenticateResponse();
         ProductAuthenticateResponse.ProductAuthData authData = new ProductAuthenticateResponse.ProductAuthData();
-        String authenticationCode = new String(bytesEncryptor.decrypt(Hex.decodeHex(authenticateCode)));
-        String[] authCodeType = authenticationCode.split("/");
-        if(authCodeType[1].equals(SurveyType.PRODUCT.getValue())) {
-            log.info("authenticationCode type -->"+authCodeType[1]);
 
-            Map<String,Object> authenticatedMap = new HashMap<>();
+        try {
+            String authenticationCode = new String(bytesEncryptor.decrypt(Hex.decodeHex(authenticateCode)));
+            String[] authCodeType = authenticationCode.split("/");
+            if(authCodeType[1].equals(SurveyType.PRODUCT.getValue())) {
+                log.info("authenticationCode type -->"+authCodeType[1]);
 
-            try {
+                Map<String,Object> authenticatedMap = new HashMap<>();
+
                 authenticatedMap = productAuthenticate(authCodeType[0]);
-                checkAllReadyAuthenticated = (Boolean) authenticatedMap.get(AuthenticatedConstant.AUTH_STATUS);
 
                 if((Boolean) authenticatedMap.get(AuthenticatedConstant.AUTH_STATUS)) {
-                    surveyId = (Long) authenticatedMap.get(AuthenticatedConstant.SURVEY_ID);
                     authData.setTitle(configs.getAuthenticate().getTitleSuccess());
                     authData.setMessage(configs.getAuthenticate().getSuccessMessage());
-                    authData.setSurveyId(cryptoService.encryptEntityId(surveyId));
+                    authData.setSurveyId((String) authenticatedMap.get(AuthenticatedConstant.SURVEY_ID));
                 } else {
                     authData.setTitle(configs.getAuthenticate().getTitleReject());
                     authData.setMessage(configs.getAuthenticate().getRejectMessage());
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                authData.setTitle(configs.getAuthenticate().getTitleReject());
-                authData.setMessage(configs.getAuthenticate().getRejectMessage());
-            }
-        } else if(authCodeType[1].equals(SurveyType.EVOTE.getValue())) {
-            log.info("authenticationCode type -->"+authCodeType[1]);
-            productAuthenticateResponse = ms2msCommunicationService.authenticateEVote(authCodeType[0]);
 
+            } else if(authCodeType[1].equals(SurveyType.EVOTE.getValue())) {
+                log.info("authenticationCode type -->"+authCodeType[1]);
+                productAuthenticateResponse = ms2msCommunicationService.authenticateEVote(authCodeType[0]);
+                if(productAuthenticateResponse!= null) {
+                    authData.setTitle(productAuthenticateResponse.getContent().getTitle());
+                    authData.setMessage(productAuthenticateResponse.getContent().getMessage());
+                    authData.setSurveyId(productAuthenticateResponse.getContent().getSurveyId());
+                } else {
+                    authData.setTitle(configs.getAuthenticate().getTitleReject());
+                    authData.setMessage(configs.getAuthenticate().getRejectMessage());
+                }
+
+            }
+        } catch (DecoderException e) {
+            throw new ComplexValidationException("authenticationCode", "Invalid Authentication Code");
+        } catch (Exception e) {
+            throw new ComplexValidationException("authenticationCode", "General Error");
         }
 
         productAuthenticateResponse.setContent(authData);
