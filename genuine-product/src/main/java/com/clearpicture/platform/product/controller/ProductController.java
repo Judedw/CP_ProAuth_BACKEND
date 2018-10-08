@@ -78,11 +78,13 @@ public class ProductController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
-        Boolean isValidSurvey = productService.validateSurvey(surveyId);
-        if(!isValidSurvey) {
-            throw  new ComplexValidationException("surveyId","productsCreateRequest.surveyId.invalid");
+        if(surveyId != null) {
+            Boolean isValidSurvey = productService.validateSurvey(surveyId);
+            if (!isValidSurvey) {
+                throw new ComplexValidationException("surveyId", "productsCreateRequest.surveyId.invalid");
+            }
+            request.setSurveyId(surveyId);
         }
-        request.setSurveyId(surveyId);
         if(file != null) {
             request.setImageName(file.getOriginalFilename());
             request.setImageObject(fileStorageService.storeFile(file));

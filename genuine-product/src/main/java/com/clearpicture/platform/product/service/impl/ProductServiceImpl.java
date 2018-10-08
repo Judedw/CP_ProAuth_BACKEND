@@ -126,6 +126,7 @@ public class ProductServiceImpl implements ProductService {
     public Product update(Product product) {
 
         try {
+
             Product currentProduct = productRepository.getOne(product.getId());
             currentProduct.setCode(product.getCode());
             currentProduct.setDescription(product.getDescription());
@@ -134,6 +135,7 @@ public class ProductServiceImpl implements ProductService {
             currentProduct.setBatchNumber(product.getBatchNumber());
             currentProduct.setClient(product.getClient());
             currentProduct.setSurveyId(product.getSurveyId());
+            currentProduct.setName(product.getName());
 
             return productRepository.save(currentProduct);
 
