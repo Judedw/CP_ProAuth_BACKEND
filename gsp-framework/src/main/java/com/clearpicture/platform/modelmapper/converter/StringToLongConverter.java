@@ -17,28 +17,31 @@ public class StringToLongConverter implements Converter<String,Long> {
 
     @Autowired
     private CryptoService cryptoService;
-
     private static final String ATTR_ID = "id";
+    private static final String ATTR_VOTE_ID = "voteId";
+    private static final String ATTR_PRODUCT_ID = "productId";
+    private static final String ATTR_CLIENT_ID = "clientId";
+    private static final String ATTR_SURVEY_ID = "surveyId";
 
+    public StringToLongConverter() {}
 
-    @Override
-    public Long convert(MappingContext<String, Long> mappingContext) {
-
-        if (StringUtils.isNotBlank(mappingContext.getSource())) {
-            // To Process String List
-            if(mappingContext.getMapping() == null) {
-                return cryptoService.decryptEntityId(mappingContext.getSource());
+    public Long convert(MappingContext<String, Long> mappingContext)
+    {
+        if (StringUtils.isNotBlank((CharSequence)mappingContext.getSource()))
+        {
+            if (mappingContext.getMapping() == null) {
+                return cryptoService.decryptEntityId((String)mappingContext.getSource());
             }
 
             String propertyName = mappingContext.getMapping().getLastDestinationProperty().getName();
-            if (ATTR_ID.equalsIgnoreCase(propertyName)) {
-                return cryptoService.decryptEntityId(mappingContext.getSource());
-            } else {
-                return (mappingContext.getSource() == null ? null : Long.valueOf(mappingContext.getSource()));
+            if (("id".equalsIgnoreCase(propertyName)) || ("voteId".equalsIgnoreCase(propertyName)) ||
+                    ("productId".equalsIgnoreCase(propertyName)) || ("clientId".equalsIgnoreCase(propertyName)) ||
+                    ("surveyId".equalsIgnoreCase(propertyName))) {
+                return cryptoService.decryptEntityId((String)mappingContext.getSource());
             }
-        } else {
-            return null;
+            return mappingContext.getSource() == null ? null : Long.valueOf((String)mappingContext.getSource());
         }
 
+        return null;
     }
 }

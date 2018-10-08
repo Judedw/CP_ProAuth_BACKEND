@@ -16,20 +16,26 @@ public class LongToStringConverter implements Converter<Long,String> {
 
     @Autowired
     private CryptoService cryptoService;
-
     private static final String ATTR_ID = "id";
+    private static final String ATTR_VOTE_ID = "voteId";
+    private static final String ATTR_PRODUCT_ID = "productId";
+    private static final String ATTR_CLIENT_ID = "clientId";
+    private static final String ATTR_SURVEY_ID = "surveyId";
 
-    @Override
-    public String convert(MappingContext<Long, String> context) {
+    public LongToStringConverter() {}
+
+    public String convert(MappingContext<Long, String> context)
+    {
         if (context.getSource() != null) {
-            String property = context.getMapping().getLastDestinationProperty().getName();
-            if (ATTR_ID.equalsIgnoreCase(property)) {
-                return cryptoService.encryptEntityId(context.getSource());
-            } else {
-                return context.getSource().toString();
+            String propertyName = context.getMapping().getLastDestinationProperty().getName();
+            if (("id".equalsIgnoreCase(propertyName)) || ("voteId".equalsIgnoreCase(propertyName)) ||
+                    ("productId".equalsIgnoreCase(propertyName)) || ("clientId".equalsIgnoreCase(propertyName)) ||
+                    ("surveyId".equalsIgnoreCase(propertyName))) {
+                return cryptoService.encryptEntityId((Long)context.getSource());
             }
-        } else {
-            return null;
+            return ((Long)context.getSource()).toString();
         }
+
+        return null;
     }
 }
