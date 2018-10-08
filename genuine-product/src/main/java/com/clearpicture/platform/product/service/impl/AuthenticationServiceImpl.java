@@ -151,11 +151,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 authenticatedRepository.save(authenticated);
             }
 
-            if(surveyId != null) {
+            /*if(surveyId != null) {
                 authenticatedMap.put(AuthenticatedConstant.SURVEY_ID,surveyId);
             } else {
                 authenticatedMap.put(AuthenticatedConstant.SURVEY_ID,0L);
-            }
+            }*/
 
 
         } else {
