@@ -1,7 +1,8 @@
 package com.clearpicture.platform.survey.service.impl;
 
 
-import com.clearpicture.platform.component.RestApiClient;
+
+import com.clearpicture.platform.componant.RestApiClient;
 import com.clearpicture.platform.survey.configuration.ConfigProperties;
 import com.clearpicture.platform.survey.dto.response.external.ClientValidateResponse;
 import com.clearpicture.platform.survey.service.Ms2msCommunicationService;

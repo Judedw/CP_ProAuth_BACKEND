@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 /**
@@ -31,9 +32,9 @@ public class Question  extends CreateModifyAwareBaseEntity {
     //@Column(unique = true)
     private String name;
 
-    private ZonedDateTime expirationDate;
+    private LocalDate expirationDate;
 
-    private ZonedDateTime startDate;
+    private LocalDate startDate;
 
     private QuestionStatus status;
 

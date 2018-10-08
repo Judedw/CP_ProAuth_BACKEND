@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -80,7 +81,7 @@ public class QuestionAnswerController {
 
                     log.info("ex date :"+dbQuestion.getExpirationDate());
 
-                    if(checkPulseExpiration(dbQuestion.getExpirationDate(), ZonedDateTime.now())) {
+                    if(checkSurveyExpiration(dbQuestion.getExpirationDate(), LocalDate.now())) {
 
                         if(question.getAnswers()!= null && question.getAnswers().size() != 0 ) {
 
@@ -117,7 +118,7 @@ public class QuestionAnswerController {
         return new ResponseEntity<>(new SimpleResponseWrapper<>(response), HttpStatus.CREATED);
     }
 
-    public boolean checkPulseExpiration(ZonedDateTime expirationDate,ZonedDateTime now) {
+    public boolean checkSurveyExpiration(LocalDate expirationDate, LocalDate now) {
         if(expirationDate!= null) {
             boolean notExpired = now.isBefore(expirationDate);
             return notExpired;

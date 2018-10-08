@@ -37,7 +37,7 @@ public class Survey extends CreateModifyAwareBaseEntity {
 
     private LocalDate startDate;
 
-    private ZonedDateTime endDate;
+    private LocalDate endDate;
 
     private Long productId;
 
