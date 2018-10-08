@@ -84,7 +84,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 if((Boolean) authenticatedMap.get(AuthenticatedConstant.AUTH_STATUS)) {
                     authData.setTitle(configs.getAuthenticate().getTitleSuccess());
                     authData.setMessage(configs.getAuthenticate().getSuccessMessage());
-                    authData.setSurveyId((String) authenticatedMap.get(AuthenticatedConstant.SURVEY_ID));
+                    if(authenticatedMap.get(AuthenticatedConstant.SURVEY_ID) != null) {
+                        authData.setSurveyId(cryptoService.encryptEntityId((Long) authenticatedMap.get(AuthenticatedConstant.SURVEY_ID)));
+                    }
+
                 } else {
                     authData.setTitle(configs.getAuthenticate().getTitleReject());
                     authData.setMessage(configs.getAuthenticate().getRejectMessage());
@@ -151,12 +154,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 authenticatedRepository.save(authenticated);
             }
 
-            /*if(surveyId != null) {
+            if(surveyId != null) {
                 authenticatedMap.put(AuthenticatedConstant.SURVEY_ID,surveyId);
-            } else {
-                authenticatedMap.put(AuthenticatedConstant.SURVEY_ID,0L);
-            }*/
-
+            }
 
         } else {
             authenticatedMap.put("status",Boolean.FALSE);

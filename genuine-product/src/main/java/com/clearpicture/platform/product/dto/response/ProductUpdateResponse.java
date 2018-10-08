@@ -1,5 +1,6 @@
 package com.clearpicture.platform.product.dto.response;
 
+import com.clearpicture.platform.product.dto.request.ProductUpdateRequest;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -25,9 +26,13 @@ public class ProductUpdateResponse {
 
     private String name;
 
+    private ProductUpdateResponse.ClientData client;
+
     private String imageName;
 
-    private ClientData client;
+    private String imageObject;
+
+    private String surveyId;
 
 
     @Data
