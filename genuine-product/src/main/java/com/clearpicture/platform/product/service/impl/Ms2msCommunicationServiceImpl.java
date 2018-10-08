@@ -1,7 +1,8 @@
 package com.clearpicture.platform.product.service.impl;
 
 
-import com.clearpicture.platform.component.RestApiClient;
+
+import com.clearpicture.platform.componant.RestApiClient;
 import com.clearpicture.platform.product.configuration.ConfigProperties;
 import com.clearpicture.platform.product.dto.response.ProductAuthenticateResponse;
 import com.clearpicture.platform.product.dto.response.external.SurveyValidateResponse;
