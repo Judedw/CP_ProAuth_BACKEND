@@ -9,6 +9,11 @@
         <res-type>javax.sql.DataSource</res-type>
     </resource-ref>
 
+    <!--<resource-ref>
+        <res-ref-name>jdbc/AuthenticaDB</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+    </resource-ref>-->
+
     <!--
         -Dspring.profiles.active=prod
     -->
