@@ -269,10 +269,10 @@ public class FileUploadController {
     @Autowired
     private ServletContext servletContext;
 
-    @GetMapping("/downloadFile/{objectId}")
+    //@GetMapping("/downloadFile/{objectId}")
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String objectId) throws IOException, ServletException {
 
-        String name=null;
+        String name = null;
         String type = null;
         InputStream stream;
         OutputStream outputStream = null;
@@ -319,9 +319,9 @@ public class FileUploadController {
         return ResponseEntity.ok()
                 // Content-Disposition
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
-                        // Content-Type
+                // Content-Type
                 .contentType(mediaType)
-                        // Contet-Length
+                // Contet-Length
                 .contentLength(file.length()) //
                 .body(resource);
 

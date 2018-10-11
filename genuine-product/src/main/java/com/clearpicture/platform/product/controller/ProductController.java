@@ -12,6 +12,7 @@ import com.clearpicture.platform.product.entity.criteria.ProductSearchCriteria;
 import com.clearpicture.platform.product.service.ClientService;
 import com.clearpicture.platform.product.service.FileStorageService;
 import com.clearpicture.platform.product.service.ProductService;
+import com.clearpicture.platform.product.util.MediaTypeUtils;
 import com.clearpicture.platform.response.wrapper.ListResponseWrapper;
 import com.clearpicture.platform.response.wrapper.PagingListResponseWrapper;
 import com.clearpicture.platform.response.wrapper.SimpleResponseWrapper;
@@ -22,8 +23,11 @@ import com.clearpicture.platform.product.dto.request.ProductUpdateRequest;
 import com.clearpicture.platform.product.dto.response.ProductDeleteResponse;
 import com.clearpicture.platform.product.dto.response.ProductViewResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,8 +40,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -64,12 +69,15 @@ public class ProductController {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private ServletContext servletContext;
+
     @PostMapping(value = "${app.endpoint.productsCreate}")
     public ResponseEntity<SimpleResponseWrapper<ProductCreateResponse>> create(
-            @RequestParam(value = "file",required = false)MultipartFile file ,@RequestParam("code") String code,
-            @RequestParam(value = "quantity")String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
-            @RequestParam(value = "name",required = false)String name ,@RequestParam(value = "description",required = false) String description,
-            @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client") String client,@RequestParam(value = "surveyId",required = false) String surveyId) throws IOException, ServletException {
+            @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("code") String code,
+            @RequestParam(value = "quantity") String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
+            @RequestParam(value = "name", required = false) String name, @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "client") String client, @RequestParam(value = "surveyId", required = false) String surveyId) throws IOException, ServletException {
 
         ProductCreateRequest request = new ProductCreateRequest();
         request.setCode(code);
@@ -78,14 +86,14 @@ public class ProductController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
-        if(surveyId != null) {
+        if (surveyId != null) {
             Boolean isValidSurvey = productService.validateSurvey(surveyId);
             if (!isValidSurvey) {
                 throw new ComplexValidationException("surveyId", "productsCreateRequest.surveyId.invalid");
             }
             request.setSurveyId(surveyId);
         }
-        if(file != null) {
+        if (file != null) {
             request.setImageName(file.getOriginalFilename());
             //request.setImageObject(fileStorageService.storeFile(file));
             request.setImageObject(file.getBytes());
@@ -94,15 +102,15 @@ public class ProductController {
 
         ProductCreateRequest.ClientData clientData = new ProductCreateRequest.ClientData();
         Client dbClient = clientService.retrieve(cryptoService.decryptEntityId(client));
-        if(dbClient == null) {
-            throw  new ComplexValidationException("client","productsCreateRequest.client.invalid");
+        if (dbClient == null) {
+            throw new ComplexValidationException("client", "productsCreateRequest.client.invalid");
         }
         clientData.setId(client);
         request.setClient(clientData);
 
-        Product product = modelMapper.map(request,Product.class);
+        Product product = modelMapper.map(request, Product.class);
         Product saveProduct = productService.save(product);
-        ProductCreateResponse response = modelMapper.map(saveProduct,ProductCreateResponse.class);
+        ProductCreateResponse response = modelMapper.map(saveProduct, ProductCreateResponse.class);
 
         return new ResponseEntity<SimpleResponseWrapper<ProductCreateResponse>>(new SimpleResponseWrapper<>(response), HttpStatus.CREATED);
     }
@@ -110,16 +118,16 @@ public class ProductController {
     @GetMapping("${app.endpoint.productsSearch}")
     public ResponseEntity<PagingListResponseWrapper<ProductSearchResponse>> retrieve(@Validated ProductSearchRequest request) {
 
-        ProductSearchCriteria criteria = modelMapper.map(request,ProductSearchCriteria.class);
+        ProductSearchCriteria criteria = modelMapper.map(request, ProductSearchCriteria.class);
 
         Page<Product> results = productService.search(criteria);
 
-        List<ProductSearchResponse> products =  modelMapper.map(results.getContent(),ProductSearchResponse.class);
+        List<ProductSearchResponse> products = modelMapper.map(results.getContent(), ProductSearchResponse.class);
 
         PagingListResponseWrapper.Pagination pagination = new PagingListResponseWrapper.Pagination(
                 results.getNumber() + 1, results.getSize(), results.getTotalPages(), results.getTotalElements());
 
-        return new ResponseEntity<PagingListResponseWrapper<ProductSearchResponse>>(new PagingListResponseWrapper<ProductSearchResponse>(products,pagination),HttpStatus.OK);
+        return new ResponseEntity<PagingListResponseWrapper<ProductSearchResponse>>(new PagingListResponseWrapper<ProductSearchResponse>(products, pagination), HttpStatus.OK);
     }
 
     @GetMapping("${app.endpoint.productsView}")
@@ -129,19 +137,19 @@ public class ProductController {
 
         Product retrievedProduct = productService.retrieve(productId);
 
-        ProductViewResponse response = modelMapper.map(retrievedProduct,ProductViewResponse.class);
+        ProductViewResponse response = modelMapper.map(retrievedProduct, ProductViewResponse.class);
 
-        return new ResponseEntity<SimpleResponseWrapper<ProductViewResponse>>(new SimpleResponseWrapper<ProductViewResponse>(response),HttpStatus.OK);
+        return new ResponseEntity<SimpleResponseWrapper<ProductViewResponse>>(new SimpleResponseWrapper<ProductViewResponse>(response), HttpStatus.OK);
 
 
     }
 
     @PutMapping("${app.endpoint.productsUpdate}")
     public ResponseEntity<SimpleResponseWrapper<ProductUpdateResponse>> update(@PathVariable String id,
-                                                                               @RequestParam(value = "file",required = false)MultipartFile file ,@RequestParam("code") String code,
-                                                                               @RequestParam(value = "quantity")String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
-                                                                               @RequestParam(value = "name",required = false)String name ,@RequestParam(value = "description",required = false) String description,
-                                                                               @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "client") String client,@RequestParam(value = "surveyId",required = false) String surveyId) throws IOException, ServletException {
+                                                                               @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("code") String code,
+                                                                               @RequestParam(value = "quantity") String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
+                                                                               @RequestParam(value = "name", required = false) String name, @RequestParam(value = "description", required = false) String description,
+                                                                               @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "client") String client, @RequestParam(value = "surveyId", required = false) String surveyId) throws IOException, ServletException {
 
         Long productId = cryptoService.decryptEntityId(id);
 
@@ -152,27 +160,27 @@ public class ProductController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
-        if(surveyId != null) {
+        if (surveyId != null) {
             Boolean isValidSurvey = productService.validateSurvey(surveyId);
             if (!isValidSurvey) {
                 throw new ComplexValidationException("surveyId", "productsCreateRequest.surveyId.invalid");
             }
             request.setSurveyId(surveyId);
         }
-        if(file != null) {
+        if (file != null) {
             request.setImageName(file.getOriginalFilename());
             request.setImageObject(fileStorageService.storeFile(file));
         }
 
-        Product product = modelMapper.map(request,Product.class);
+        Product product = modelMapper.map(request, Product.class);
 
         product.setId(productId);
 
         Product updatedClient = productService.update(product);
 
-        ProductUpdateResponse response = modelMapper.map(updatedClient,ProductUpdateResponse.class);
+        ProductUpdateResponse response = modelMapper.map(updatedClient, ProductUpdateResponse.class);
 
-        return new ResponseEntity<SimpleResponseWrapper<ProductUpdateResponse>>(new SimpleResponseWrapper<ProductUpdateResponse>(response),HttpStatus.OK);
+        return new ResponseEntity<SimpleResponseWrapper<ProductUpdateResponse>>(new SimpleResponseWrapper<ProductUpdateResponse>(response), HttpStatus.OK);
 
 
     }
@@ -184,9 +192,9 @@ public class ProductController {
 
         Product client = productService.delete(productId);
 
-        ProductDeleteResponse response = modelMapper.map(client.getId(),ProductDeleteResponse.class);
+        ProductDeleteResponse response = modelMapper.map(client.getId(), ProductDeleteResponse.class);
 
-        return new ResponseEntity<SimpleResponseWrapper<ProductDeleteResponse>>(new SimpleResponseWrapper<ProductDeleteResponse>(response),HttpStatus.OK);
+        return new ResponseEntity<SimpleResponseWrapper<ProductDeleteResponse>>(new SimpleResponseWrapper<ProductDeleteResponse>(response), HttpStatus.OK);
 
     }
 
@@ -203,4 +211,33 @@ public class ProductController {
         return new ResponseEntity<ListResponseWrapper<ProductSuggestionResponse>>(
                 new ListResponseWrapper<ProductSuggestionResponse>(productSuggestions), HttpStatus.OK);
     }
+
+    @GetMapping("/downloadFile/{objectId}")
+    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String objectId) throws IOException, ServletException {
+        Long productId = cryptoService.decryptEntityId(objectId);
+
+        Product retrievedProduct = productService.retrieve(productId);
+        byte[] imageByte = retrievedProduct.getImageObject();
+        String fileName = retrievedProduct.getImageName();
+
+        MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, fileName);
+
+        File imageFile = new File(fileName);
+        OutputStream outPutStream = new FileOutputStream(imageFile);
+
+        outPutStream.write(imageByte);
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(imageFile));
+
+        return ResponseEntity.ok()
+                // Content-Disposition
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + imageFile.getName())
+                // Content-Type
+                .contentType(mediaType)
+                // Contet-Length
+                .contentLength(imageFile.length())
+                .body(resource);
+    }
+
+
 }
