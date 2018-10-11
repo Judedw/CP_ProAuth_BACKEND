@@ -10,11 +10,7 @@ import com.clearpicture.platform.service.CryptoService;
 import com.clearpicture.platform.survey.dto.request.EVoteCreateRequest;
 import com.clearpicture.platform.survey.dto.request.EVoteSearchRequest;
 import com.clearpicture.platform.survey.dto.request.EVoteUpdateRequest;
-import com.clearpicture.platform.survey.dto.response.EVoteCreateResponse;
-import com.clearpicture.platform.survey.dto.response.EVoteSearchResponse;
-import com.clearpicture.platform.survey.dto.response.EVoteSuggestionResponse;
-import com.clearpicture.platform.survey.dto.response.EVoteUpdateResponse;
-import com.clearpicture.platform.survey.dto.response.EVoteViewResponse;
+import com.clearpicture.platform.survey.dto.response.*;
 import com.clearpicture.platform.survey.entity.EVote;
 import com.clearpicture.platform.survey.entity.Survey;
 import com.clearpicture.platform.survey.entity.criteria.EVoteSearchCriteria;
@@ -29,12 +25,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletException;
@@ -70,11 +61,11 @@ public class EVoteController {
 
     @PostMapping(value = "${app.endpoint.evotesCreate}")
     public ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>> create(
-            @RequestParam(value = "file",required = false)MultipartFile file,@RequestParam(value = "code",required = false) String code,
-            @RequestParam(value = "quantity",required = false)String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
-            @RequestParam(value = "topic",required = false)String topic ,@RequestParam(value = "description",required = false) String description,
-            @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "clientId",required = false) String clientId,
-            @RequestParam(value = "surveyId",required = false) String surveyId) {
+            @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "code", required = false) String code,
+            @RequestParam(value = "quantity", required = false) String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
+            @RequestParam(value = "topic", required = false) String topic, @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "clientId", required = false) String clientId,
+            @RequestParam(value = "surveyId", required = false) String surveyId) {
 
         EVoteCreateRequest request = new EVoteCreateRequest();
         request.setCode(code);
@@ -84,17 +75,22 @@ public class EVoteController {
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
         request.setClientId(clientId);
-        if(surveyId!=null && !surveyId.isEmpty())
+        System.out.println("clientId : " + clientId);
+        System.out.println("topic : " + topic);
+        if (surveyId != null && !surveyId.isEmpty())
             request.setSurveyId(surveyId);
-        if(file != null) {
+        if (file != null) {
             request.setImageName(file.getOriginalFilename());
             try {
-                request.setImageObject(fileStorageService.storeFile(file));
+                // request.setImageObject(fileStorageService.storeFile(file));
+                request.setImageObject(file.getBytes());
+
             } catch (IOException e) {
-                throw  new ComplexValidationException("eVote","eVoteCreateRequest.canNotStoreFile");
-            } catch (ServletException e) {
-                throw  new ComplexValidationException("eVote","eVoteCreateRequest.canNotStoreFile");
+                throw new ComplexValidationException("eVote", "eVoteCreateRequest.canNotStoreFile");
             }
+//            catch (ServletException e) {
+//                throw  new ComplexValidationException("eVote","eVoteCreateRequest.canNotStoreFile");
+//            }
         }
 
         validate(request);
@@ -106,10 +102,10 @@ public class EVoteController {
             eVote.setSurveyId(cryptoService.decryptEntityId(survey));*/
         try {
             EVote saveEVote = eVoteService.save(eVote);
-            EVoteCreateResponse response = modelMapper.map(saveEVote,EVoteCreateResponse.class);
+            EVoteCreateResponse response = modelMapper.map(saveEVote, EVoteCreateResponse.class);
             return new ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>>(new SimpleResponseWrapper<>(response), HttpStatus.CREATED);
         } catch (Exception e) {
-            throw  new ComplexValidationException("eVote",e.toString());
+            throw new ComplexValidationException("eVote", e.toString());
         }
 
 
@@ -123,16 +119,16 @@ public class EVoteController {
     @GetMapping("${app.endpoint.evotesSearch}")
     public ResponseEntity<PagingListResponseWrapper<EVoteSearchResponse>> retrieve(@Validated EVoteSearchRequest request) {
 
-        EVoteSearchCriteria criteria = modelMapper.map(request,EVoteSearchCriteria.class);
+        EVoteSearchCriteria criteria = modelMapper.map(request, EVoteSearchCriteria.class);
 
         Page<EVote> results = eVoteService.search(criteria);
 
-        List<EVoteSearchResponse> products =  modelMapper.map(results.getContent(),EVoteSearchResponse.class);
+        List<EVoteSearchResponse> products = modelMapper.map(results.getContent(), EVoteSearchResponse.class);
 
         PagingListResponseWrapper.Pagination pagination = new PagingListResponseWrapper.Pagination(
                 results.getNumber() + 1, results.getSize(), results.getTotalPages(), results.getTotalElements());
 
-        return new ResponseEntity<PagingListResponseWrapper<EVoteSearchResponse>>(new PagingListResponseWrapper<EVoteSearchResponse>(products,pagination),HttpStatus.OK);
+        return new ResponseEntity<PagingListResponseWrapper<EVoteSearchResponse>>(new PagingListResponseWrapper<EVoteSearchResponse>(products, pagination), HttpStatus.OK);
     }
 
     @GetMapping("${app.endpoint.evotesView}")
@@ -142,19 +138,19 @@ public class EVoteController {
 
         EVote retrievedProduct = eVoteService.retrieve(productId);
 
-        EVoteViewResponse response = modelMapper.map(retrievedProduct,EVoteViewResponse.class);
+        EVoteViewResponse response = modelMapper.map(retrievedProduct, EVoteViewResponse.class);
 
-        return new ResponseEntity<SimpleResponseWrapper<EVoteViewResponse>>(new SimpleResponseWrapper<EVoteViewResponse>(response),HttpStatus.OK);
+        return new ResponseEntity<SimpleResponseWrapper<EVoteViewResponse>>(new SimpleResponseWrapper<EVoteViewResponse>(response), HttpStatus.OK);
 
 
     }
 
     @PutMapping("${app.endpoint.evotesUpdate}")
-    public ResponseEntity<SimpleResponseWrapper<EVoteUpdateResponse>> update(@PathVariable String id,@RequestParam(value = "file",required = false)MultipartFile file,@RequestParam(value = "code",required = false) String code,
-                                                                             @RequestParam(value = "quantity",required = false)String quantity ,@RequestParam(value = "expireDate",required = false) String expireDate,
-                                                                             @RequestParam(value = "topic",required = false)String topic ,@RequestParam(value = "description",required = false) String description,
-                                                                             @RequestParam(value = "batchNumber",required = false)String batchNumber ,@RequestParam(value = "clientId",required = false) String clientId,
-                                                                             @RequestParam(value = "surveyId",required = false) String surveyId) {
+    public ResponseEntity<SimpleResponseWrapper<EVoteUpdateResponse>> update(@PathVariable String id, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "code", required = false) String code,
+                                                                             @RequestParam(value = "quantity", required = false) String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
+                                                                             @RequestParam(value = "topic", required = false) String topic, @RequestParam(value = "description", required = false) String description,
+                                                                             @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "clientId", required = false) String clientId,
+                                                                             @RequestParam(value = "surveyId", required = false) String surveyId) {
         Long eVoteId = cryptoService.decryptEntityId(id);
 
         EVoteUpdateRequest request = new EVoteUpdateRequest();
@@ -166,16 +162,16 @@ public class EVoteController {
         request.setBatchNumber(batchNumber);
         request.setClientId(clientId);
         request.setSurveyId(surveyId);
-        if(file != null) {
+        if (file != null) {
             request.setImageName(file.getOriginalFilename());
             try {
                 request.setImageObject(fileStorageService.storeFile(file));
             } catch (IOException e) {
 
-                throw  new ComplexValidationException("eVote","eVoteUpdateRequest.canNotStoreFile");
+                throw new ComplexValidationException("eVote", "eVoteUpdateRequest.canNotStoreFile");
 
             } catch (ServletException e) {
-                throw  new ComplexValidationException("eVote","eVoteUpdateRequest.canNotStoreFile");
+                throw new ComplexValidationException("eVote", "eVoteUpdateRequest.canNotStoreFile");
             }
         }
 
@@ -188,9 +184,9 @@ public class EVoteController {
 
         EVote updatedEVote = eVoteService.update(eVote);
 
-        EVoteUpdateResponse response = modelMapper.map(updatedEVote,EVoteUpdateResponse.class);
+        EVoteUpdateResponse response = modelMapper.map(updatedEVote, EVoteUpdateResponse.class);
 
-        return new ResponseEntity<SimpleResponseWrapper<EVoteUpdateResponse>>(new SimpleResponseWrapper<EVoteUpdateResponse>(response),HttpStatus.OK);
+        return new ResponseEntity<SimpleResponseWrapper<EVoteUpdateResponse>>(new SimpleResponseWrapper<EVoteUpdateResponse>(response), HttpStatus.OK);
 
 
     }
@@ -205,25 +201,39 @@ public class EVoteController {
                 new ListResponseWrapper<EVoteSuggestionResponse>(answerTemplatesSuggestions), HttpStatus.OK);
     }
 
+    @DeleteMapping("${app.endpoint.evotesDelete}")
+    public ResponseEntity<SimpleResponseWrapper<EvoteDeleteResponse>> delete(@PathVariable String id) {
+
+        Long evoteId = cryptoService.decryptEntityId(id);
+
+        EVote evote = eVoteService.delete(evoteId);
+
+        EvoteDeleteResponse response = modelMapper.map(evote.getId(), EvoteDeleteResponse.class);
+
+        return new ResponseEntity<SimpleResponseWrapper<EvoteDeleteResponse>>(new SimpleResponseWrapper<EvoteDeleteResponse>(response), HttpStatus.OK);
+
+    }
+
+
     public void validate(EVoteCreateRequest request) {
 
-        if(request.getSurveyId() != null) {
+        if (request.getSurveyId() != null) {
             Survey survey = surveyService.retrieve(cryptoService.decryptEntityId(request.getSurveyId()));
-            if(survey == null) {
-                throw new ComplexValidationException("survey","EVoteCreateRequest.survey.invalid");
+            if (survey == null) {
+                throw new ComplexValidationException("survey", "EVoteCreateRequest.survey.invalid");
             }
         }
 
-        if(request.getClientId() == null) {
-            throw new ComplexValidationException("client","EVoteCreateRequest.client.empty");
+        if (request.getClientId() == null) {
+            throw new ComplexValidationException("client", "EVoteCreateRequest.client.empty");
         } else {
-            if(!ms2msCommunicationService.validateClient(request.getClientId())) {
-                throw new ComplexValidationException("client","EVoteCreateRequest.client.invalid");
+            if (!ms2msCommunicationService.validateClient(request.getClientId())) {
+                throw new ComplexValidationException("client", "EVoteCreateRequest.client.invalid");
             }
         }
 
-        if(request.getTopic() == null) {
-            throw new ComplexValidationException("client","EVoteCreateRequest.client.empty");
+        if (request.getTopic() == null) {
+            throw new ComplexValidationException("client", "EVoteCreateRequest.client.empty");
         }
 
     }
