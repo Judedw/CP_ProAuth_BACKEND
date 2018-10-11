@@ -20,4 +20,6 @@ public interface EVoteService {
     List<EVote> retrieveForSuggestions(String keyword);
 
     EVote update(EVote eVote);
+
+    EVote delete(Long id);
 }

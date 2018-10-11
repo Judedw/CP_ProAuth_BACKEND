@@ -137,4 +137,11 @@ public class EVoteServiceImpl implements EVoteService {
         }
 
     }
+
+    @Override
+    public EVote delete(Long id) {
+        EVote currentSurvey = eVoteRepository.getOne(id);
+        eVoteRepository.delete(currentSurvey);
+        return currentSurvey;
+    }
 }
