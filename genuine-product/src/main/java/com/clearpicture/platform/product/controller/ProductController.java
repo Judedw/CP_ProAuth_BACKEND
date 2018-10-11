@@ -87,7 +87,8 @@ public class ProductController {
         }
         if(file != null) {
             request.setImageName(file.getOriginalFilename());
-            request.setImageObject(fileStorageService.storeFile(file));
+            //request.setImageObject(fileStorageService.storeFile(file));
+            request.setImageObject(file.getBytes());
         }
 
 

@@ -29,7 +29,8 @@ public class ProductCreateResponse {
 
     private String imageName;
 
-    private String imageObject;
+    //private String imageObject;
+    private byte[] imageObject;
 
     private String surveyId;
 
