@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Lob;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -45,7 +46,9 @@ public class Product extends CreateModifyAwareBaseEntity {
 
     private String imageName;
 
-    private String imageObject;
+    //private String imageObject;
+    @Lob
+    private byte[] imageObject;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="client_id")
