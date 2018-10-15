@@ -1,5 +1,6 @@
 package com.clearpicture.platform.survey.controller;
 
+
 import com.clearpicture.platform.dto.request.GeneralSuggestionRequest;
 import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.modelmapper.ModelMapper;
@@ -18,18 +19,23 @@ import com.clearpicture.platform.survey.service.EVoteService;
 import com.clearpicture.platform.survey.service.FileStorageService;
 import com.clearpicture.platform.survey.service.Ms2msCommunicationService;
 import com.clearpicture.platform.survey.service.SurveyService;
+import com.clearpicture.platform.survey.util.MediaTypeUtils;
 import com.clearpicture.platform.survey.validation.validator.EVoteUpdateRequestValidation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -55,6 +61,9 @@ public class EVoteController {
 
     @Autowired
     private SurveyService surveyService;
+
+    @Autowired
+    private ServletContext servletContext;
 
     @Autowired
     private Ms2msCommunicationService ms2msCommunicationService;
@@ -212,6 +221,33 @@ public class EVoteController {
 
         return new ResponseEntity<SimpleResponseWrapper<EvoteDeleteResponse>>(new SimpleResponseWrapper<EvoteDeleteResponse>(response), HttpStatus.OK);
 
+    }
+
+    @GetMapping("/downloadFile/{objectId}")
+    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String objectId) throws IOException, ServletException {
+        Long evoteId = cryptoService.decryptEntityId(objectId);
+
+        EVote retrievedEvote = eVoteService.retrieve(evoteId);
+        byte[] imageByte = retrievedEvote.getImageObject();
+        String fileName = retrievedEvote.getImageName();
+
+        MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, fileName);
+
+        File imageFile = new File(fileName);
+        OutputStream outPutStream = new FileOutputStream(imageFile);
+
+        outPutStream.write(imageByte);
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(imageFile));
+
+        return ResponseEntity.ok()
+                // Content-Disposition
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + imageFile.getName())
+                // Content-Type
+                .contentType(mediaType)
+                // Contet-Length
+                .contentLength(imageFile.length())
+                .body(resource);
     }
 
 
