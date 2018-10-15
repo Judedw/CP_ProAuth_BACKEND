@@ -1,14 +1,16 @@
 package com.clearpicture.platform.exception;
 
 /**
- * EntityIdCryptoException
- * Created by nuwan on 7/21/18.
+ * 
+ * @author Virajith
+ *
  */
 public class EntityIdCryptoException extends BaseException {
 
-    private static final long serialVersionUID = -4495723878645477394L;
+	private static final long serialVersionUID = -4495723878645477394L;
 
-    public EntityIdCryptoException(String message, Throwable cause) {
-        super(message, cause);
-    }
+	public EntityIdCryptoException(String message, Throwable cause) {
+		super(message, cause);
+	}
+
 }

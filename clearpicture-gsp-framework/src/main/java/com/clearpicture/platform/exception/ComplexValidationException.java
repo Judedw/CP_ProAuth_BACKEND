@@ -1,37 +1,44 @@
 package com.clearpicture.platform.exception;
 
+
 import com.clearpicture.platform.dto.validation.ValidationFailure;
 
 import java.util.List;
 
+/**
+ * 
+ * @author Virajith
+ *
+ */
 public class ComplexValidationException extends BaseException {
 
-    private static final long serialVersionUID = 4502802173447729724L;
+	private static final long serialVersionUID = 4502802173447729724L;
 
-    private String field;
+	private String field;
 
-    private String code;
+	private String code;
+	
+	private List<ValidationFailure> validationFailures;
 
-    private List<ValidationFailure> validationFailures;
+	public ComplexValidationException(String field, String code) {
+		this.field = field;
+		this.code = code;
+	}
 
-    public ComplexValidationException(String field, String code) {
-        this.field = field;
-        this.code = code;
-    }
+	public ComplexValidationException(List<ValidationFailure> validationFailures) {
+		this.validationFailures = validationFailures;
+	}
 
-    public ComplexValidationException(List<ValidationFailure> validationFailures) {
-        this.validationFailures = validationFailures;
-    }
+	public String getField() {
+		return field;
+	}
 
-    public String getField() {
-        return field;
-    }
+	public String getCode() {
+		return code;
+	}
 
-    public String getCode() {
-        return code;
-    }
+	public List<ValidationFailure> getValidationFailures() {
+		return validationFailures;
+	}
 
-    public List<ValidationFailure> getValidationFailures() {
-        return validationFailures;
-    }
 }

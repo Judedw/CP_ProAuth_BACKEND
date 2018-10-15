@@ -2,6 +2,7 @@ package com.clearpicture.platform.product.service.impl;
 
 import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.product.entity.Client;
+import com.clearpicture.platform.product.entity.Product;
 import com.clearpicture.platform.product.entity.QClient;
 import com.clearpicture.platform.product.entity.criteria.ClientSearchCriteria;
 import com.clearpicture.platform.product.repository.ClientRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +39,6 @@ public class ClientServiceImpl implements ClientService {
         } else {
             throw new ComplexValidationException("code","clientCreateRequest.duplicate.code");
         }
-
     }
 
     @Override
@@ -48,12 +49,9 @@ public class ClientServiceImpl implements ClientService {
         Page<Client> clients = null;
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-
         if(StringUtils.isNotBlank(criteria.getName())) {
             booleanBuilder.and(QClient.client.name.containsIgnoreCase(criteria.getName()));
-
         }
-
         if (booleanBuilder.hasValue()) {
             clients = clientRepository.findAll(booleanBuilder, page);
         } else {
@@ -67,11 +65,10 @@ public class ClientServiceImpl implements ClientService {
     public Client retrieve(Long id) {
         try {
             Optional<Client> client = clientRepository.findById(id);
-
             if(client != null) {
                 return client.get();
             } else {
-                return null;
+                throw new ComplexValidationException("client", "clientViewRequest.clientNotExist");
             }
         } catch (Exception e) {
             return null;
@@ -80,10 +77,11 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client update(Client client) {
-        Client currentClient = clientRepository.getOne(client.getId());
-
-        if(currentClient == null) {
-
+        Client currentClient = null;
+        try {
+            currentClient = clientRepository.getOne(client.getId());
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("client", "clientUpdateRequest.clientNotExist");
         }
         currentClient.setName(client.getName());
         currentClient.setCode(client.getCode());
@@ -93,25 +91,19 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client delete(Long id) {
-        Client currentClient = clientRepository.getOne(id);
-
-        if(currentClient == null) {
-
+        Client currentClient = null;
+        try {
+            currentClient = clientRepository.getOne(id);
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("client", "clientDeleteRequest.clientNotExist");
         }
-
-        //if client attached to product to will not permit to delete client
-
         clientRepository.delete(currentClient);
-
         return currentClient;
-
-
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Client> retrieveForSuggestions() {
-
         return clientRepository.findAll();
     }
 }

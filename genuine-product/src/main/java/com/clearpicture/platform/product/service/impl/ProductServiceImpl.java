@@ -149,13 +149,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product delete(Long id) {
+        Product product=null;
         try {
-            Product currentProduct = productRepository.getOne(id);
-            productRepository.delete(currentProduct);
-            return currentProduct;
+            product = productRepository.getOne(id);
+            product.getProductDetails().size();
         } catch (EntityNotFoundException e) {
-            throw new ComplexValidationException("product", "productDeleteRequest.productNotExist");
+            throw new ComplexValidationException("product", "productViewRequest.productNotExist");
         }
+        productRepository.delete(product);
+        return product;
 
     }
 
