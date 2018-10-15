@@ -39,32 +39,22 @@ public class CryptoServiceImpl implements CryptoService {
     @PostConstruct
     public void init() {
         Security.setProperty("crypto.policy", "unlimited");
+        entityIdEncryptor = Encryptors.queryableText(configs.getCrypto().getPassword(), configs.getCrypto().getSalt());
 
-        // Generate an 8 character salt
-        String salt = KeyGenerators.string().generateKey();
+        //Generate an 8 character salt
+        //String salt = KeyGenerators.string().generateKey();
         // Generate a 128 character password
-        String password = RandomStringUtils.randomAscii(256);
+        /*String password = RandomStringUtils.randomAscii(256);
         System.out.println("Generated salt = " + salt);
         System.out.println("Generated password = " + password);
-
-        entityIdEncryptor = Encryptors.queryableText(configs.getCrypto().getPassword(), configs.getCrypto().getSalt());
-        //entityIdEncryptor = Encryptors.queryableText(password, salt);
+        entityIdEncryptor = Encryptors.queryableText(password, salt);*/
     }
-
-    /*@Override
-    public String encryptString(String text) {
-        return textEncryptor.encrypt(text);
-    }
-
-    @Override
-    public String decryptString(String text) {
-        return textEncryptor.decrypt(text);
-    }*/
 
     @Override
     public String encryptEntityId(Long number) {
         try {
-            //return number.toString();
+            System.out.println("Crypto encrypt password = " + configs.getCrypto().getPassword());
+            System.out.println("Crypto encrypt salt = " + configs.getCrypto().getSalt());
             return entityIdEncryptor.encrypt(number.toString());
         } catch (Exception e) {
             throw new EntityIdCryptoException("encryption failed! value: " + number, e);
@@ -75,6 +65,8 @@ public class CryptoServiceImpl implements CryptoService {
     @Override
     public Long decryptEntityId(String text) {
         try {
+            System.out.println("Crypto decrypt password = " + configs.getCrypto().getPassword());
+            System.out.println("Crypto decrypt salt = " + configs.getCrypto().getSalt());
             return Long.valueOf(entityIdEncryptor.decrypt(text));
         } catch (Exception e) {
             throw new EntityIdCryptoException("decryption failed! value: " + text, e);

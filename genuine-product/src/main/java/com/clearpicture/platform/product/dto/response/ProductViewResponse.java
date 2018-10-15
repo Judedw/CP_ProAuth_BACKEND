@@ -28,7 +28,7 @@ public class ProductViewResponse {
 
     private String imageName;
 
-    private String imageObject;
+    private byte[] imageObject;
 
     private List<ProductDetailData> productDetails;
 

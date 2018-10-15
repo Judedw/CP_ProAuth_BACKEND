@@ -146,10 +146,10 @@ public class ProductController {
 
     @PutMapping("${app.endpoint.productsUpdate}")
     public ResponseEntity<SimpleResponseWrapper<ProductUpdateResponse>> update(@PathVariable String id,
-                                                                               @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("code") String code,
-                                                                               @RequestParam(value = "quantity") String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
-                                                                               @RequestParam(value = "name", required = false) String name, @RequestParam(value = "description", required = false) String description,
-                                                                               @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "client") String client, @RequestParam(value = "surveyId", required = false) String surveyId) throws IOException, ServletException {
+            @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("code") String code,
+            @RequestParam(value = "quantity") String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
+            @RequestParam(value = "name", required = false) String name, @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "client") String client, @RequestParam(value = "surveyId", required = false) String surveyId) throws IOException, ServletException {
 
         Long productId = cryptoService.decryptEntityId(id);
 
@@ -160,17 +160,26 @@ public class ProductController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
+
         if (surveyId != null) {
             Boolean isValidSurvey = productService.validateSurvey(surveyId);
             if (!isValidSurvey) {
-                throw new ComplexValidationException("surveyId", "productsCreateRequest.surveyId.invalid");
+                throw new ComplexValidationException("surveyId", "productsUpdateRequest.surveyId.invalid");
             }
             request.setSurveyId(surveyId);
         }
         if (file != null) {
             request.setImageName(file.getOriginalFilename());
-            request.setImageObject(fileStorageService.storeFile(file));
+            request.setImageObject(file.getBytes());
         }
+
+        ProductUpdateRequest.ClientData clientData = new ProductUpdateRequest.ClientData();
+        Client dbClient = clientService.retrieve(cryptoService.decryptEntityId(client));
+        if (dbClient == null) {
+            throw new ComplexValidationException("client", "productsCreateRequest.client.invalid");
+        }
+        clientData.setId(client);
+        request.setClient(clientData);
 
         Product product = modelMapper.map(request, Product.class);
 

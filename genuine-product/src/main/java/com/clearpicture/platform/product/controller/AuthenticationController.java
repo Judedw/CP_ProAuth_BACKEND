@@ -36,6 +36,7 @@ public class AuthenticationController {
         authenticateResponse.setTitle(productAuthenticateResponse.getContent().getTitle());
         authenticateResponse.setMessage(productAuthenticateResponse.getContent().getMessage());
         authenticateResponse.setServerId(productAuthenticateResponse.getContent().getSurveyId());
+        authenticateResponse.setProductId(productAuthenticateResponse.getContent().getProductId());
         log.info("Authentication End {}",authCode);
         return new ResponseEntity<SimpleResponseWrapper<AuthenticateResponse>>(new SimpleResponseWrapper<AuthenticateResponse>(authenticateResponse), HttpStatus.OK);
     }

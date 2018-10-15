@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.crypto.AEADBadTagException;
 import java.security.Security;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +75,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
             String authenticationCode = new String(bytesEncryptor.decrypt(Hex.decodeHex(authenticateCode)));
             String[] authCodeType = authenticationCode.split("/");
+
+
             if(authCodeType[1].equals(SurveyType.PRODUCT.getValue())) {
                 log.info("authenticationCode type -->"+authCodeType[1]);
 
@@ -86,6 +89,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     authData.setMessage(configs.getAuthenticate().getSuccessMessage());
                     if(authenticatedMap.get(AuthenticatedConstant.SURVEY_ID) != null) {
                         authData.setSurveyId(cryptoService.encryptEntityId((Long) authenticatedMap.get(AuthenticatedConstant.SURVEY_ID)));
+                    }
+                    if(authenticatedMap.get(AuthenticatedConstant.PRODUCT_ID) != null) {
+                        authData.setProductId(cryptoService.encryptEntityId((Long) authenticatedMap.get(AuthenticatedConstant.PRODUCT_ID)));
                     }
 
                 } else {
@@ -107,9 +113,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             }
         } catch (DecoderException e) {
-            throw new ComplexValidationException("authenticationCode", "Invalid Authentication Code");
-        } catch (Exception e) {
-            throw new ComplexValidationException("authenticationCode", "General Error");
+            authData.setTitle(configs.getAuthenticate().getTitleReject());
+            authData.setMessage(configs.getAuthenticate().getRejectMessage());
+        } catch (AEADBadTagException e) {
+            authData.setTitle(configs.getAuthenticate().getTitleReject());
+            authData.setMessage(configs.getAuthenticate().getRejectMessage());
+        }catch (Exception e) {
+            e.printStackTrace();
+            authData.setTitle(configs.getAuthenticate().getTitleReject());
+            authData.setMessage(configs.getAuthenticate().getRejectMessage());
         }
 
         productAuthenticateResponse.setContent(authData);
@@ -132,8 +144,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             log.info("product : {}",product);
 
             Long surveyId = product.getSurveyId();
+            Long productId = product.getId();
 
             log.info("surveyId : {}",surveyId);
+            log.info("productId : {}",productId);
 
             BooleanBuilder booleanBuilder = new BooleanBuilder(QAuthenticated.authenticated.authenticationCode.eq(authenticateCode));
 
@@ -156,6 +170,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             if(surveyId != null) {
                 authenticatedMap.put(AuthenticatedConstant.SURVEY_ID,surveyId);
+            }
+            if(productId != null) {
+                authenticatedMap.put(AuthenticatedConstant.PRODUCT_ID,productId);
             }
 
         } else {

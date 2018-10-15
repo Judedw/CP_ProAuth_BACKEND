@@ -117,7 +117,7 @@ public class ProductServiceImpl implements ProductService {
             product.getProductDetails().size();
             return product;
         } catch (EntityNotFoundException e) {
-            throw new ComplexValidationException("product", "productCreateRequest.productNotExist");
+            throw new ComplexValidationException("product", "productViewRequest.productNotExist");
         }
 
     }
@@ -136,6 +136,8 @@ public class ProductServiceImpl implements ProductService {
             currentProduct.setClient(product.getClient());
             currentProduct.setSurveyId(product.getSurveyId());
             currentProduct.setName(product.getName());
+            currentProduct.setImageName(product.getImageName());
+            currentProduct.setImageObject(product.getImageObject());
 
             return productRepository.save(currentProduct);
 
@@ -147,7 +149,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product delete(Long id) {
-
         try {
             Product currentProduct = productRepository.getOne(id);
             productRepository.delete(currentProduct);
@@ -160,10 +161,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> retrieveForSuggestions() {
-        //BooleanBuilder booleanBuilder = new BooleanBuilder();
-
         List<Product> products = productRepository.findAll();
-
         return products;
 
 

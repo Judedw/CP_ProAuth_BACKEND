@@ -11,6 +11,8 @@ public class AuthenticateResponse {
 
     private String serverId;
 
+    private String productId;
+
     private String title;
 
     private String message;

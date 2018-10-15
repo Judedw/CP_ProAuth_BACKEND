@@ -56,11 +56,11 @@ public class Product extends CreateModifyAwareBaseEntity {
 
     private Long surveyId;
 
-    @OneToMany(mappedBy = "product",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(mappedBy = "product",cascade = {CascadeType.MERGE,CascadeType.PERSIST},orphanRemoval = true)
     private Set<ProductDetail> productDetails;
 
-    @OneToMany(mappedBy = "product",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
-    private Set<EvoteQuestion> questions;
+    /*@OneToMany(mappedBy = "product",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    private Set<EvoteQuestion> questions;*/
 
     /*@EmbeddedId
     private ProductIdentity productIdentity;*///https://www.callicoder.com/hibernate-spring-boot-jpa-composite-primary-key-example/

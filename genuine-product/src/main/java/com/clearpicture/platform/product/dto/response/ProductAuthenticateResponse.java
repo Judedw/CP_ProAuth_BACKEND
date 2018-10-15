@@ -16,6 +16,8 @@ public class ProductAuthenticateResponse {
 
         private String surveyId;
 
+        private String productId;
+
         private String title;
 
         private String message;

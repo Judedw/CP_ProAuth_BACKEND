@@ -16,12 +16,12 @@ import java.time.LocalDate;
 @Data
 public class ProductCreateRequest {
 
-    @NotBlank(message = "platformProductCreateRequest.product.code.empty")
+    @NotBlank(message = "platformProductUpdateRequest.product.code.empty")
     private String code;
 
     private String description;
 
-    @NotBlank(message = "platformProductCreateRequest.product.quantity.empty")
+    @NotBlank(message = "platformProductUpdateRequest.product.quantity.empty")
     private String quantity;
 
     private LocalDate expireDate;
@@ -31,22 +31,19 @@ public class ProductCreateRequest {
     @Valid
     private ClientData client;
 
-    @NotBlank(message = "platformProductCreateRequest.product.name.empty")
+    @NotBlank(message = "platformProductUpdateRequest.product.name.empty")
     private String name;
 
     private String imageName;
 
-    //private String imageObject;
     private byte[] imageObject;
 
     private String surveyId;
 
-
-
     @Data
     public static class ClientData implements ModelMappingAware {
 
-        @NotBlank(message = "platformProductCreateRequest.product.id.empty")
+        @NotBlank(message = "platformProductUpdateRequest.product.id.empty")
         private String id;
 
         @Override
