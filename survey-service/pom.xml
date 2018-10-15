@@ -33,7 +33,7 @@
     <dependencies>
         <dependency>
             <groupId>com.clearpicture.platform</groupId>
-            <artifactId>gsp-framework</artifactId>
+            <artifactId>clearpicture-gsp-framework</artifactId>
             <version>${gsp-framework-version}</version>
         </dependency>
         <dependency>

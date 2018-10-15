@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -93,12 +94,13 @@ public class AnswerTemplateServiceImpl implements AnswerTemplateService {
 
     @Override
     public AnswerTemplate update(AnswerTemplate answerTemplate) {
-        AnswerTemplate currentAnswerTemplate = answerTemplateRepository.getOne(answerTemplate.getId());
+        AnswerTemplate currentAnswerTemplate = null;
 
-        /*if (currentAnswerTemplate == null) {
-            throw new ComplexValidationException("answerTemplate",
-                    "answerTemplateUpdateRequest.answerTemplateNotExist");
-        }*/
+        try {
+            currentAnswerTemplate = answerTemplateRepository.getOne(answerTemplate.getId());
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("answerTemplate", "answerTemplateUpdateRequest.answerTemplateNotExist");
+        }
 
         BooleanBuilder booleanBuilder = new BooleanBuilder(QAnswerTemplate.answerTemplate.questions.isNotEmpty())
                 .and(QAnswerTemplate.answerTemplate.id.eq(answerTemplate.getId()));
@@ -166,11 +168,13 @@ public class AnswerTemplateServiceImpl implements AnswerTemplateService {
                     "answerTemplateUpdateRequest.answerTemplateAttachedToQuestions");
         }*/
 
-        AnswerTemplate currentAnswerTemplate = answerTemplateRepository.getOne(id);
-        /*if (currentAnswerTemplate == null) {
-            throw new ComplexValidationException("answerTemplate",
-                    "answerTemplateDeleteRequest.answerTemplateNotExist");
-        }*/
+        AnswerTemplate currentAnswerTemplate = null;
+
+        try {
+            currentAnswerTemplate = answerTemplateRepository.getOne(id);
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("answerTemplate", "answerTemplateDeleteRequest.answerTemplateNotExist");
+        }
 
         currentAnswerTemplate.setStatus(AnswerTemplateStatus.DELETED);
         answerTemplateRepository.save(currentAnswerTemplate);

@@ -121,6 +121,8 @@ public class EVoteServiceImpl implements EVoteService {
     @Override
     public EVote update(EVote eVote) {
 
+
+
         try {
             EVote currentEVote = eVoteRepository.getOne(eVote.getId());
             currentEVote.setCode(eVote.getCode());
@@ -133,14 +135,19 @@ public class EVoteServiceImpl implements EVoteService {
             return eVoteRepository.save(currentEVote);
 
         } catch (EntityNotFoundException e) {
-            throw new ComplexValidationException("product", "productUpdateRequest.productNotExist");
+            throw new ComplexValidationException("eVote", "eVoteUpdateRequest.eVoteNotExist");
         }
 
     }
 
     @Override
     public EVote delete(Long id) {
-        EVote currentSurvey = eVoteRepository.getOne(id);
+        EVote currentSurvey = null;
+        try {
+            currentSurvey = eVoteRepository.getOne(id);
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("eVote", "eVoteDeleteRequest.eVoteNotExist");
+        }
         eVoteRepository.delete(currentSurvey);
         return currentSurvey;
     }

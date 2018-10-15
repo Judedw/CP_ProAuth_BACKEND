@@ -92,10 +92,10 @@ public class SurveyServiceImpl implements SurveyService {
             if(survey != null) {
                 return survey.get();
             } else {
-                return null;
+                throw new ComplexValidationException("survey", "surveyUpdateRequest.surveyNotExist");
             }
         } catch (Exception e) {
-            return null;
+            throw new ComplexValidationException("survey", "surveyUpdateRequest.surveyNotExist");
         }
 
     }
@@ -169,7 +169,7 @@ public class SurveyServiceImpl implements SurveyService {
             return surveyRepository.save(persistedSurvey);
 
         } catch (EntityNotFoundException e) {
-            throw new ComplexValidationException("product", "productUpdateRequest.productNotExist");
+            throw new ComplexValidationException("survey", "surveyUpdateRequest.surveyNotExist");
         }
     }
 
