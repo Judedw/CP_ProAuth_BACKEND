@@ -8,6 +8,7 @@ import com.clearpicture.platform.product.dto.response.ProductSuggestionResponse;
 import com.clearpicture.platform.product.dto.response.ProductUpdateResponse;
 import com.clearpicture.platform.product.entity.Client;
 import com.clearpicture.platform.product.entity.Product;
+import com.clearpicture.platform.product.entity.ProductImage;
 import com.clearpicture.platform.product.entity.criteria.ProductSearchCriteria;
 import com.clearpicture.platform.product.service.ClientService;
 import com.clearpicture.platform.product.service.FileStorageService;
@@ -44,6 +45,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,10 +76,11 @@ public class ProductController {
 
     @PostMapping(value = "${app.endpoint.productsCreate}")
     public ResponseEntity<SimpleResponseWrapper<ProductCreateResponse>> create(
-            @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("code") String code,
+            @RequestParam(value = "file", required = false) List<MultipartFile> files, @RequestParam("code") String code,
             @RequestParam(value = "quantity") String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
             @RequestParam(value = "name", required = false) String name, @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "client") String client, @RequestParam(value = "surveyId", required = false) String surveyId) throws IOException, ServletException {
+
 
         ProductCreateRequest request = new ProductCreateRequest();
         request.setCode(code);
@@ -86,6 +89,7 @@ public class ProductController {
         request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
+
         if (surveyId != null) {
             Boolean isValidSurvey = productService.validateSurvey(surveyId);
             if (!isValidSurvey) {
@@ -93,10 +97,23 @@ public class ProductController {
             }
             request.setSurveyId(surveyId);
         }
-        if (file != null) {
+        /*if (file != null) {
             request.setImageName(file.getOriginalFilename());
             //request.setImageObject(fileStorageService.storeFile(file));
             request.setImageObject(file.getBytes());
+        }*/
+
+        if (!files.isEmpty()) {
+            //In first phase we are limiting image count as 4
+            List<ProductCreateRequest.ProductImageRequest> proImages = new ArrayList<>(4);
+            for (MultipartFile file : files) {
+                System.out.println("file name : " + file.getOriginalFilename());
+                ProductCreateRequest.ProductImageRequest proImage = new ProductCreateRequest.ProductImageRequest();
+                proImage.setImageName(file.getOriginalFilename());
+                proImage.setImageObject(file.getBytes());
+                proImages.add(proImage);
+            }
+            request.setImageObjects(proImages);
         }
 
 
@@ -146,10 +163,10 @@ public class ProductController {
 
     @PutMapping("${app.endpoint.productsUpdate}")
     public ResponseEntity<SimpleResponseWrapper<ProductUpdateResponse>> update(@PathVariable String id,
-            @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam("code") String code,
-            @RequestParam(value = "quantity") String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
-            @RequestParam(value = "name", required = false) String name, @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "client") String client, @RequestParam(value = "surveyId", required = false) String surveyId) throws IOException, ServletException {
+                                                                               @RequestParam(value = "file", required = false) List<MultipartFile> files, @RequestParam("code") String code,
+                                                                               @RequestParam(value = "quantity") String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
+                                                                               @RequestParam(value = "name", required = false) String name, @RequestParam(value = "description", required = false) String description,
+                                                                               @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "client") String client, @RequestParam(value = "surveyId", required = false) String surveyId) throws IOException, ServletException {
 
         Long productId = cryptoService.decryptEntityId(id);
 
@@ -168,9 +185,22 @@ public class ProductController {
             }
             request.setSurveyId(surveyId);
         }
-        if (file != null) {
-            request.setImageName(file.getOriginalFilename());
-            request.setImageObject(file.getBytes());
+//        if (file != null) {
+//            request.setImageName(file.getOriginalFilename());
+//            request.setImageObject(file.getBytes());
+//        }
+
+        if (!files.isEmpty()) {
+            //In first phase we are limiting image count as 4
+            List< ProductUpdateRequest.ProductImageUpdateRequest> proImages = new ArrayList<>(4);
+            for (MultipartFile file : files) {
+                System.out.println("file name : " + file.getOriginalFilename());
+                ProductUpdateRequest.ProductImageUpdateRequest productImageUpdateRequest = new ProductUpdateRequest.ProductImageUpdateRequest();
+                productImageUpdateRequest.setImageName(file.getOriginalFilename());
+                productImageUpdateRequest.setImageObject(file.getBytes());
+                proImages.add(productImageUpdateRequest);
+            }
+            request.setImageObjects(proImages);
         }
 
         ProductUpdateRequest.ClientData clientData = new ProductUpdateRequest.ClientData();
@@ -223,12 +253,14 @@ public class ProductController {
 
     @GetMapping("/downloadFile/{objectId}")
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String objectId) throws IOException, ServletException {
-        Long productId = cryptoService.decryptEntityId(objectId);
+        Long productImageId = cryptoService.decryptEntityId(objectId);
 
-        Product retrievedProduct = productService.retrieve(productId);
-        byte[] imageByte = retrievedProduct.getImageObject();
-        String fileName = retrievedProduct.getImageName();
+        ProductImage retrievedImage = productService.retrieveProductImage(productImageId);
 
+        byte[] imageByte = retrievedImage.getImageObject();
+        String fileName = retrievedImage.getImageName();
+
+        System.out.println("................Image Name..............: " + fileName);
         MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, fileName);
 
         File imageFile = new File(fileName);

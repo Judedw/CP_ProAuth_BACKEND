@@ -4,6 +4,7 @@ import com.clearpicture.platform.product.dto.request.ProductUpdateRequest;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * ProductUpdateResponse
@@ -28,9 +29,9 @@ public class ProductUpdateResponse {
 
     private ProductUpdateResponse.ClientData client;
 
-    private String imageName;
-
-    private byte[] imageObject;
+    //private String imageName;
+    //private byte[] imageObject;
+    private Set<ProductImageData> imageObjects;
 
     private String surveyId;
 
@@ -40,5 +41,10 @@ public class ProductUpdateResponse {
 
         private String id;
 
+    }
+
+    @Data
+    public static class ProductImageData {
+        private String id;
     }
 }

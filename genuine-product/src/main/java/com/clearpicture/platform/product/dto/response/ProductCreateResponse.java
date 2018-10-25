@@ -3,6 +3,8 @@ package com.clearpicture.platform.product.dto.response;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 /**
  * ProductCreateResponse
@@ -27,18 +29,23 @@ public class ProductCreateResponse {
 
     private ClientData client;
 
-    private String imageName;
-
+    //private String imageName;
     //private String imageObject;
-    private byte[] imageObject;
+    //private byte[] imageObject;
+    private Set<ProductImageData> imageObjects;
 
     private String surveyId;
 
 
     @Data
-    public static class ClientData  {
-
+    public static class ClientData {
         private String id;
-
     }
+
+    @Data
+    public static class ProductImageData {
+        private String id;
+    }
+
+
 }

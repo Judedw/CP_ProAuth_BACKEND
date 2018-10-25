@@ -7,6 +7,7 @@ import lombok.Data;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * ProductUpdateRequest
@@ -33,9 +34,9 @@ public class ProductUpdateRequest {
     @NotBlank(message = "platformProductCreateRequest.product.name.empty")
     private String name;
 
-    private String imageName;
-
-    private byte[] imageObject;
+    //private String imageName;
+    //private byte[] imageObject;
+    private List<ProductImageUpdateRequest> imageObjects;
 
     private String surveyId;
 
@@ -50,6 +51,19 @@ public class ProductUpdateRequest {
         @Override
         public Class<?> getDestinationType() {
             return Client.class;
+        }
+    }
+
+    @Data
+    public static class ProductImageUpdateRequest implements ModelMappingAware {
+
+        private String imageName;
+
+        private byte[] imageObject;
+
+        @Override
+        public Class<?> getDestinationType() {
+            return ProductImageUpdateRequest.class;
         }
     }
 }

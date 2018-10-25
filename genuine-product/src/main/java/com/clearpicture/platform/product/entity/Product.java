@@ -44,19 +44,21 @@ public class Product extends CreateModifyAwareBaseEntity {
 
     private Integer batchNumber;
 
-    private String imageName;
-
+    //private String imageName;
     //private String imageObject;
-    @Lob
-    private byte[] imageObject;
+    //@Lob
+    //private byte[] imageObject;
+
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private Set<ProductImage> imageObjects;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="client_id")
+    @JoinColumn(name = "client_id")
     private Client client;
 
     private Long surveyId;
 
-    @OneToMany(mappedBy = "product",cascade = {CascadeType.MERGE,CascadeType.PERSIST},orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Set<ProductDetail> productDetails;
 
     /*@OneToMany(mappedBy = "product",cascade = {CascadeType.MERGE,CascadeType.PERSIST})

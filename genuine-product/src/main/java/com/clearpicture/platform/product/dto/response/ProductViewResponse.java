@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * ProductViewResponse
@@ -26,9 +27,9 @@ public class ProductViewResponse {
 
     private Integer batchNumber;
 
-    private String imageName;
-
-    private byte[] imageObject;
+    //private String imageName;
+    //private byte[] imageObject;
+    private Set<ProductImageData> imageObjects;
 
     private List<ProductDetailData> productDetails;
 
@@ -51,5 +52,11 @@ public class ProductViewResponse {
         private String id;
 
         private String name;
+    }
+
+
+    @Data
+    public static class ProductImageData {
+        private String id;
     }
 }
