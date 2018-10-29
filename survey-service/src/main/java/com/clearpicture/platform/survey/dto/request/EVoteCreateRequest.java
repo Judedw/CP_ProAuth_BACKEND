@@ -1,9 +1,11 @@
 package com.clearpicture.platform.survey.dto.request;
 
+import com.clearpicture.platform.modelmapper.ModelMappingAware;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * EVoteCreateRequest
@@ -30,12 +32,25 @@ public class EVoteCreateRequest {
     @NotBlank(message = "EVoteCreateRequest.topic.empty")
     private String topic;
 
-    private String imageName;
-
+    //private String imageName;
     //private String imageObject;
-    private byte[]  imageObject;
+    //private byte[]  imageObject;
+    private List<EvoteImageRequest> imageObjects;
 
     private String surveyId;
+
+    @Data
+    public static class EvoteImageRequest implements ModelMappingAware {
+
+        private String imageName;
+
+        private byte[] imageObject;
+
+        @Override
+        public Class<?> getDestinationType() {
+            return EvoteImageRequest.class;
+        }
+    }
 
 
 }

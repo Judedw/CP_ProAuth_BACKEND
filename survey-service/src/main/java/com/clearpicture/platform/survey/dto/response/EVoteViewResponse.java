@@ -3,6 +3,7 @@ package com.clearpicture.platform.survey.dto.response;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * EVoteViewResponse
@@ -25,9 +26,14 @@ public class EVoteViewResponse {
 
     private Integer batchNumber;
 
-    private String imageName;
+    private Set<EvoteImageData> imageObjects;
 
     private String clientId;
 
     private String surveyId;
+
+    @Data
+    public static class EvoteImageData {
+        private String id;
+    }
 }

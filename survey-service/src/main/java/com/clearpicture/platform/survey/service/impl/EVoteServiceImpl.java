@@ -1,13 +1,11 @@
 package com.clearpicture.platform.survey.service.impl;
 
 import com.clearpicture.platform.exception.ComplexValidationException;
-import com.clearpicture.platform.survey.entity.EVote;
-import com.clearpicture.platform.survey.entity.EVoteDetail;
-import com.clearpicture.platform.survey.entity.QEVote;
-import com.clearpicture.platform.survey.entity.Voter;
+import com.clearpicture.platform.survey.entity.*;
 import com.clearpicture.platform.survey.entity.criteria.EVoteSearchCriteria;
 import com.clearpicture.platform.survey.repository.EVoteDetailsRepository;
 import com.clearpicture.platform.survey.repository.EVoteRepository;
+import com.clearpicture.platform.survey.repository.EvoteImageRepository;
 import com.clearpicture.platform.survey.repository.VoterRepository;
 import com.clearpicture.platform.survey.service.EVoteService;
 import com.querydsl.core.BooleanBuilder;
@@ -36,6 +34,9 @@ public class EVoteServiceImpl implements EVoteService {
     private EVoteRepository eVoteRepository;
 
     @Autowired
+    private EvoteImageRepository imageRepository;
+
+    @Autowired
     private VoterRepository voterRepository;
 
     @Autowired
@@ -56,6 +57,11 @@ public class EVoteServiceImpl implements EVoteService {
                 eVoteDetails.add(eVoteDetail);
             }
             eVote.setEVoteDetails(eVoteDetails);
+
+            for(EvoteImage image : eVote.getImageObjects()){
+                image.setEvote(eVote);
+            }
+
 
         }
 
@@ -150,5 +156,14 @@ public class EVoteServiceImpl implements EVoteService {
         }
         eVoteRepository.delete(currentSurvey);
         return currentSurvey;
+    }
+
+    @Override
+    public EvoteImage retrieveEvoteImage(Long id) {
+        try {
+            return imageRepository.getOne(id);
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("evote_image", "evoteImageRetrieve.evoteImageNotExists");
+        }
     }
 }

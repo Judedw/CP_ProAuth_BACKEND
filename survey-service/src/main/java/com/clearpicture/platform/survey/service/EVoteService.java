@@ -1,6 +1,7 @@
 package com.clearpicture.platform.survey.service;
 
 import com.clearpicture.platform.survey.entity.EVote;
+import com.clearpicture.platform.survey.entity.EvoteImage;
 import com.clearpicture.platform.survey.entity.criteria.EVoteSearchCriteria;
 import org.springframework.data.domain.Page;
 
@@ -22,4 +23,6 @@ public interface EVoteService {
     EVote update(EVote eVote);
 
     EVote delete(Long id);
+
+    EvoteImage retrieveEvoteImage(Long id);
 }

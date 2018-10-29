@@ -34,11 +34,8 @@ public class EVote extends CreateModifyAwareBaseEntity {
 
     private Integer batchNumber;
 
-    private String imageName;
-
-    //private String imageObject;
-    @Lob
-    private byte[]  imageObject;
+    @OneToMany(mappedBy = "evote", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private Set<EvoteImage> imageObjects;
 
     private Long clientId;
 

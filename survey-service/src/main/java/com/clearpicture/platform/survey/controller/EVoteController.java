@@ -13,6 +13,7 @@ import com.clearpicture.platform.survey.dto.request.EVoteSearchRequest;
 import com.clearpicture.platform.survey.dto.request.EVoteUpdateRequest;
 import com.clearpicture.platform.survey.dto.response.*;
 import com.clearpicture.platform.survey.entity.EVote;
+import com.clearpicture.platform.survey.entity.EvoteImage;
 import com.clearpicture.platform.survey.entity.Survey;
 import com.clearpicture.platform.survey.entity.criteria.EVoteSearchCriteria;
 import com.clearpicture.platform.survey.service.EVoteService;
@@ -37,6 +38,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,7 +72,7 @@ public class EVoteController {
 
     @PostMapping(value = "${app.endpoint.evotesCreate}")
     public ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>> create(
-            @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "code", required = false) String code,
+            @RequestParam(value = "file", required = false) List<MultipartFile> files, @RequestParam(value = "code", required = false) String code,
             @RequestParam(value = "quantity", required = false) String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
             @RequestParam(value = "topic", required = false) String topic, @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "clientId", required = false) String clientId,
@@ -84,22 +86,25 @@ public class EVoteController {
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
         request.setClientId(clientId);
-        System.out.println("clientId : " + clientId);
-        System.out.println("topic : " + topic);
+
         if (surveyId != null && !surveyId.isEmpty())
             request.setSurveyId(surveyId);
-        if (file != null) {
-            request.setImageName(file.getOriginalFilename());
+
+        if (files != null) {
+            List<EVoteCreateRequest.EvoteImageRequest> evoteImages  = new ArrayList<>();
             try {
                 // request.setImageObject(fileStorageService.storeFile(file));
-                request.setImageObject(file.getBytes());
-
+                for(MultipartFile file : files){
+                    //System.out.println("...........EVOTE IMAGE NAME : " + file.getOriginalFilename()+".........");
+                    EVoteCreateRequest.EvoteImageRequest evoteImg = new EVoteCreateRequest.EvoteImageRequest();
+                    evoteImg.setImageName(file.getOriginalFilename());
+                    evoteImg.setImageObject(file.getBytes());
+                    evoteImages.add(evoteImg);
+                }
+                request.setImageObjects(evoteImages);
             } catch (IOException e) {
                 throw new ComplexValidationException("eVote", "eVoteCreateRequest.canNotStoreFile");
             }
-//            catch (ServletException e) {
-//                throw  new ComplexValidationException("eVote","eVoteCreateRequest.canNotStoreFile");
-//            }
         }
 
         validate(request);
@@ -225,11 +230,11 @@ public class EVoteController {
 
     @GetMapping("/downloadFile/{objectId}")
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String objectId) throws IOException, ServletException {
-        Long evoteId = cryptoService.decryptEntityId(objectId);
+        Long evoteImageId = cryptoService.decryptEntityId(objectId);
 
-        EVote retrievedEvote = eVoteService.retrieve(evoteId);
-        byte[] imageByte = retrievedEvote.getImageObject();
-        String fileName = retrievedEvote.getImageName();
+        EvoteImage evoteImage = eVoteService.retrieveEvoteImage(evoteImageId);
+        byte[] imageByte = evoteImage.getImageObject();
+        String fileName = evoteImage.getImageName();
 
         MediaType mediaType = MediaTypeUtils.getMediaTypeForFileName(this.servletContext, fileName);
 
