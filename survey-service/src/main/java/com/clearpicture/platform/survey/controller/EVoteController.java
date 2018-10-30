@@ -160,11 +160,12 @@ public class EVoteController {
     }
 
     @PutMapping("${app.endpoint.evotesUpdate}")
-    public ResponseEntity<SimpleResponseWrapper<EVoteUpdateResponse>> update(@PathVariable String id, @RequestParam(value = "file", required = false) MultipartFile file, @RequestParam(value = "code", required = false) String code,
+    public ResponseEntity<SimpleResponseWrapper<EVoteUpdateResponse>> update(@PathVariable String id, @RequestParam(value = "file", required = false) List<MultipartFile> files, @RequestParam(value = "code", required = false) String code,
                                                                              @RequestParam(value = "quantity", required = false) String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
                                                                              @RequestParam(value = "topic", required = false) String topic, @RequestParam(value = "description", required = false) String description,
                                                                              @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "clientId", required = false) String clientId,
-                                                                             @RequestParam(value = "surveyId", required = false) String surveyId) {
+                                                                             @RequestParam(value = "surveyId", required = false) String surveyId,
+                                                                             @RequestParam(value = "remainImagesID", required = false) List<String> remainImagesID) {
         Long eVoteId = cryptoService.decryptEntityId(id);
 
         EVoteUpdateRequest request = new EVoteUpdateRequest();
@@ -176,17 +177,26 @@ public class EVoteController {
         request.setBatchNumber(batchNumber);
         request.setClientId(clientId);
         request.setSurveyId(surveyId);
-        if (file != null) {
-            request.setImageName(file.getOriginalFilename());
+
+        if (!files.isEmpty()) {
             try {
-                request.setImageObject(fileStorageService.storeFile(file));
+                //request.setImageObject(fileStorageService.storeFile(file));
+                List< EVoteUpdateRequest.EvoteImageUpdateRequest> evoteImages  = new ArrayList<>();
+                for(MultipartFile file : files){
+                    EVoteUpdateRequest.EvoteImageUpdateRequest image = new EVoteUpdateRequest.EvoteImageUpdateRequest();
+                    image.setImageName(file.getOriginalFilename());
+                    image.setImageObject(file.getBytes());
+                    evoteImages.add(image);
+                }
+
+                request.setImageObjects(evoteImages);
             } catch (IOException e) {
-
-                throw new ComplexValidationException("eVote", "eVoteUpdateRequest.canNotStoreFile");
-
-            } catch (ServletException e) {
                 throw new ComplexValidationException("eVote", "eVoteUpdateRequest.canNotStoreFile");
             }
+        }
+
+        if(remainImagesID != null && !remainImagesID.isEmpty()){
+            request.setRemainImagesID(remainImagesID);
         }
 
         EVoteUpdateRequestValidation validation = new EVoteUpdateRequestValidation();

@@ -141,17 +141,42 @@ public class ProductServiceImpl implements ProductService {
             currentProduct.setClient(product.getClient());
             currentProduct.setSurveyId(product.getSurveyId());
             currentProduct.setName(product.getName());
-            //currentProduct.setImageName(product.getImageName());
-            //currentProduct.setImageObject(product.getImageObject());
 
-//            Set<ProductImage> productImages = product.getImageObjects();
-//            if (productImages != null && !productImages.isEmpty()) {
-//                for (ProductImage image : productImages) {
-//                    image.setProduct(currentProduct);
-//                }
-//                currentProduct.setImageObjects(productImages);
-//            }
+            // Currently existing image objects in database
+            Set<ProductImage> productImages = currentProduct.getImageObjects();
 
+            // Image id set that is not going to be change
+            Set<Long> remainImageIds = product.getRemainImagesID();
+
+            // Declare and Initialize a set for newly added images
+            Set<ProductImage> toBeUpdatedSet = new HashSet<>();
+
+            if (remainImageIds != null && !remainImageIds.isEmpty()) {
+                productImages.forEach(image -> {
+                    if (remainImageIds.contains(image.getId())) {
+                        toBeUpdatedSet.add(image);
+                    }
+                });
+            }
+
+            // Incoming newly added Images
+            Set<ProductImage> incomingImages = product.getImageObjects();
+
+            if (incomingImages != null && !incomingImages.isEmpty()) {
+                // setting up the product object to new product image objects
+                for (ProductImage image : product.getImageObjects()) {
+                    image.setProduct(product);
+                }
+
+                // add incoming new images to to be updated image list.
+                toBeUpdatedSet.addAll(incomingImages);
+            }
+
+            // clear the existing set in object level
+            currentProduct.getImageObjects().clear();
+
+            // add new updated Set into current product object
+            currentProduct.getImageObjects().addAll(toBeUpdatedSet);
 
             return productRepository.save(currentProduct);
 

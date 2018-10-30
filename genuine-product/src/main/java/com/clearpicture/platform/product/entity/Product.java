@@ -1,9 +1,11 @@
 package com.clearpicture.platform.product.entity;
 
 import com.clearpicture.platform.entity.CreateModifyAwareBaseEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Transient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,7 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Lob;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -44,10 +45,9 @@ public class Product extends CreateModifyAwareBaseEntity {
 
     private Integer batchNumber;
 
-    //private String imageName;
-    //private String imageObject;
-    //@Lob
-    //private byte[] imageObject;
+    @Transient
+    @JsonInclude
+    private Set<Long> remainImagesID;
 
     @OneToMany(mappedBy = "product", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Set<ProductImage> imageObjects;

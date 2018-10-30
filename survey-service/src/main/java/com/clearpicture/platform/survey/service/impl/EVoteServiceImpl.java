@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,18 +48,18 @@ public class EVoteServiceImpl implements EVoteService {
 
         Set<EVoteDetail> eVoteDetails = new HashSet<>();
         Long lastId = eVoteDetailsRepository.getMaxId();
-        if(eVote.getBatchNumber() != null) {
+        if (eVote.getBatchNumber() != null) {
             List<Voter> voters = voterRepository.findByBatchNumber(eVote.getBatchNumber());
 
-            for(Voter voter:voters) {
+            for (Voter voter : voters) {
                 EVoteDetail eVoteDetail = new EVoteDetail();
-                eVoteDetail.setUniqueVoteCode(eVote.getCode()+"/"+eVote.getClientId()+"/"+ lastId++);
+                eVoteDetail.setUniqueVoteCode(eVote.getCode() + "/" + eVote.getClientId() + "/" + lastId++);
                 eVoteDetail.setEVote(eVote);
                 eVoteDetails.add(eVoteDetail);
             }
             eVote.setEVoteDetails(eVoteDetails);
 
-            for(EvoteImage image : eVote.getImageObjects()){
+            for (EvoteImage image : eVote.getImageObjects()) {
                 image.setEvote(eVote);
             }
 
@@ -78,7 +79,7 @@ public class EVoteServiceImpl implements EVoteService {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        if(StringUtils.isNotBlank(criteria.getTopic())) {
+        if (StringUtils.isNotBlank(criteria.getTopic())) {
             booleanBuilder.and(QEVote.eVote.topic.equalsIgnoreCase(criteria.getTopic()));
         }
 
@@ -128,7 +129,6 @@ public class EVoteServiceImpl implements EVoteService {
     public EVote update(EVote eVote) {
 
 
-
         try {
             EVote currentEVote = eVoteRepository.getOne(eVote.getId());
             currentEVote.setCode(eVote.getCode());
@@ -138,7 +138,48 @@ public class EVoteServiceImpl implements EVoteService {
             currentEVote.setBatchNumber(eVote.getBatchNumber());
             currentEVote.setClientId(eVote.getClientId());
             currentEVote.setSurveyId(eVote.getSurveyId());
+
+            // Currently existing image objects in database
+            Set<EvoteImage> evoteImages = currentEVote.getImageObjects();
+
+            // Image id set that is not going to be change
+            Set<Long> remainImageIds = eVote.getRemainImagesID();
+
+
+                // Declare and Initialize a set for newly added images
+                Set<EvoteImage> toBeUpdatedSet = new HashSet<>();
+
+                if (remainImageIds != null && !remainImageIds.isEmpty()) {
+                    evoteImages.forEach(image -> {
+                        if (remainImageIds.contains(image.getId())) {
+                            toBeUpdatedSet.add(image);
+                        }
+                    });
+                }
+
+                // Incoming newly added Images
+                Set<EvoteImage> incomingImages = eVote.getImageObjects();
+
+                if (incomingImages != null && !incomingImages.isEmpty()) {
+                    // setting up the evote object to new evote image objects
+                    for (EvoteImage image : eVote.getImageObjects()) {
+                        image.setEvote(eVote);
+                    }
+
+                    // add incoming new images to to be updated image list.
+                    toBeUpdatedSet.addAll(incomingImages);
+                }
+
+                // clear the existing set in object level
+                currentEVote.getImageObjects().clear();
+
+                // add new updated Set into current evote object
+                currentEVote.getImageObjects().addAll(toBeUpdatedSet);
+
+
+            // persists the content to database
             return eVoteRepository.save(currentEVote);
+
 
         } catch (EntityNotFoundException e) {
             throw new ComplexValidationException("eVote", "eVoteUpdateRequest.eVoteNotExist");

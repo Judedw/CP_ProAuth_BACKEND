@@ -29,8 +29,6 @@ public class ProductUpdateResponse {
 
     private ProductUpdateResponse.ClientData client;
 
-    //private String imageName;
-    //private byte[] imageObject;
     private Set<ProductImageData> imageObjects;
 
     private String surveyId;

@@ -40,7 +40,7 @@ public class ProductUpdateRequest {
 
     private String surveyId;
 
-
+    private List<String> remainImagesID;
 
     @Data
     public static class ClientData implements ModelMappingAware {

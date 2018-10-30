@@ -1,10 +1,18 @@
 package com.clearpicture.platform.survey.entity;
 
 import com.clearpicture.platform.entity.CreateModifyAwareBaseEntity;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Transient;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -33,6 +41,10 @@ public class EVote extends CreateModifyAwareBaseEntity {
     private LocalDate expireDate;
 
     private Integer batchNumber;
+
+    @Transient
+    @JsonInclude
+    private Set<Long> remainImagesID;
 
     @OneToMany(mappedBy = "evote", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private Set<EvoteImage> imageObjects;
