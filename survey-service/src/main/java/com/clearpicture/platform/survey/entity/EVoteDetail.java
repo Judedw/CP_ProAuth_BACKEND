@@ -22,7 +22,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(catalog = "survey_db", name = "e_vote_detail")
-public class EVoteDetail {
+public class EVoteDetail   {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,4 +46,13 @@ public class EVoteDetail {
             authenticationCode = UUID.randomUUID().toString();
         }
     }
+
+    // default constructor
+    public EVoteDetail(){}
+
+    public EVoteDetail(String uniqueVoteCode , EVote evote){
+        this.uniqueVoteCode = uniqueVoteCode;
+        this.eVote = evote;
+    }
+
 }

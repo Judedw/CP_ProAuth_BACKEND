@@ -73,7 +73,7 @@ public class EVoteController {
     @PostMapping(value = "${app.endpoint.evotesCreate}")
     public ResponseEntity<SimpleResponseWrapper<EVoteCreateResponse>> create(
             @RequestParam(value = "file", required = false) List<MultipartFile> files, @RequestParam(value = "code", required = false) String code,
-            @RequestParam(value = "quantity", required = false) String quantity, @RequestParam(value = "expireDate", required = false) String expireDate,
+           @RequestParam(value = "expireDate", required = false) String expireDate,
             @RequestParam(value = "topic", required = false) String topic, @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "batchNumber", required = false) String batchNumber, @RequestParam(value = "clientId", required = false) String clientId,
             @RequestParam(value = "surveyId", required = false) String surveyId) {
@@ -82,7 +82,7 @@ public class EVoteController {
         request.setCode(code);
         request.setTopic(topic);
         request.setDescription(description);
-        request.setQuantity(quantity);
+
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
         request.setClientId(clientId);
@@ -172,7 +172,6 @@ public class EVoteController {
         request.setCode(code);
         request.setTopic(topic);
         request.setDescription(description);
-        request.setQuantity(quantity);
         request.setExpireDate(expireDate != null ? LocalDate.parse(expireDate) : null);
         request.setBatchNumber(batchNumber);
         request.setClientId(clientId);

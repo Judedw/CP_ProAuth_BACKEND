@@ -20,8 +20,6 @@ public class EVoteViewResponse {
 
     private String description;
 
-    private Integer quantity;
-
     private LocalDate expireDate;
 
     private Integer batchNumber;

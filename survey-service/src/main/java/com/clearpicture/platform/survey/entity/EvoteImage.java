@@ -1,6 +1,7 @@
 package com.clearpicture.platform.survey.entity;
 
 
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(catalog = "survey_db", name = "evote_image")
-public class EvoteImage {
+public class EvoteImage  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

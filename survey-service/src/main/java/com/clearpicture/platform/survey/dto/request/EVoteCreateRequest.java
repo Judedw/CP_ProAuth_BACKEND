@@ -19,9 +19,6 @@ public class EVoteCreateRequest {
 
     private String description;
 
-    @NotBlank(message = "EVoteCreateRequest.quantity.empty")
-    private String quantity;
-
     private LocalDate expireDate;
 
     private String batchNumber;

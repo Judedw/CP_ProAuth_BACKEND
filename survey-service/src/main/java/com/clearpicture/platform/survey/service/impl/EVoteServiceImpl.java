@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -48,22 +47,23 @@ public class EVoteServiceImpl implements EVoteService {
 
         Set<EVoteDetail> eVoteDetails = new HashSet<>();
         Long lastId = eVoteDetailsRepository.getMaxId();
+
         if (eVote.getBatchNumber() != null) {
-            List<Voter> voters = voterRepository.findByBatchNumber(eVote.getBatchNumber());
+            //List<Voter> voters = voterRepository.findByBatchNumber(eVote.getBatchNumber());
+            List<Voter> voters = voterRepository.findByBatchNumberAndClientId(eVote.getBatchNumber(), eVote.getClientId());
+
+            if(voters.isEmpty())
+                throw new ComplexValidationException("votersZero", "eVoteCreateRequest.eVoteVotersNotExists");
 
             for (Voter voter : voters) {
-                EVoteDetail eVoteDetail = new EVoteDetail();
-                eVoteDetail.setUniqueVoteCode(eVote.getCode() + "/" + eVote.getClientId() + "/" + lastId++);
-                eVoteDetail.setEVote(eVote);
+                EVoteDetail eVoteDetail = new EVoteDetail(eVote.getCode() + "/" + eVote.getClientId() + "/" + lastId++,eVote);
                 eVoteDetails.add(eVoteDetail);
             }
             eVote.setEVoteDetails(eVoteDetails);
+        }
 
-            for (EvoteImage image : eVote.getImageObjects()) {
-                image.setEvote(eVote);
-            }
-
-
+        for (EvoteImage image : eVote.getImageObjects()) {
+            image.setEvote(eVote);
         }
 
         return eVoteRepository.save(eVote);
@@ -130,12 +130,14 @@ public class EVoteServiceImpl implements EVoteService {
 
 
         try {
+
+            Integer batchNumber = eVote.getBatchNumber();
+
             EVote currentEVote = eVoteRepository.getOne(eVote.getId());
             currentEVote.setCode(eVote.getCode());
             currentEVote.setDescription(eVote.getDescription());
-            currentEVote.setQuantity(eVote.getQuantity());
             currentEVote.setExpireDate(eVote.getExpireDate());
-            currentEVote.setBatchNumber(eVote.getBatchNumber());
+            currentEVote.setBatchNumber(batchNumber);
             currentEVote.setClientId(eVote.getClientId());
             currentEVote.setSurveyId(eVote.getSurveyId());
 
@@ -146,35 +148,35 @@ public class EVoteServiceImpl implements EVoteService {
             Set<Long> remainImageIds = eVote.getRemainImagesID();
 
 
-                // Declare and Initialize a set for newly added images
-                Set<EvoteImage> toBeUpdatedSet = new HashSet<>();
+            // Declare and Initialize a set for newly added images
+            Set<EvoteImage> toBeUpdatedSet = new HashSet<>();
 
-                if (remainImageIds != null && !remainImageIds.isEmpty()) {
-                    evoteImages.forEach(image -> {
-                        if (remainImageIds.contains(image.getId())) {
-                            toBeUpdatedSet.add(image);
-                        }
-                    });
-                }
-
-                // Incoming newly added Images
-                Set<EvoteImage> incomingImages = eVote.getImageObjects();
-
-                if (incomingImages != null && !incomingImages.isEmpty()) {
-                    // setting up the evote object to new evote image objects
-                    for (EvoteImage image : eVote.getImageObjects()) {
-                        image.setEvote(eVote);
+            if (remainImageIds != null && !remainImageIds.isEmpty()) {
+                evoteImages.forEach(image -> {
+                    if (remainImageIds.contains(image.getId())) {
+                        toBeUpdatedSet.add(image);
                     }
+                });
+            }
 
-                    // add incoming new images to to be updated image list.
-                    toBeUpdatedSet.addAll(incomingImages);
+            // Incoming newly added Images
+            Set<EvoteImage> incomingImages = eVote.getImageObjects();
+
+            if (incomingImages != null && !incomingImages.isEmpty()) {
+                // setting up the evote object to new evote image objects
+                for (EvoteImage image : eVote.getImageObjects()) {
+                    image.setEvote(eVote);
                 }
 
-                // clear the existing set in object level
-                currentEVote.getImageObjects().clear();
+                // add incoming new images to to be updated image list.
+                toBeUpdatedSet.addAll(incomingImages);
+            }
 
-                // add new updated Set into current evote object
-                currentEVote.getImageObjects().addAll(toBeUpdatedSet);
+            // clear the existing set in object level
+            currentEVote.getImageObjects().clear();
+
+            // add new updated Set into current evote object
+            currentEVote.getImageObjects().addAll(toBeUpdatedSet);
 
 
             // persists the content to database

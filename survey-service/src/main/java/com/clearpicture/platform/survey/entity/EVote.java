@@ -36,8 +36,6 @@ public class EVote extends CreateModifyAwareBaseEntity {
 
     private String description;
 
-    private Integer quantity;
-
     private LocalDate expireDate;
 
     private Integer batchNumber;

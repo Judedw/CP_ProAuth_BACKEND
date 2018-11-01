@@ -14,4 +14,7 @@ public interface VoterRepository extends JpaRepository<Voter,Long>,QuerydslPredi
 
     //@Query("SELECT v FROM Voter v where batchNumber =:batchNumber")
     List<Voter> findByBatchNumber(Integer batchNumber);
+
+    List<Voter> findByBatchNumberAndClientId(Integer batchNumber, Long clientId);
+
 }
