@@ -76,8 +76,12 @@ public class ProductServiceImpl implements ProductService {
             productDetails.add(productDetail);
         }
 
-        for (ProductImage image : product.getImageObjects()) {
-            image.setProduct(product);
+        Set<ProductImage> prodImages = product.getImageObjects();
+
+        if (prodImages != null && !prodImages.isEmpty()) {
+            for (ProductImage image : product.getImageObjects()) {
+                image.setProduct(product);
+            }
         }
 
         product.setProductDetails(productDetails);

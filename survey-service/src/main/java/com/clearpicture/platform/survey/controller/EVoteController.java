@@ -90,7 +90,7 @@ public class EVoteController {
         if (surveyId != null && !surveyId.isEmpty())
             request.setSurveyId(surveyId);
 
-        if (files != null) {
+        if (!files.isEmpty()) {
             List<EVoteCreateRequest.EvoteImageRequest> evoteImages  = new ArrayList<>();
             try {
                 // request.setImageObject(fileStorageService.storeFile(file));

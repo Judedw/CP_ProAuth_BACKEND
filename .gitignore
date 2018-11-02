@@ -1,3 +1,4 @@
 
 survey-service/src/main/resources/application.properties
 genuine-product/src/main/resources/application.properties
+*.png

@@ -52,19 +52,23 @@ public class EVoteServiceImpl implements EVoteService {
             //List<Voter> voters = voterRepository.findByBatchNumber(eVote.getBatchNumber());
             List<Voter> voters = voterRepository.findByBatchNumberAndClientId(eVote.getBatchNumber(), eVote.getClientId());
 
-            if(voters.isEmpty())
+            if (voters.isEmpty())
                 throw new ComplexValidationException("votersZero", "eVoteCreateRequest.eVoteVotersNotExists");
 
             for (Voter voter : voters) {
-                EVoteDetail eVoteDetail = new EVoteDetail(eVote.getCode() + "/" + eVote.getClientId() + "/" + lastId++,eVote);
+                EVoteDetail eVoteDetail = new EVoteDetail(eVote.getCode() + "/" + eVote.getClientId() + "/" + lastId++, eVote);
                 eVoteDetails.add(eVoteDetail);
             }
             eVote.setEVoteDetails(eVoteDetails);
         }
 
-        for (EvoteImage image : eVote.getImageObjects()) {
-            image.setEvote(eVote);
+        Set<EvoteImage> evImages = eVote.getImageObjects();
+        if (evImages != null && !evImages.isEmpty()) {
+            for (EvoteImage image : eVote.getImageObjects()) {
+                image.setEvote(eVote);
+            }
         }
+
 
         return eVoteRepository.save(eVote);
     }
