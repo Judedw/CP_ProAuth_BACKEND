@@ -24,7 +24,7 @@ public class FutureSurvey extends CreateModifyAwareBaseEntity {
     private String title;
     private Long clientId;
 
-    @OneToMany(mappedBy = "futureSurvey", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "futureSurvey", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Page> pages;
 
     @Lob

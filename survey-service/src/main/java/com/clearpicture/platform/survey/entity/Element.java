@@ -21,7 +21,9 @@ public class Element extends CreateModifyAwareBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long questionId;
+    private Long elementId;
+
+    private String qcode;
 
     private String type;
 

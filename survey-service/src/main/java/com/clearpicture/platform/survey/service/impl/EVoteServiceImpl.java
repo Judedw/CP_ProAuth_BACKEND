@@ -144,6 +144,7 @@ public class EVoteServiceImpl implements EVoteService {
             currentEVote.setBatchNumber(batchNumber);
             currentEVote.setClientId(eVote.getClientId());
             currentEVote.setSurveyId(eVote.getSurveyId());
+            currentEVote.setTopic(eVote.getTopic());
 
             // Currently existing image objects in database
             Set<EvoteImage> evoteImages = currentEVote.getImageObjects();

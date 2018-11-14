@@ -113,6 +113,7 @@ public class SurveyServiceImpl implements SurveyService {
             persistedSurvey.setStartDate(survey.getStartDate());
             persistedSurvey.setEndDate(survey.getEndDate());
             persistedSurvey.setProductId(survey.getProductId());
+            persistedSurvey.setVoteId(survey.getVoteId());
 
             if(persistedSurvey.getQuestions() != null)
                 persistedSurvey.getQuestions().size();

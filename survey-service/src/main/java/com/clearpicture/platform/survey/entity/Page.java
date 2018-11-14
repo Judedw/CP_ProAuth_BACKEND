@@ -28,7 +28,7 @@ public class Page extends CreateModifyAwareBaseEntity {
     @JoinColumn(name = "future_survey_id")
     private FutureSurvey futureSurvey;
 
-    @OneToMany(mappedBy = "page",cascade = {CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval = true,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "page",cascade = {CascadeType.ALL},orphanRemoval = true,fetch = FetchType.LAZY)
     private Set<Element> elements;
 
 

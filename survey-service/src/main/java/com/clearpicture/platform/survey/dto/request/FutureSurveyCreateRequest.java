@@ -51,7 +51,7 @@ public class FutureSurveyCreateRequest {
             private String name;
 
             @NotBlank(message = "")
-            private String questionId;
+            private String qcode;
 
             private List<Object> choices;
 

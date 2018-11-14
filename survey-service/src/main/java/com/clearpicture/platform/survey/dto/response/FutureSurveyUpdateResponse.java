@@ -1,19 +1,15 @@
-package com.clearpicture.platform.survey.dto.request;
+package com.clearpicture.platform.survey.dto.response;
 
 
-import com.clearpicture.platform.modelmapper.ModelMappingAware;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
- * created by Raveen -  18/10/24
- * FutureSurveyCreateRequest - Handling every advanced surveys & e votes
+ * created by Raveen -  18/11/08
+ * FutureSurveyUpdateResponse
  */
-
 @Data
-public class FutureSurveyCreateResponse {
+public class FutureSurveyUpdateResponse {
 
     private String id;
     private String title;
@@ -31,7 +27,7 @@ public class FutureSurveyCreateResponse {
         @Data
         public static class ElementData {
 
-            private String questionId;
+            private String qcode;
             private String type;
             private String name;
             private List<Object> choices;
