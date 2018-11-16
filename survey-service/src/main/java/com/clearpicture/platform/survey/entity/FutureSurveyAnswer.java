@@ -26,6 +26,6 @@ public class FutureSurveyAnswer extends CreateModifyAwareBaseEntity {
     private String ipAddress;
 
     @ManyToOne
-    @JoinColumn(name = "element_id")
+    @JoinColumn(name = "element_table_id")
     private Element element;
 }

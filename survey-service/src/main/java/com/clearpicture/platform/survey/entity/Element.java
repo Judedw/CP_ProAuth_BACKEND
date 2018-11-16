@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(catalog = "survey_db", name = "element")
+@Table(catalog = "survey_db", name = "element_table")
 public class Element extends CreateModifyAwareBaseEntity {
 
     @Id
@@ -32,10 +32,10 @@ public class Element extends CreateModifyAwareBaseEntity {
     @OneToMany(mappedBy = "elementObj", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Choice> choices;
 
-    @OneToMany(mappedBy = "element", cascade = {CascadeType.MERGE,CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "element", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<FutureSurveyAnswer> answers;
 
     @ManyToOne
-    @JoinColumn(name = "page_id")
+    @JoinColumn(name = "page_table_id")
     private Page page;
 }

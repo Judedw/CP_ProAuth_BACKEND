@@ -46,9 +46,7 @@ public class FutureSurveyServiceImpl implements FutureSurveyService {
     @Override
     public FutureSurvey save(FutureSurvey futureSurvey) {
 
-        System.out.println("TITLE : " + futureSurvey.getTitle());
-        System.out.println("client id  : " + futureSurvey.getClientId());
-        System.out.println("JSON content : " + futureSurvey.getJsonContent());
+
 
         for (Page page : futureSurvey.getPages()) {
             page.setFutureSurvey(futureSurvey);

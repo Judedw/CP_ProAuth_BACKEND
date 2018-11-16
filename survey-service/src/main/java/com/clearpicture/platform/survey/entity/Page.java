@@ -16,7 +16,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(catalog = "survey_db", name = "page")
+@Table(catalog = "survey_db", name = "page_table")
 public class Page extends CreateModifyAwareBaseEntity {
 
     @Id

@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(catalog = "survey_db", name = "choice")
+@Table(catalog = "survey_db", name = "choice_table")
 public class Choice extends CreateModifyAwareBaseEntity {
 
     @Id
@@ -27,11 +27,11 @@ public class Choice extends CreateModifyAwareBaseEntity {
     private String text;
 
     @Lob
-    @Column(columnDefinition="BLOB")
+    @Column(length = 16777215)
     private String imageLink;
 
     @ManyToOne
-    @JoinColumn(name = "element_id")
+    @JoinColumn(name = "element_table_id")
     private Element elementObj;
 
 }
