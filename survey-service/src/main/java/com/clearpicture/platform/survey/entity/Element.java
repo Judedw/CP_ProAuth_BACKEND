@@ -29,7 +29,7 @@ public class Element extends CreateModifyAwareBaseEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "element", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "elementObj", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Choice> choices;
 
     @OneToMany(mappedBy = "element", cascade = {CascadeType.MERGE,CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)

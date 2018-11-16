@@ -63,7 +63,7 @@ public class FutureSurveyServiceImpl implements FutureSurveyService {
 
                     if (dropDownList.contains(eleType) && !CollectionUtils.isEmpty(choices)) {
                         for (Choice choice : choices) {
-                            choice.setElement(ele);
+                            choice.setElementObj(ele);
                             choice.setText(choice.getText());
                             choice.setValue(choice.getValue());
                             choice.setImageLink(choice.getImageLink());
@@ -131,7 +131,7 @@ public class FutureSurveyServiceImpl implements FutureSurveyService {
 
                         if (dropDownList.contains(eleType) && !CollectionUtils.isEmpty(choices)) {
                             for (Choice choice : choices) {
-                                choice.setElement(ele);
+                                choice.setElementObj(ele);
                                 choice.setText(choice.getText());
                                 choice.setValue(choice.getValue());
                                 choice.setImageLink(choice.getImageLink());

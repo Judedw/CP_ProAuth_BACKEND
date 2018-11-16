@@ -32,6 +32,6 @@ public class Choice extends CreateModifyAwareBaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "element_id")
-    private Element element;
+    private Element elementObj;
 
 }
