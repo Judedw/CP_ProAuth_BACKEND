@@ -51,7 +51,21 @@ public class FutureSurveyUpdateRequest {
             @NotBlank(message = "")
             private String qcode;
 
-            private List<Object> choices;
+            private List<Choice> choices;
+
+
+            @Data
+            public static class Choice implements ModelMappingAware {
+
+                private String value;
+                private String text;
+                private String imageLink;
+
+                @Override
+                public Class<?> getDestinationType() {
+                    return Choice.class;
+                }
+            }
 
             @Override
             public Class<?> getDestinationType() {

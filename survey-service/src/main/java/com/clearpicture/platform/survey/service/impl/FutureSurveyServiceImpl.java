@@ -1,11 +1,10 @@
 package com.clearpicture.platform.survey.service.impl;
 
 import com.clearpicture.platform.exception.ComplexValidationException;
-import com.clearpicture.platform.survey.entity.Element;
-import com.clearpicture.platform.survey.entity.FutureSurvey;
-import com.clearpicture.platform.survey.entity.Page;
-import com.clearpicture.platform.survey.entity.QFutureSurvey;
+import com.clearpicture.platform.survey.entity.*;
 import com.clearpicture.platform.survey.entity.criteria.FutureSurveySearchCriteria;
+import com.clearpicture.platform.survey.repository.ElementRepository;
+import com.clearpicture.platform.survey.repository.FutureSurveyAnswerRepository;
 import com.clearpicture.platform.survey.repository.FutureSurveyRepository;
 import com.clearpicture.platform.survey.service.FutureSurveyService;
 import com.querydsl.core.BooleanBuilder;
@@ -15,8 +14,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +35,14 @@ public class FutureSurveyServiceImpl implements FutureSurveyService {
     @Autowired
     private FutureSurveyRepository futureSurveyRepository;
 
+    @Autowired
+    private ElementRepository elementRepository;
+
+    @Autowired
+    private FutureSurveyAnswerRepository futureSurveyAnswerRepository;
+
+    private static final List<String> dropDownList = Arrays.asList("dropdown", "imagepicker");
+
     @Override
     public FutureSurvey save(FutureSurvey futureSurvey) {
 
@@ -42,18 +51,24 @@ public class FutureSurveyServiceImpl implements FutureSurveyService {
         System.out.println("JSON content : " + futureSurvey.getJsonContent());
 
         for (Page page : futureSurvey.getPages()) {
-            //System.out.println("PAGE NAME : " + page.getName());
             page.setFutureSurvey(futureSurvey);
 
             Set<Element> elementSet = page.getElements();
-            if (!(elementSet == null)) {
+            if (elementSet != null) {
                 for (Element ele : elementSet) {
                     ele.setPage(page);
 
-                    /*System.out.println("......ELE NAME : " + ele.getName());
-                    System.out.println("......ELE TYPE : " + ele.getType());
-                    System.out.println("......ELE ID : " + ele.getId());
-                    System.out.println("......ELE QID : " + ele.getQuestionId());*/
+                    String eleType = ele.getType();
+                    Set<Choice> choices = ele.getChoices();
+
+                    if (dropDownList.contains(eleType) && !CollectionUtils.isEmpty(choices)) {
+                        for (Choice choice : choices) {
+                            choice.setElement(ele);
+                            choice.setText(choice.getText());
+                            choice.setValue(choice.getValue());
+                            choice.setImageLink(choice.getImageLink());
+                        }
+                    }
                 }
             }
 
@@ -110,6 +125,18 @@ public class FutureSurveyServiceImpl implements FutureSurveyService {
                 if (!(elementSet == null)) {
                     for (Element ele : elementSet) {
                         ele.setPage(page);
+
+                        String eleType = ele.getType();
+                        Set<Choice> choices = ele.getChoices();
+
+                        if (dropDownList.contains(eleType) && !CollectionUtils.isEmpty(choices)) {
+                            for (Choice choice : choices) {
+                                choice.setElement(ele);
+                                choice.setText(choice.getText());
+                                choice.setValue(choice.getValue());
+                                choice.setImageLink(choice.getImageLink());
+                            }
+                        }
                     }
                 }
             }
@@ -135,6 +162,27 @@ public class FutureSurveyServiceImpl implements FutureSurveyService {
 
         futureSurveyRepository.delete(fSurvey);
         return fSurvey;
+    }
+
+    @Override
+    public FutureSurvey view(Long id) {
+        try {
+            FutureSurvey fSurvey = futureSurveyRepository.getOne(id);
+            return fSurvey;
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("future-survey", "futureSurveyView.futureSurveyNotExist");
+        }
+    }
+
+    @Override
+    public FutureSurveyAnswer submitAnswer(FutureSurveyAnswer answer) {
+        try {
+            Element questionElement = elementRepository.findByQcode(answer.getQcode());
+            answer.setElement(questionElement);
+            return futureSurveyAnswerRepository.save(answer);
+        } catch (EntityNotFoundException e) {
+            throw new ComplexValidationException("element", "futureSurveyAnswerRequest.questionElementDoesNotExists");
+        }
     }
 
 

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 /**
  * created by Raveen -  18/10/24
@@ -21,7 +21,7 @@ public class Element extends CreateModifyAwareBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long elementId;
+    private Long id;
 
     private String qcode;
 
@@ -29,7 +29,11 @@ public class Element extends CreateModifyAwareBaseEntity {
 
     private String name;
 
-    //private List<Object> choices;
+    @OneToMany(mappedBy = "element", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Choice> choices;
+
+    @OneToMany(mappedBy = "element", cascade = {CascadeType.MERGE,CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<FutureSurveyAnswer> answers;
 
     @ManyToOne
     @JoinColumn(name = "page_id")

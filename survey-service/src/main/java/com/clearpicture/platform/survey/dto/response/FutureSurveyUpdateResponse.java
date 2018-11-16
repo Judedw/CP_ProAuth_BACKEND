@@ -2,6 +2,7 @@ package com.clearpicture.platform.survey.dto.response;
 
 
 import lombok.Data;
+
 import java.util.List;
 
 /**
@@ -30,7 +31,17 @@ public class FutureSurveyUpdateResponse {
             private String qcode;
             private String type;
             private String name;
-            private List<Object> choices;
+            private List<Choice> choices;
+
+            @Data
+            public static class Choice {
+
+                private String value;
+                private String text;
+                private byte[] imageLink;
+
+
+            }
 
         }
 

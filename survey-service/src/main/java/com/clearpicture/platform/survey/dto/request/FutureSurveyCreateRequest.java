@@ -2,7 +2,6 @@ package com.clearpicture.platform.survey.dto.request;
 
 
 import com.clearpicture.platform.modelmapper.ModelMappingAware;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -53,7 +52,21 @@ public class FutureSurveyCreateRequest {
             @NotBlank(message = "")
             private String qcode;
 
-            private List<Object> choices;
+            private List<Choice> choices;
+
+            @Data
+            public static class Choice implements ModelMappingAware {
+
+                private String value;
+                private String text;
+                private String imageLink;
+
+                @Override
+                public Class<?> getDestinationType() {
+                    return Choice.class;
+                }
+            }
+
 
             @Override
             public Class<?> getDestinationType() {
