@@ -29,8 +29,8 @@ public class FutureSurvey extends CreateModifyAwareBaseEntity {
 
     @Lob
     //@Column(columnDefinition="LONGBLOB")
-    @Column(length = 16777215)
-    private String jsonContent;
+    //@Column(length = 16777215)
+    private byte[] jsonContent;
 
 
 }

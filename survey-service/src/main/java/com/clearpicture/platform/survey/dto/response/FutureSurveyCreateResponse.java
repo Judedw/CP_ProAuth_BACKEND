@@ -42,7 +42,7 @@ public class FutureSurveyCreateResponse {
 
                 private String value;
                 private String text;
-                private byte[] imageLink;
+                private String imageLink;
 
 
             }

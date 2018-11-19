@@ -27,8 +27,8 @@ public class Choice extends CreateModifyAwareBaseEntity {
     private String text;
 
     @Lob
-    @Column(length = 16777215)
-    private String imageLink;
+    //@Column(length = 16777215)
+    private byte[] imageLink;
 
     @ManyToOne
     @JoinColumn(name = "element_table_id")

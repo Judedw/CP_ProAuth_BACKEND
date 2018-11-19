@@ -14,6 +14,4 @@ public class FutureSurveyViewResponse {
     private String title;
     private String clientId;
     private String jsonContent;
-
-
 }

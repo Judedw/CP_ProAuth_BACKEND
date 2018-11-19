@@ -38,7 +38,7 @@ public class FutureSurveyUpdateResponse {
 
                 private String value;
                 private String text;
-                private byte[] imageLink;
+                private String imageLink;
 
 
             }

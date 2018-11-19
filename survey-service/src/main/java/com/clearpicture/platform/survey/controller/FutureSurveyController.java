@@ -46,13 +46,16 @@ public class FutureSurveyController {
     @PostMapping(value = "${app.endpoint.futureSurveyCreate}")
     public ResponseEntity<SimpleResponseWrapper<FutureSurveyCreateResponse>> create(
             @RequestBody FutureSurveyCreateRequest futureSurveyCreateRequest
-    ) {
+    ) throws Exception {
 
+        byte[] jsonContentByte = futureSurveyCreateRequest.getJsonContent().getBytes();
         FutureSurvey futureSurvey = modelMapper.map(futureSurveyCreateRequest, FutureSurvey.class);
+        futureSurvey.setJsonContent(jsonContentByte);
 
         FutureSurvey savedSurvey = futureSurveyService.save(futureSurvey);
-
+        String jsonString = new String(savedSurvey.getJsonContent(),"UTF-8");
         FutureSurveyCreateResponse futureSurveyCreateResponse = modelMapper.map(savedSurvey, FutureSurveyCreateResponse.class);
+        futureSurveyCreateResponse.setJsonContent(jsonString);
 
         return new ResponseEntity<SimpleResponseWrapper<FutureSurveyCreateResponse>>(new SimpleResponseWrapper<FutureSurveyCreateResponse>(futureSurveyCreateResponse), HttpStatus.CREATED);
     }
@@ -74,14 +77,20 @@ public class FutureSurveyController {
     }
 
     @PutMapping(value = "${app.endpoint.futureSurveyUpdate}")
-    public ResponseEntity<SimpleResponseWrapper<FutureSurveyUpdateResponse>> update(@PathVariable String id, @RequestBody FutureSurveyUpdateRequest request) {
+    public ResponseEntity<SimpleResponseWrapper<FutureSurveyUpdateResponse>> update(@PathVariable String id, @RequestBody FutureSurveyUpdateRequest request)throws Exception {
 
         Long surveyId = cryptoService.decryptEntityId(id);
+
+
+        byte[] jsonContentByte = request.getJsonContent().getBytes();
         FutureSurvey fSurvey = modelMapper.map(request, FutureSurvey.class);
+        fSurvey.setJsonContent(jsonContentByte);
+
         fSurvey.setId(surveyId);
         FutureSurvey updateSurvey = futureSurveyService.update(fSurvey);
+        String jsonString = new String(updateSurvey.getJsonContent(),"UTF-8");
         FutureSurveyUpdateResponse response = modelMapper.map(updateSurvey, FutureSurveyUpdateResponse.class);
-
+        response.setJsonContent(jsonString);
         return new ResponseEntity<SimpleResponseWrapper<FutureSurveyUpdateResponse>>(new SimpleResponseWrapper<FutureSurveyUpdateResponse>(response), HttpStatus.OK);
     }
 
@@ -95,10 +104,12 @@ public class FutureSurveyController {
 
 
     @GetMapping("${app.endpoint.futureSurveyView}")
-    public ResponseEntity<SimpleResponseWrapper<FutureSurveyViewResponse>> view(@PathVariable String id) {
+    public ResponseEntity<SimpleResponseWrapper<FutureSurveyViewResponse>> view(@PathVariable String id) throws Exception{
         Long surveyId = cryptoService.decryptEntityId(id);
         FutureSurvey retrievedSurvey = futureSurveyService.view(surveyId);
+        String jsonString = new String(retrievedSurvey.getJsonContent(),"UTF-8");
         FutureSurveyViewResponse response = modelMapper.map(retrievedSurvey, FutureSurveyViewResponse.class);
+        response.setJsonContent(jsonString);
         return new ResponseEntity<SimpleResponseWrapper<FutureSurveyViewResponse>>(new SimpleResponseWrapper<FutureSurveyViewResponse>(response), HttpStatus.OK);
     }
 

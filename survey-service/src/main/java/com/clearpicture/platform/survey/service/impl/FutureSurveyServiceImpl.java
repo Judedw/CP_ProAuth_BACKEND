@@ -41,7 +41,8 @@ public class FutureSurveyServiceImpl implements FutureSurveyService {
     @Autowired
     private FutureSurveyAnswerRepository futureSurveyAnswerRepository;
 
-    private static final List<String> dropDownList = Arrays.asList("dropdown", "imagepicker");
+    // SHOULD BE UPDATE , When add a new dropdown item into Tool Bar
+    private static final List<String> dropDownList = Arrays.asList("dropdown", "imagepicker","radiogroup");
 
     @Override
     public FutureSurvey save(FutureSurvey futureSurvey) {
