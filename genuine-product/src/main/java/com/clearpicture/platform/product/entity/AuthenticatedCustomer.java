@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @Setter
 @Entity
 @Table(catalog = "product_db", name = "authenticated_customer")
-public class authenticatedCustomer extends CreateModifyAwareBaseEntity {
+public class AuthenticatedCustomer extends CreateModifyAwareBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +31,10 @@ public class authenticatedCustomer extends CreateModifyAwareBaseEntity {
     private String email;
 
     private String mobileNumber;
+
+    private String city;
+
+    private String province;
 
     @ManyToOne
     @JoinColumn(name ="authenticated")
