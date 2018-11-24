@@ -23,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.crypto.AEADBadTagException;
 import java.security.Security;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * AuthenticationServiceImpl
@@ -285,22 +283,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             log.info("authenticates : {}",authenticate);
 
-
+            Set<AuthenticatedCustomer> authenticatedCustomers = new HashSet<>();
             if(authenticate != null && authenticate.isPresent()) {
                 log.info("authenticates get: {}",authenticate.get());
                 Authenticated authenticated = authenticate.get();
                 authenticated.setNumberOfAuthentication(authenticated.getNumberOfAuthentication()+1);
                 authenticatedCustomer.setAuthenticated(authenticated);
-                authenticated.getAuthenticatedCustomers().add(authenticatedCustomer);
+                if(authenticated.getAuthenticatedCustomers() == null) {
+                    authenticatedCustomers.add(authenticatedCustomer);
+                    authenticated.setAuthenticatedCustomers(authenticatedCustomers);
+                } else {
+                    authenticated.getAuthenticatedCustomers().add(authenticatedCustomer);
+                }
                 authenticatedRepository.save(authenticated);
-
             } else {
                 Authenticated authenticated = new Authenticated();
                 authenticated.setAuthenticationCode(authenticateCode);
                 authenticated.setProductDetail(productDetail.get());
                 authenticated.setNumberOfAuthentication(new Integer(1));
                 authenticatedCustomer.setAuthenticated(authenticated);
-                authenticated.getAuthenticatedCustomers().add(authenticatedCustomer);
+                if(authenticated.getAuthenticatedCustomers() == null) {
+                    authenticatedCustomers.add(authenticatedCustomer);
+                    authenticated.setAuthenticatedCustomers(authenticatedCustomers);
+                } else {
+                    authenticated.getAuthenticatedCustomers().add(authenticatedCustomer);
+                }
                 authenticatedRepository.save(authenticated);
             }
 
