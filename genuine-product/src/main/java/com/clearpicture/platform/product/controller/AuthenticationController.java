@@ -38,12 +38,16 @@ public class AuthenticationController {
     public ResponseEntity<SimpleResponseWrapper<AuthenticateResponse>> authenticate(@RequestParam String authCode) {
         log.info("Authentication Start {}",authCode);
         AuthenticateResponse authenticateResponse = new AuthenticateResponse();
-        ProductAuthenticateResponse productAuthenticateResponse=null;
-        productAuthenticateResponse = authenticatedService.authenticate((authCode));
-        authenticateResponse.setTitle(productAuthenticateResponse.getContent().getTitle());
+        ProductAuthenticateResponse productAuthenticateResponse = authenticatedService.authenticate((authCode));
+
+        if(productAuthenticateResponse != null && productAuthenticateResponse.getContent() != null) {
+            authenticateResponse = modelMapper.map(productAuthenticateResponse.getContent(),AuthenticateResponse.class);
+        }
+
+        /*authenticateResponse.setTitle(productAuthenticateResponse.getContent().getTitle());
         authenticateResponse.setMessage(productAuthenticateResponse.getContent().getMessage());
         authenticateResponse.setServerId(productAuthenticateResponse.getContent().getSurveyId());
-        authenticateResponse.setProductId(productAuthenticateResponse.getContent().getProductId());
+        authenticateResponse.setProductId(productAuthenticateResponse.getContent().getProductId());*/
         log.info("Authentication End {}",authCode);
         return new ResponseEntity<SimpleResponseWrapper<AuthenticateResponse>>(new SimpleResponseWrapper<AuthenticateResponse>(authenticateResponse), HttpStatus.OK);
     }
@@ -55,10 +59,13 @@ public class AuthenticationController {
         AuthenticatedCustomer authenticatedCustomer = modelMapper.map(request,AuthenticatedCustomer.class);
         AuthenticateResponse authenticateResponse = new AuthenticateResponse();
         ProductAuthenticateResponse productAuthenticateResponse = authenticatedService.authenticateWithCustomer(request.getAuthCode(),authenticatedCustomer);
-        authenticateResponse.setTitle(productAuthenticateResponse.getContent().getTitle());
+        if(productAuthenticateResponse != null && productAuthenticateResponse.getContent() != null) {
+            authenticateResponse = modelMapper.map(productAuthenticateResponse.getContent(),AuthenticateResponse.class);
+        }
+        /*authenticateResponse.setTitle(productAuthenticateResponse.getContent().getTitle());
         authenticateResponse.setMessage(productAuthenticateResponse.getContent().getMessage());
         authenticateResponse.setServerId(productAuthenticateResponse.getContent().getSurveyId());
-        authenticateResponse.setProductId(productAuthenticateResponse.getContent().getProductId());
+        authenticateResponse.setProductId(productAuthenticateResponse.getContent().getProductId());*/
 
 
         log.info("Authentication End {}",request.getAuthCode());

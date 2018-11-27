@@ -4,13 +4,7 @@ import com.clearpicture.platform.entity.CreateModifyAwareBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * authenticated_customer
@@ -39,4 +33,11 @@ public class AuthenticatedCustomer extends CreateModifyAwareBaseEntity {
     @ManyToOne
     @JoinColumn(name ="authenticated")
     private Authenticated authenticated;
+
+    private Integer recordNumber;
+
+    @PrePersist
+    public void doPrePersist() {
+            recordNumber = new Integer(1);
+    }
 }

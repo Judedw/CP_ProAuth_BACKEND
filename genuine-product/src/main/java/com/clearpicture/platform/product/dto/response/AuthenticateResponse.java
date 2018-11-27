@@ -16,4 +16,6 @@ public class AuthenticateResponse {
     private String title;
 
     private String message;
+
+    private String authCode;
 }

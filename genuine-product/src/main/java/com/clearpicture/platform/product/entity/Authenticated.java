@@ -32,4 +32,11 @@ public class Authenticated extends CreateModifyAwareBaseEntity {
 
     @OneToMany(mappedBy = "authenticated",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private Set<AuthenticatedCustomer> authenticatedCustomers;
+
+    private Integer recordNumber;
+
+    @PrePersist
+    public void doPrePersist() {
+        recordNumber = new Integer(1);
+    }
 }

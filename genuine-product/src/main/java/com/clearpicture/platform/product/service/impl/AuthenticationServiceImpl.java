@@ -69,6 +69,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             String authenticationCode = new String(bytesEncryptor.decrypt(Hex.decodeHex(authenticateCode)));
             String[] authCodeType = authenticationCode.split("/");
 
+            authData.setAuthCode(authenticateCode);
 
             if(authCodeType[1].equals(SurveyType.PRODUCT.getValue())) {
                 log.info("authenticationCode type -->"+authCodeType[1]);
@@ -207,6 +208,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             String authenticationCode = new String(bytesEncryptor.decrypt(Hex.decodeHex(authenticateCode)));
             String[] authCodeType = authenticationCode.split("/");
 
+            authData.setAuthCode(authenticateCode);
 
             if(authCodeType[1].equals(SurveyType.PRODUCT.getValue())) {
                 log.info("authenticationCode type -->"+authCodeType[1]);
