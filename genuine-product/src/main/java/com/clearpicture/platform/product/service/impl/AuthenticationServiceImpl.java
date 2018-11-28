@@ -2,13 +2,8 @@ package com.clearpicture.platform.product.service.impl;
 
 import com.clearpicture.platform.configuration.PlatformConfigProperties;
 import com.clearpicture.platform.enums.SurveyType;
-import com.clearpicture.platform.exception.ComplexValidationException;
 import com.clearpicture.platform.product.dto.response.ProductAuthenticateResponse;
-import com.clearpicture.platform.product.entity.Authenticated;
-import com.clearpicture.platform.product.entity.Product;
-import com.clearpicture.platform.product.entity.ProductDetail;
-import com.clearpicture.platform.product.entity.QAuthenticated;
-import com.clearpicture.platform.product.entity.QProductDetail;
+import com.clearpicture.platform.product.entity.*;
 import com.clearpicture.platform.product.repository.AuthenticatedRepository;
 import com.clearpicture.platform.product.repository.ProductDetailRepository;
 import com.clearpicture.platform.product.service.AuthenticationService;
@@ -28,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.crypto.AEADBadTagException;
 import java.security.Security;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * AuthenticationServiceImpl
@@ -76,6 +69,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             String authenticationCode = new String(bytesEncryptor.decrypt(Hex.decodeHex(authenticateCode)));
             String[] authCodeType = authenticationCode.split("/");
 
+            authData.setAuthCode(authenticateCode);
 
             if(authCodeType[1].equals(SurveyType.PRODUCT.getValue())) {
                 log.info("authenticationCode type -->"+authCodeType[1]);
@@ -154,10 +148,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             Optional<Authenticated> authenticate =authenticatedRepository.findOne(booleanBuilder);
 
             log.info("authenticates : {}",authenticate);
+
+            AuthenticatedCustomer authenticatedCustomer = null;
+
             if(authenticate != null && authenticate.isPresent()) {
+
                 log.info("authenticates get: {}",authenticate.get());
                 Authenticated authenticated = authenticate.get();
                 authenticated.setNumberOfAuthentication(authenticated.getNumberOfAuthentication()+1);
+
+                authenticatedCustomer = new AuthenticatedCustomer();
+
                 authenticatedRepository.save(authenticated);
 
             } else {
@@ -196,5 +197,136 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     }
 
+    @Override
+    public ProductAuthenticateResponse authenticateWithCustomer(String authenticateCode, AuthenticatedCustomer authenticatedCustomer) {
+        Long surveyId =0L;
+        Boolean checkAllReadyAuthenticated = Boolean.FALSE;
+        ProductAuthenticateResponse productAuthenticateResponse = new ProductAuthenticateResponse();
+        ProductAuthenticateResponse.ProductAuthData authData = new ProductAuthenticateResponse.ProductAuthData();
 
+        try {
+            String authenticationCode = new String(bytesEncryptor.decrypt(Hex.decodeHex(authenticateCode)));
+            String[] authCodeType = authenticationCode.split("/");
+
+            authData.setAuthCode(authenticateCode);
+
+            if(authCodeType[1].equals(SurveyType.PRODUCT.getValue())) {
+                log.info("authenticationCode type -->"+authCodeType[1]);
+
+                Map<String,Object> authenticatedMap = new HashMap<>();
+
+                authenticatedMap = productAuthenticateWithCustomer(authCodeType[0],authenticatedCustomer);
+
+                if((Boolean) authenticatedMap.get(AuthenticatedConstant.AUTH_STATUS)) {
+                    authData.setTitle(configs.getAuthenticate().getTitleSuccess());
+                    authData.setMessage(configs.getAuthenticate().getSuccessMessage());
+                    if(authenticatedMap.get(AuthenticatedConstant.SURVEY_ID) != null) {
+                        authData.setSurveyId(cryptoService.encryptEntityId((Long) authenticatedMap.get(AuthenticatedConstant.SURVEY_ID)));
+                    }
+                    if(authenticatedMap.get(AuthenticatedConstant.PRODUCT_ID) != null) {
+                        authData.setProductId(cryptoService.encryptEntityId((Long) authenticatedMap.get(AuthenticatedConstant.PRODUCT_ID)));
+                    }
+
+                } else {
+                    authData.setTitle(configs.getAuthenticate().getTitleReject());
+                    authData.setMessage(configs.getAuthenticate().getRejectMessage());
+                }
+
+            } else if(authCodeType[1].equals(SurveyType.EVOTE.getValue())) {
+                log.info("authenticationCode type -->"+authCodeType[1]);
+                productAuthenticateResponse = ms2msCommunicationService.authenticateEVote(authCodeType[0]);
+                if(productAuthenticateResponse!= null) {
+                    authData.setTitle(productAuthenticateResponse.getContent().getTitle());
+                    authData.setMessage(productAuthenticateResponse.getContent().getMessage());
+                    authData.setSurveyId(productAuthenticateResponse.getContent().getSurveyId());
+                } else {
+                    authData.setTitle(configs.getAuthenticate().getTitleReject());
+                    authData.setMessage(configs.getAuthenticate().getRejectMessage());
+                }
+
+            }
+        } catch (DecoderException e) {
+            authData.setTitle(configs.getAuthenticate().getTitleReject());
+            authData.setMessage(configs.getAuthenticate().getRejectMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            authData.setTitle(configs.getAuthenticate().getTitleReject());
+            authData.setMessage(configs.getAuthenticate().getRejectMessage());
+        }
+
+        productAuthenticateResponse.setContent(authData);
+        return productAuthenticateResponse;
+    }
+
+    private Map<String, Object> productAuthenticateWithCustomer(String authenticateCode,AuthenticatedCustomer authenticatedCustomer) {
+
+        log.info("authenticateCode : {}",authenticateCode);
+
+        Map<String,Object> authenticatedMap = new HashMap<>();
+
+        Optional<ProductDetail> productDetail = authenticateProductDetail(authenticateCode);
+
+        if(productDetail != null) {
+            authenticatedMap.put(AuthenticatedConstant.AUTH_STATUS,Boolean.TRUE);
+            ProductDetail dbProductDetail = productDetail.get();
+            Product product = dbProductDetail.getProduct();
+
+            log.info("product : {}",product);
+
+            Long surveyId = product.getSurveyId();
+            Long productId = product.getId();
+
+            log.info("surveyId : {}",surveyId);
+            log.info("productId : {}",productId);
+
+            BooleanBuilder booleanBuilder = new BooleanBuilder(QAuthenticated.authenticated.authenticationCode.eq(authenticateCode));
+
+            Optional<Authenticated> authenticate =authenticatedRepository.findOne(booleanBuilder);
+
+            log.info("authenticates : {}",authenticate);
+
+            Set<AuthenticatedCustomer> authenticatedCustomers = new HashSet<>();
+            if(authenticate != null && authenticate.isPresent()) {
+                log.info("authenticates get: {}",authenticate.get());
+                Authenticated authenticated = authenticate.get();
+                authenticated.setNumberOfAuthentication(authenticated.getNumberOfAuthentication()+1);
+                authenticatedCustomer.setAuthenticated(authenticated);
+                if(authenticated.getAuthenticatedCustomers() == null) {
+                    authenticatedCustomers.add(authenticatedCustomer);
+                    authenticated.setAuthenticatedCustomers(authenticatedCustomers);
+                } else {
+                    authenticated.getAuthenticatedCustomers().add(authenticatedCustomer);
+                }
+                authenticatedRepository.save(authenticated);
+            } else {
+                Authenticated authenticated = new Authenticated();
+                authenticated.setAuthenticationCode(authenticateCode);
+                authenticated.setProductDetail(productDetail.get());
+                authenticated.setNumberOfAuthentication(new Integer(1));
+                authenticatedCustomer.setAuthenticated(authenticated);
+                if(authenticated.getAuthenticatedCustomers() == null) {
+                    authenticatedCustomers.add(authenticatedCustomer);
+                    authenticated.setAuthenticatedCustomers(authenticatedCustomers);
+                } else {
+                    authenticated.getAuthenticatedCustomers().add(authenticatedCustomer);
+                }
+                authenticatedRepository.save(authenticated);
+            }
+
+            if(surveyId != null) {
+                authenticatedMap.put(AuthenticatedConstant.SURVEY_ID,surveyId);
+            }
+            if(productId != null) {
+                authenticatedMap.put(AuthenticatedConstant.PRODUCT_ID,productId);
+            }
+
+        } else {
+            authenticatedMap.put("status",Boolean.FALSE);
+
+        }
+
+        log.info("authenticatedMap : {}",authenticatedMap);
+
+        return authenticatedMap;
+    }
 }

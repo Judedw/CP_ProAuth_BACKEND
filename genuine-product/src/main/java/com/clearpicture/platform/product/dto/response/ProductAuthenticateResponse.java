@@ -22,5 +22,7 @@ public class ProductAuthenticateResponse {
 
         private String message;
 
+        private String authCode;
+
     }
 }

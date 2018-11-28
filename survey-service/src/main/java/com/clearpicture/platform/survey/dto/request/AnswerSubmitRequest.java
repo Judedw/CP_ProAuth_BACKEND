@@ -6,6 +6,7 @@ import com.clearpicture.platform.survey.entity.Question;
 import lombok.Data;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
@@ -16,7 +17,11 @@ import java.util.List;
 @Data
 public class AnswerSubmitRequest {
 
+    @NotBlank(message = "AnswerSubmitRequest.surveyId.empty")
     private String surveyId;
+
+    @NotBlank(message = "AnswerSubmitRequest.authCode.empty")
+    private String authCode;
 
     private List<QuestionData> questions;
 

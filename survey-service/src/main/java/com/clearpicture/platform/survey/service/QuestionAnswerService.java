@@ -11,5 +11,10 @@ import java.util.Set;
  * Created by nuwan on 9/7/18.
  */
 public interface QuestionAnswerService {
+    
     List<QuestionAnswer> create(Set<QuestionAnswer> answers, Question question);
+
+    boolean checkQuestionAnswerStatus(Long id,Long answerId,String s);
+
+    boolean checkQuestionAnswerStatusWithFreeText(Long questionId, String answer, String s);
 }

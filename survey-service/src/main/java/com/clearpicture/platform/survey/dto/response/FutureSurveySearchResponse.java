@@ -13,5 +13,5 @@ public class FutureSurveySearchResponse {
     private String id;
     private String clientId;
     private String title;
-    private String jsonContent;
+    //private String jsonContent;
 }

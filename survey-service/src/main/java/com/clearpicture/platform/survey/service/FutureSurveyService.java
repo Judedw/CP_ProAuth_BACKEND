@@ -1,6 +1,7 @@
 package com.clearpicture.platform.survey.service;
 
 import com.clearpicture.platform.survey.entity.FutureSurvey;
+import com.clearpicture.platform.survey.entity.FutureSurveyAnswer;
 import com.clearpicture.platform.survey.entity.criteria.FutureSurveySearchCriteria;
 import org.springframework.data.domain.Page;
 
@@ -17,4 +18,9 @@ public interface FutureSurveyService {
     FutureSurvey update(FutureSurvey futureSurvey);
 
     FutureSurvey delete(Long id);
+
+    FutureSurvey view(Long id);
+
+    FutureSurveyAnswer submitAnswer(FutureSurveyAnswer answer);
+
 }

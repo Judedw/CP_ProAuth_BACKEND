@@ -4,15 +4,7 @@ import com.clearpicture.platform.entity.CreateModifyAwareBaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 /**
@@ -38,6 +30,13 @@ public class Authenticated extends CreateModifyAwareBaseEntity {
 
     private Integer numberOfAuthentication;
 
-    @OneToMany(mappedBy = "authenticated")
-    private Set<authenticatedCustomer> authenticatedCustomers;
+    @OneToMany(mappedBy = "authenticated",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    private Set<AuthenticatedCustomer> authenticatedCustomers;
+
+    private Integer recordNumber;
+
+    @PrePersist
+    public void doPrePersist() {
+        recordNumber = new Integer(1);
+    }
 }
